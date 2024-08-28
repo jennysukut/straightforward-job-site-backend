@@ -1,4 +1,5 @@
 This folder holds a SpringBoot application
+<test>
 
 One time setup:
   Create a folder in your home folder named "data"
