@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,9 @@ public class AccountController {
   Logger logger = Logger.getLogger(AccountController.class.getName());
   ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
 
+  @Autowired
+  PasswordEncoder passwordEncoder;
+
   @RequestMapping(path = "/account/{id}", method = RequestMethod.DELETE)
   public void delete(@PathVariable(name = "id") Long id) {
     service.delete(id);
@@ -48,7 +52,10 @@ public class AccountController {
       accountEntity = new AccountEntity();
       accountEntity.setName(requestBody.getName());
       accountEntity.setLabel(requestBody.getLabel());
-      accountEntity.setPassword(requestBody.getPassword());
+      String rawPassword = requestBody.getPassword();
+      String encryptedPassword = passwordEncoder.encode(rawPassword);
+      logger.info("Encrypted password: " + encryptedPassword);
+      accountEntity.setPassword(encryptedPassword);
       accountEntity.setEnabled(requestBody.isEnabled());
       accountEntity.setRoles(requestBody.getRoles().stream().map(role -> {
         RoleEntity roleEntity = new RoleEntity();
@@ -64,7 +71,10 @@ public class AccountController {
         accountEntity.setLabel(requestBody.getLabel());
       }
       if (requestBody.getPassword() != null) {
-        accountEntity.setPassword(requestBody.getPassword());
+        String rawPassword = requestBody.getPassword();
+        String encryptedPassword = passwordEncoder.encode(rawPassword);
+        logger.info("Encrypted password: " + encryptedPassword);
+        accountEntity.setPassword(encryptedPassword);
       }
       accountEntity.setEnabled(requestBody.isEnabled());
       accountEntity.setRoles(requestBody.getRoles().stream().map(role -> {
