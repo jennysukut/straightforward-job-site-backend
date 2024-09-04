@@ -1,18 +1,18 @@
 package com.sfjs.ctrl;
 
-import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -37,24 +37,22 @@ public class RoleController {
     service.delete(id);
   }
 
-  @RequestMapping(path = "/role", method = RequestMethod.POST)
-  public Role save(@RequestBody Role requestBody) {
-    logger.info("Request body: " + requestBody);
+  @MutationMapping(name = "saveRole")
+  public Role save(@Argument Long id, @Argument String name, @Argument String label) {
     RoleEntity roleEntity;
-    if (requestBody.getId() == null) {
+    if (id == null) {
       roleEntity = new RoleEntity();
-      roleEntity.setName(requestBody.getName());
-      roleEntity.setLabel(requestBody.getLabel());
     } else {
-      roleEntity = service.getById(requestBody.getId());
-      if (requestBody.getName() != null) {
-        roleEntity.setName(requestBody.getName());
-      }
-      if (requestBody.getLabel() != null) {
-        roleEntity.setLabel(requestBody.getLabel());
-      }
+      roleEntity = service.getById(id);
+    }
+    if (name != null) {
+      roleEntity.setName(name);
+    }
+    if (label != null) {
+      roleEntity.setLabel(label);
     }
     return new Role(service.save(roleEntity));
+
   }
 
   @RequestMapping(path = "/role/getbyid/{id}", method = RequestMethod.GET)
@@ -76,7 +74,7 @@ public class RoleController {
     logger.info("Path variable: " + id);
     return service.findAllById(id).stream().map(roleEntity -> {
       return new Role(roleEntity);
-    }).collect(Collectors.toList());      
+    }).collect(Collectors.toList());
   }
 
   @RequestMapping(path = "/role/findbyname/{name}", method = RequestMethod.GET)
@@ -90,7 +88,7 @@ public class RoleController {
     logger.info("Path variable: " + name);
     return service.findAllByName(name).stream().map(roleEntity -> {
       return new Role(roleEntity);
-    }).collect(Collectors.toList());      
+    }).collect(Collectors.toList());
   }
 
   @RequestMapping(path = "/role/findbylabel/{label}", method = RequestMethod.GET)
@@ -104,14 +102,19 @@ public class RoleController {
     logger.info("Path variable: " + label);
     return service.findAllByLabel(label).stream().map(roleEntity -> {
       return new Role(roleEntity);
-    }).collect(Collectors.toList());      
+    }).collect(Collectors.toList());
   }
 
+  @QueryMapping(name = "findAllRoles")
   @RequestMapping(path = "/role/findall", method = RequestMethod.GET)
-  public List<Role> findAll(@RequestParam("limit") Optional<Integer> limit, Principal principal) {
+  public List<Role> findAll(@Argument Integer limit) {
     logger.info("Request param limit: " + limit);
-    return service.findAll().stream().map(roleEntity -> {
+    Stream<RoleEntity> roleStream = service.findAll().stream();
+    if (limit != null) {
+      roleStream = roleStream.limit(limit);
+    }
+    return roleStream.map(roleEntity -> {
       return new Role(roleEntity);
-    }).collect(Collectors.toList());      
+    }).collect(Collectors.toList());
   }
 }

@@ -30,4 +30,9 @@ public class Role {
   @Getter
   @Setter
   private String label;
+
+  @Override
+  public String toString() {
+    return String.format("name: %s label: %s", name, label);
+  }
 }

@@ -1,3 +1,13 @@
 type Query {
-    hello: String
+  findAllRoles(limit: Int): [Role]
+}
+
+type Mutation {
+  saveRole(id: ID, name: String, label: String): Role
+}
+
+type Role {
+  id: ID
+  name: String
+  label: String
 }
