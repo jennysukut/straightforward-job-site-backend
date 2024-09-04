@@ -4,10 +4,20 @@ type Query {
 
 type Mutation {
   saveRole(id: ID, name: String, label: String): Role
+  saveAccount(id: ID, name: String, label: String,
+    password: String, enabled: Boolean, roles: [ID]) : Account
 }
 
 type Role {
   id: ID
   name: String
   label: String
+}
+
+type Account {
+  id: ID
+  name: String
+  label: String
+  enabled: Boolean
+  roles: [Role]
 }

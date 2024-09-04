@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,47 +45,32 @@ public class AccountController {
     service.delete(id);
   }
 
+  @MutationMapping(name = "saveAccount")
   @RequestMapping(path = "/account", method = RequestMethod.POST)
-  public Account save(@RequestBody Account requestBody) {
-    logger.info("Request body: " + requestBody);
+  public Account save(@Argument Long id, @Argument String name, @Argument String label, @Argument String password,
+      @Argument Boolean enabled, @Argument List<Long> roles) {
     try {
-    AccountEntity accountEntity;
-    if (requestBody.getId() == null) {
-      accountEntity = new AccountEntity();
-      accountEntity.setName(requestBody.getName());
-      accountEntity.setLabel(requestBody.getLabel());
-      String rawPassword = requestBody.getPassword();
+      AccountEntity accountEntity;
+      if (id == null) {
+        accountEntity = new AccountEntity();
+      } else {
+        accountEntity = service.getById(id);
+      }
+      accountEntity.setName(name);
+      accountEntity.setLabel(label);
+      String rawPassword = password;
       String encryptedPassword = passwordEncoder.encode(rawPassword);
       logger.info("Encrypted password: " + encryptedPassword);
       accountEntity.setPassword(encryptedPassword);
-      accountEntity.setEnabled(requestBody.isEnabled());
-      accountEntity.setRoles(requestBody.getRoles().stream().map(role -> {
-        RoleEntity roleEntity = new RoleEntity();
-        roleEntity.setId(role.getId());
-        return roleEntity;
-      }).collect(Collectors.toSet()));
-    } else {
-      accountEntity = service.getById(requestBody.getId());
-      if (requestBody.getName() != null) {
-        accountEntity.setName(requestBody.getName());
+      accountEntity.setEnabled(enabled);
+      if (roles != null) {
+        accountEntity.setRoles(roles.stream().map(roleId -> {
+          RoleEntity roleEntity = new RoleEntity();
+          roleEntity.setId(roleId);
+          return roleEntity;
+        }).collect(Collectors.toSet()));
       }
-      if (requestBody.getLabel() != null) {
-        accountEntity.setLabel(requestBody.getLabel());
-      }
-      if (requestBody.getPassword() != null) {
-        String rawPassword = requestBody.getPassword();
-        String encryptedPassword = passwordEncoder.encode(rawPassword);
-        logger.info("Encrypted password: " + encryptedPassword);
-        accountEntity.setPassword(encryptedPassword);
-      }
-      accountEntity.setEnabled(requestBody.isEnabled());
-      accountEntity.setRoles(requestBody.getRoles().stream().map(role -> {
-        RoleEntity roleEntity = new RoleEntity();
-        roleEntity.setId(role.getId());
-        return roleEntity;
-      }).collect(Collectors.toSet()));
-    }
-    return new Account(service.save(accountEntity));
+      return new Account(service.save(accountEntity));
     } catch (Exception ex) {
       logger.log(Level.SEVERE, ex.getLocalizedMessage(), ex);
       throw ex;
@@ -109,7 +96,7 @@ public class AccountController {
     logger.info("Path variable: " + id);
     return service.findAllById(id).stream().map(accountEntity -> {
       return new Account(accountEntity);
-    }).collect(Collectors.toList());      
+    }).collect(Collectors.toList());
   }
 
   @RequestMapping(path = "/account/findbyname/{name}", method = RequestMethod.GET)
@@ -123,7 +110,7 @@ public class AccountController {
     logger.info("Path variable: " + name);
     return service.findAllByName(name).stream().map(accountEntity -> {
       return new Account(accountEntity);
-    }).collect(Collectors.toList());      
+    }).collect(Collectors.toList());
   }
 
   @RequestMapping(path = "/account/findbylabel/{label}", method = RequestMethod.GET)
@@ -137,7 +124,7 @@ public class AccountController {
     logger.info("Path variable: " + label);
     return service.findAllByLabel(label).stream().map(accountEntity -> {
       return new Account(accountEntity);
-    }).collect(Collectors.toList());      
+    }).collect(Collectors.toList());
   }
 
   @RequestMapping(path = "/account/findall", method = RequestMethod.GET)
@@ -145,6 +132,6 @@ public class AccountController {
     logger.info("Request param limit: " + limit);
     return service.findAll().stream().map(accountEntity -> {
       return new Account(accountEntity);
-    }).collect(Collectors.toList());      
+    }).collect(Collectors.toList());
   }
 }
