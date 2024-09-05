@@ -11,6 +11,7 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,21 +39,25 @@ public class RoleController {
   }
 
   @MutationMapping(name = "saveRole")
-  public Role save(@Argument Long id, @Argument String name, @Argument String label) {
+  public Role saveRole(@Argument(name = "requestBody") Role requestBody) {
+    return save(requestBody);
+  }
+
+  @RequestMapping(path = "/role", method = RequestMethod.POST)
+  public Role save(@RequestBody Role requestBody) {
     RoleEntity roleEntity;
-    if (id == null) {
+    if (requestBody.getId() == null) {
       roleEntity = new RoleEntity();
     } else {
-      roleEntity = service.getById(id);
+      roleEntity = service.getById(requestBody.getId());
     }
-    if (name != null) {
-      roleEntity.setName(name);
+    if (requestBody.getName() != null) {
+      roleEntity.setName(requestBody.getName());
     }
-    if (label != null) {
-      roleEntity.setLabel(label);
+    if (requestBody.getLabel() != null) {
+      roleEntity.setLabel(requestBody.getLabel());
     }
     return new Role(service.save(roleEntity));
-
   }
 
   @RequestMapping(path = "/role/getbyid/{id}", method = RequestMethod.GET)

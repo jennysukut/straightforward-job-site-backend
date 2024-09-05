@@ -3,9 +3,23 @@ type Query {
 }
 
 type Mutation {
-  saveRole(id: ID, name: String, label: String): Role
-  saveAccount(id: ID, name: String, label: String,
-    password: String, enabled: Boolean, roles: [ID]) : Account
+  saveRole(requestBody: RoleInput): Role
+  saveAccount(requestBody: AccountInput) : Account
+}
+
+input AccountInput {
+  id: ID
+  name: String
+  label: String
+  password: String
+  enabled: Boolean
+  roles: [RoleInput]
+}
+
+input RoleInput {
+  id: ID
+  name: String
+  label: String
 }
 
 type Role {

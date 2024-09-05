@@ -46,27 +46,36 @@ public class AccountController {
   }
 
   @MutationMapping(name = "saveAccount")
+  public Account saveAccount(@Argument(name = "requestBody") Account requestBody) {
+    return save(requestBody);
+  }
+
   @RequestMapping(path = "/account", method = RequestMethod.POST)
-  public Account save(@Argument Long id, @Argument String name, @Argument String label, @Argument String password,
-      @Argument Boolean enabled, @Argument List<Long> roles) {
+  public Account save(@RequestBody Account requestBody) {
     try {
       AccountEntity accountEntity;
-      if (id == null) {
+      if (requestBody.getId() == null) {
         accountEntity = new AccountEntity();
       } else {
-        accountEntity = service.getById(id);
+        accountEntity = service.getById(requestBody.getId());
       }
-      accountEntity.setName(name);
-      accountEntity.setLabel(label);
-      String rawPassword = password;
-      String encryptedPassword = passwordEncoder.encode(rawPassword);
-      logger.info("Encrypted password: " + encryptedPassword);
-      accountEntity.setPassword(encryptedPassword);
-      accountEntity.setEnabled(enabled);
-      if (roles != null) {
-        accountEntity.setRoles(roles.stream().map(roleId -> {
+      if (requestBody.getName() != null) {
+        accountEntity.setName(requestBody.getName());
+      }
+      if (requestBody.getLabel() != null) {
+        accountEntity.setLabel(requestBody.getLabel());
+      }
+      if (requestBody.getPassword() != null) {
+        String rawPassword = requestBody.getPassword();
+        String encryptedPassword = passwordEncoder.encode(rawPassword);
+        logger.info("Encrypted password: " + encryptedPassword);
+        accountEntity.setPassword(encryptedPassword);
+      }
+      accountEntity.setEnabled(requestBody.isEnabled());
+      if (requestBody.getRoles() != null) {
+        accountEntity.setRoles(requestBody.getRoles().stream().map(role -> {
           RoleEntity roleEntity = new RoleEntity();
-          roleEntity.setId(roleId);
+          roleEntity.setId(role.getId());
           return roleEntity;
         }).collect(Collectors.toSet()));
       }
