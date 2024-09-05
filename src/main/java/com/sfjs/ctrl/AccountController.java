@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -136,6 +137,7 @@ public class AccountController {
     }).collect(Collectors.toList());
   }
 
+  @QueryMapping(name = "findAllAccounts")
   @RequestMapping(path = "/account/findall", method = RequestMethod.GET)
   public List<Account> findAll(@RequestParam("limit") Optional<Integer> limit, Principal principal) {
     logger.info("Request param limit: " + limit);
