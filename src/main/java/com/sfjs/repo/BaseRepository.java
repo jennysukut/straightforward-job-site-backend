@@ -4,21 +4,21 @@ import java.util.List;
 
 import com.sfjs.entity.BaseEntity;
 
-public interface BaseRepository<E extends BaseEntity> {
+public interface BaseRepository<ENTITY extends BaseEntity> {
 
-  List<E> findAllById(Long id);
+  List<ENTITY> findAllById(Long id);
 
   boolean existsByName(String name);
 
-  E findByName(String name);
+  ENTITY findByName(String name);
 
-  List<E> findAllByName(String name);
+  List<ENTITY> findAllByName(String name);
 
   boolean existsByLabel(String label);
 
-  E findByLabel(String label);
+  ENTITY findByLabel(String label);
 
-  List<E> findAllByLabel(String label);
+  List<ENTITY> findAllByLabel(String label);
 
-  List<E> findAll();
+  List<ENTITY> findAll();
 }
