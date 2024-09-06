@@ -8,5 +8,5 @@ import com.sfjs.entity.RoleEntity;
 
 @Repository
 @Transactional
-public interface RoleRepository extends JpaRepository<RoleEntity, Long>, SimpleRepository<RoleEntity> {
+public interface RoleRepository extends JpaRepository<RoleEntity, Long>, BaseRepository<RoleEntity> {
 }

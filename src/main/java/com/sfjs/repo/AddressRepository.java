@@ -8,5 +8,5 @@ import com.sfjs.entity.AddressEntity;
 
 @Repository
 @Transactional
-public interface AddressRepository extends JpaRepository<AddressEntity, Long>, SimpleRepository<AddressEntity> {
+public interface AddressRepository extends JpaRepository<AddressEntity, Long>, BaseRepository<AddressEntity> {
 }

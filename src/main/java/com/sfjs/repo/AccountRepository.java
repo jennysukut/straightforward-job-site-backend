@@ -8,5 +8,5 @@ import com.sfjs.entity.AccountEntity;
 
 @Repository
 @Transactional
-public interface AccountRepository extends JpaRepository<AccountEntity, Long>, SimpleRepository<AccountEntity> {
+public interface AccountRepository extends JpaRepository<AccountEntity, Long>, BaseRepository<AccountEntity> {
 }

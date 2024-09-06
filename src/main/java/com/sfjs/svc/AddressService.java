@@ -6,19 +6,19 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.entity.AddressEntity;
 import com.sfjs.repo.AddressRepository;
-import com.sfjs.repo.SimpleRepository;
+import com.sfjs.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class AddressService extends SimpleService<AddressEntity> {
+public class AddressService extends BaseService<AddressEntity> {
 
   @Autowired
   AddressRepository repository;
 
   @Override
-  public SimpleRepository<AddressEntity> getSimpleRepository() {
+  public BaseRepository<AddressEntity> getBaseRepository() {
     return this.repository;
   }
 

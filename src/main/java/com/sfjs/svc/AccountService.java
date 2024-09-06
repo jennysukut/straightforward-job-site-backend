@@ -6,19 +6,19 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.entity.AccountEntity;
 import com.sfjs.repo.AccountRepository;
-import com.sfjs.repo.SimpleRepository;
+import com.sfjs.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class AccountService extends SimpleService<AccountEntity> {
+public class AccountService extends BaseService<AccountEntity> {
 
   @Autowired
   AccountRepository repository;
 
   @Override
-  public SimpleRepository<AccountEntity> getSimpleRepository() {
+  public BaseRepository<AccountEntity> getBaseRepository() {
     return this.repository;
   }
 

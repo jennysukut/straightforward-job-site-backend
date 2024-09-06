@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.sfjs.entity.BaseEntity;
 
-public interface SimpleRepository<E extends BaseEntity> {
+public interface BaseRepository<E extends BaseEntity> {
 
   List<E> findAllById(Long id);
 

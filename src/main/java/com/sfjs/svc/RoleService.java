@@ -6,19 +6,19 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.entity.RoleEntity;
 import com.sfjs.repo.RoleRepository;
-import com.sfjs.repo.SimpleRepository;
+import com.sfjs.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class RoleService extends SimpleService<RoleEntity> {
+public class RoleService extends BaseService<RoleEntity> {
 
   @Autowired
   RoleRepository repository;
 
   @Override
-  public SimpleRepository<RoleEntity> getSimpleRepository() {
+  public BaseRepository<RoleEntity> getBaseRepository() {
     return this.repository;
   }
 

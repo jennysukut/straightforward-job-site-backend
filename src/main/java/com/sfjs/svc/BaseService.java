@@ -9,11 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.sfjs.entity.BaseEntity;
-import com.sfjs.repo.SimpleRepository;
+import com.sfjs.repo.BaseRepository;
 
-public abstract class SimpleService<ENTITY extends BaseEntity> {
+public abstract class BaseService<ENTITY extends BaseEntity> {
 
-  public abstract SimpleRepository<ENTITY> getSimpleRepository();
+  public abstract BaseRepository<ENTITY> getBaseRepository();
 
   public abstract JpaRepository<ENTITY, Long> getJpaRepository();
 
@@ -34,28 +34,28 @@ public abstract class SimpleService<ENTITY extends BaseEntity> {
   }
 
   public List<ENTITY> findAllById(Long id) {
-    return getSimpleRepository().findAllById(id);
+    return getBaseRepository().findAllById(id);
   }
 
   public List<ENTITY> findAll() {
-    return getSimpleRepository().findAll();
+    return getBaseRepository().findAll();
   }
 
   public ENTITY findByName(String name) {
-    ENTITY entity = getSimpleRepository().findByName(name);
+    ENTITY entity = getBaseRepository().findByName(name);
     return entity;
   }
 
   public List<ENTITY> findAllByName(String name) {
-    return getSimpleRepository().findAllByName(name);
+    return getBaseRepository().findAllByName(name);
   }
 
   public ENTITY findByLabel(String label) {
-    return getSimpleRepository().findByLabel(label);
+    return getBaseRepository().findByLabel(label);
   }
 
   public List<ENTITY> findAllByLabel(String label) {
-    return getSimpleRepository().findAllByLabel(label);
+    return getBaseRepository().findAllByLabel(label);
   }
 
   public Page<ENTITY> findAll(Optional<Integer> limit) {

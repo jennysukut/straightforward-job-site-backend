@@ -6,19 +6,19 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.entity.FellowEntity;
 import com.sfjs.repo.FellowRepository;
-import com.sfjs.repo.SimpleRepository;
+import com.sfjs.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class FellowService extends SimpleService<FellowEntity> {
+public class FellowService extends BaseService<FellowEntity> {
 
   @Autowired
   FellowRepository repository;
 
   @Override
-  public SimpleRepository<FellowEntity> getSimpleRepository() {
+  public BaseRepository<FellowEntity> getBaseRepository() {
     return this.repository;
   }
 

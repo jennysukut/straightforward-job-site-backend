@@ -8,5 +8,5 @@ import com.sfjs.entity.FellowEntity;
 
 @Repository
 @Transactional
-public interface FellowRepository extends JpaRepository<FellowEntity, Long>, SimpleRepository<FellowEntity> {
+public interface FellowRepository extends JpaRepository<FellowEntity, Long>, BaseRepository<FellowEntity> {
 }
