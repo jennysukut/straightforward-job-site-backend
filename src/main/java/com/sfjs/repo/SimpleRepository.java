@@ -2,7 +2,9 @@ package com.sfjs.repo;
 
 import java.util.List;
 
-public interface SimpleRepository<E> {
+import com.sfjs.entity.BaseEntity;
+
+public interface SimpleRepository<E extends BaseEntity> {
 
   List<E> findAllById(Long id);
 

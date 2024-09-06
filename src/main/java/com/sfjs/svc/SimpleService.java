@@ -8,9 +8,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.sfjs.entity.BaseEntity;
 import com.sfjs.repo.SimpleRepository;
 
-public abstract class SimpleService<ENTITY> {
+public abstract class SimpleService<ENTITY extends BaseEntity> {
 
   public abstract SimpleRepository<ENTITY> getSimpleRepository();
 
