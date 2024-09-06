@@ -1,11 +1,10 @@
 package com.sfjs.ctrl;
 
-import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -139,9 +137,13 @@ public class AccountController {
 
   @QueryMapping(name = "findAllAccounts")
   @RequestMapping(path = "/account/findall", method = RequestMethod.GET)
-  public List<Account> findAll(@RequestParam("limit") Optional<Integer> limit, Principal principal) {
+  public List<Account> findAll(@Argument Integer limit) {
     logger.info("Request param limit: " + limit);
-    return service.findAll().stream().map(accountEntity -> {
+    Stream<AccountEntity> accountStream = service.findAll().stream();
+    if (limit != null) {
+      accountStream = accountStream.limit(limit);
+    }
+    return accountStream.map(accountEntity -> {
       return new Account(accountEntity);
     }).collect(Collectors.toList());
   }
