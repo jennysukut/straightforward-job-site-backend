@@ -1,5 +1,6 @@
 package com.sfjs.dto;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class Account {
       this.setEmail(entity.getEmail());
       this.setPassword(entity.getPassword());
       this.setEnabled(entity.isEnabled());
-      this.setRoles(entity.getRoles().stream().map(roleEntity -> {
+      this.setRoles(entity.getRoles() == null ? Collections.emptySet() : entity.getRoles().stream().map(roleEntity -> {
         Role role = new Role();
         role.setId(roleEntity.getId());
         role.setName(roleEntity.getName());
@@ -55,7 +56,7 @@ public class Account {
   @Getter
   @Setter
   private Set<Role> roles;
-  
+
   @Getter
   @Setter
   private boolean enabled;
