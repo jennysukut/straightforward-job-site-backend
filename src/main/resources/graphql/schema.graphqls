@@ -28,6 +28,7 @@ input AccountInput {
   id: ID
   name: String
   label: String
+  email: String
   password: String
   enabled: Boolean
   roles: [RoleInput]
@@ -49,6 +50,7 @@ type Account {
   id: ID
   name: String
   label: String
+  email: String
   enabled: Boolean
   roles: [Role]
 }

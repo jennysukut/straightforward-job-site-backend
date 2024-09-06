@@ -64,6 +64,9 @@ public class AccountController {
       if (requestBody.getLabel() != null) {
         accountEntity.setLabel(requestBody.getLabel());
       }
+      if (requestBody.getEmail() != null) {
+        accountEntity.setEmail(requestBody.getEmail());
+      }
       if (requestBody.getPassword() != null) {
         String rawPassword = requestBody.getPassword();
         String encryptedPassword = passwordEncoder.encode(rawPassword);

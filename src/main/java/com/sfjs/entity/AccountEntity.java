@@ -37,6 +37,10 @@ public class AccountEntity {
 
   @Getter
   @Setter
+  private String email;
+
+  @Getter
+  @Setter
   private String password;
 
   @Getter

@@ -23,6 +23,7 @@ public class Account {
       this.setId(entity.getId());
       this.setName(entity.getName());
       this.setLabel(entity.getLabel());
+      this.setEmail(entity.getEmail());
       this.setPassword(entity.getPassword());
       this.setEnabled(entity.isEnabled());
       this.setRoles(entity.getRoles().stream().map(roleEntity -> {
@@ -42,6 +43,10 @@ public class Account {
   @Getter
   @Setter
   private String label;
+
+  @Getter
+  @Setter
+  private String email;
 
   @Getter
   @Setter
