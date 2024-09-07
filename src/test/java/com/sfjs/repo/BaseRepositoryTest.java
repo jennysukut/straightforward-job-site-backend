@@ -22,7 +22,7 @@ public abstract class BaseRepositoryTest<R extends BaseRepository<E>, E extends 
   protected abstract E createEntity();
 
   @ParameterizedTest
-  @ValueSource(strings = {"ADMIN", "USER", "GUEST"})
+  @ValueSource(strings = {"entity_name_1", "entity_name_2", "entity_name_3"})
   public void whenFindByName_thenReturnEntity(String name) {
     // given
     E entity = createEntity();
@@ -39,7 +39,7 @@ public abstract class BaseRepositoryTest<R extends BaseRepository<E>, E extends 
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"ADMIN", "USER", "GUEST"})
+  @ValueSource(strings = {"entity_label_1", "entity_label_2", "entity_label_3"})
   public void whenFindByLabel_thenReturnEntity(String label) {
     // given
     E entity = createEntity();

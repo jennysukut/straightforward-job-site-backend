@@ -19,7 +19,7 @@ public class PaymentEntity extends BaseEntity<PaymentEntity, Payment> {
   @Getter
   @Setter
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "account_id", nullable = false)
+  @JoinColumn(name = "account_id", nullable = true)
   private AccountEntity account;
 
   @Override
