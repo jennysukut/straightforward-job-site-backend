@@ -32,9 +32,14 @@ public class RoleController extends BaseController<RoleService, RoleEntity, Role
     return RoleEntity.class;
   }
 
+  @MutationMapping(name = "deleteRole")
+  public Boolean deleteRole(@Argument(name = "id") Long id) {
+    return delete(id);
+  }
+
   @RequestMapping(path = "/role/{id}", method = RequestMethod.DELETE)
-  public void delete(@PathVariable(name = "id") Long id) {
-    super.delete(id);
+  public Boolean delete(@PathVariable(name = "id") Long id) {
+    return super.delete(id);
   }
 
   @MutationMapping(name = "saveRole")

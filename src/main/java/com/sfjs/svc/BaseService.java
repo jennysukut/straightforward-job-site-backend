@@ -6,31 +6,29 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.sfjs.entity.BaseEntity;
 import com.sfjs.repo.BaseRepository;
 
-public abstract class BaseService<ENTITY extends BaseEntity> {
+public abstract class BaseService<ENTITY extends BaseEntity<?, ?>> {
 
   public abstract BaseRepository<ENTITY> getBaseRepository();
 
-  public abstract JpaRepository<ENTITY, Long> getJpaRepository();
-
-  public void delete(Long id) {
-    getJpaRepository().deleteById(id);
+  public Boolean delete(Long id) {
+    getBaseRepository().deleteById(id);
+    return true;
   }
 
   public ENTITY save(ENTITY entity) {
-    return getJpaRepository().save(entity);
+    return getBaseRepository().save(entity);
   }
 
   public ENTITY getById(Long id) {
-    return getJpaRepository().getReferenceById(id);
+    return getBaseRepository().getReferenceById(id);
   }
 
   public ENTITY findById(Long id) {
-    return getJpaRepository().findById(id).get();
+    return getBaseRepository().findById(id).get();
   }
 
   public List<ENTITY> findAllById(Long id) {
@@ -60,6 +58,6 @@ public abstract class BaseService<ENTITY extends BaseEntity> {
 
   public Page<ENTITY> findAll(Optional<Integer> limit) {
     Pageable pageable = PageRequest.of(0, limit.isPresent() ? limit.get() : 3);
-    return getJpaRepository().findAll(pageable);
+    return getBaseRepository().findAll(pageable);
   }
 }

@@ -2,9 +2,22 @@ package com.sfjs.repo;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.NoRepositoryBean;
+import org.springframework.data.repository.query.Param;
+
 import com.sfjs.entity.BaseEntity;
 
-public interface BaseRepository<ENTITY extends BaseEntity> {
+@NoRepositoryBean
+public interface BaseRepository<ENTITY extends BaseEntity<?, ?>> extends JpaRepository<ENTITY, Long>, CrudRepository<ENTITY, Long> {
+
+  @Override
+  @Modifying
+  @Query("UPDATE #{#entityName} e SET e.deletedAt = CURRENT_TIMESTAMP WHERE e.id = :id")
+  void deleteById(@Param("id") Long id);
 
   List<ENTITY> findAllById(Long id);
 
@@ -20,5 +33,7 @@ public interface BaseRepository<ENTITY extends BaseEntity> {
 
   List<ENTITY> findAllByLabel(String label);
 
+  @Override
+  @Query("SELECT e FROM #{#entityName} e WHERE e.deletedAt IS NULL")
   List<ENTITY> findAll();
 }

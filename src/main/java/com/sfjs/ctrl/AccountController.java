@@ -37,9 +37,14 @@ public class AccountController extends BaseController<AccountService, AccountEnt
     return AccountEntity.class;
   }
 
+  @MutationMapping(name = "deleteAccount")
+  public Boolean deleteAccount(@Argument(name = "id") Long id) {
+    return delete(id);
+  }
+
   @RequestMapping(path = "/account/{id}", method = RequestMethod.DELETE)
-  public void delete(@PathVariable(name = "id") Long id) {
-    super.delete(id);
+  public Boolean delete(@PathVariable(name = "id") Long id) {
+    return super.delete(id);
   }
 
   @MutationMapping(name = "saveAccount")

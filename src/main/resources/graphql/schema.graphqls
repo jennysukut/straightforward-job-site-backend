@@ -7,9 +7,13 @@ type Query {
 
 type Mutation {
   saveRole(requestBody: RoleInput): Role
+  deleteRole(id: ID): Boolean
   saveAccount(requestBody: AccountInput) : Account
+  deleteAccount(id: ID): Boolean
   saveAddress(requestBody: AddressInput): Address
+  deleteAddress(id: ID): Boolean
   savePayment(requestBody: PaymentInput): Payment
+  deletePayment(id: ID): Boolean
 }
 
 input PaymentInput {

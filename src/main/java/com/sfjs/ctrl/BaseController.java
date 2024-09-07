@@ -43,8 +43,8 @@ public abstract class BaseController<SERVICE extends BaseService<ENTITY>, ENTITY
     return BaseEntity.createInstance(getEntityClass());
   }
 
-  public void delete(@PathVariable(name = "id") Long id) {
-    service.delete(id);
+  public Boolean delete(@PathVariable(name = "id") Long id) {
+    return service.delete(id);
   }
 
   public BODY saveData(@Argument(name = "requestBody") BODY requestBody) {

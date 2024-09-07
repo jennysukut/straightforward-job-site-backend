@@ -1,7 +1,6 @@
 package com.sfjs.svc;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.entity.AccountEntity;
@@ -19,11 +18,6 @@ public class AccountService extends BaseService<AccountEntity> {
 
   @Override
   public BaseRepository<AccountEntity> getBaseRepository() {
-    return this.repository;
-  }
-
-  @Override
-  public JpaRepository<AccountEntity, Long> getJpaRepository() {
     return this.repository;
   }
 }

@@ -32,9 +32,14 @@ public class FellowController extends BaseController<FellowService, FellowEntity
     return FellowEntity.class;
   }
 
+  @MutationMapping(name = "deleteFellow")
+  public Boolean deleteFellow(@Argument(name = "id") Long id) {
+    return delete(id);
+  }
+
   @RequestMapping(path = "/fellow/{id}", method = RequestMethod.DELETE)
-  public void delete(@PathVariable(name = "id") Long id) {
-    super.delete(id);
+  public Boolean delete(@PathVariable(name = "id") Long id) {
+    return super.delete(id);
   }
 
   @MutationMapping(name = "saveFellow")

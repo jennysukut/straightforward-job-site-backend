@@ -32,9 +32,14 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
     return PaymentEntity.class;
   }
 
+  @MutationMapping(name = "deletePayment")
+  public Boolean deletePayment(@Argument(name = "id") Long id) {
+    return delete(id);
+  }
+
   @RequestMapping(path = "/payment/{id}", method = RequestMethod.DELETE)
-  public void delete(@PathVariable(name = "id") Long id) {
-    super.delete(id);
+  public Boolean delete(@PathVariable(name = "id") Long id) {
+    return super.delete(id);
   }
 
   @MutationMapping(name = "savePayment")
@@ -87,4 +92,5 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
   public List<Payment> findAll(@Argument Integer limit) {
     return super.findAll(limit);
   }
+
 }

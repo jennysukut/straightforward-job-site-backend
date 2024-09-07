@@ -1,7 +1,6 @@
 package com.sfjs.svc;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.entity.AddressEntity;
@@ -19,11 +18,6 @@ public class AddressService extends BaseService<AddressEntity> {
 
   @Override
   public BaseRepository<AddressEntity> getBaseRepository() {
-    return this.repository;
-  }
-
-  @Override
-  public JpaRepository<AddressEntity, Long> getJpaRepository() {
     return this.repository;
   }
 }

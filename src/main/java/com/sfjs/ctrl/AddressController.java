@@ -32,9 +32,14 @@ public class AddressController extends BaseController<AddressService, AddressEnt
     return AddressEntity.class;
   }
 
+  @MutationMapping(name = "deleteAddress")
+  public Boolean deleteAddress(@Argument(name = "id") Long id) {
+    return delete(id);
+  }
+
   @RequestMapping(path = "/address/{id}", method = RequestMethod.DELETE)
-  public void delete(@PathVariable(name = "id") Long id) {
-    super.delete(id);
+  public Boolean delete(@PathVariable(name = "id") Long id) {
+    return super.delete(id);
   }
 
   @MutationMapping(name = "saveAddress")
