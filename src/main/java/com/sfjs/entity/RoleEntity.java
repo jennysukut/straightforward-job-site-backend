@@ -3,6 +3,8 @@ package com.sfjs.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.sfjs.dto.Role;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -12,7 +14,7 @@ import lombok.Setter;
 
 @Entity(name = "role")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class RoleEntity extends BaseEntity {
+public class RoleEntity extends BaseEntity<RoleEntity, Role> {
 
   @Getter
   @Setter

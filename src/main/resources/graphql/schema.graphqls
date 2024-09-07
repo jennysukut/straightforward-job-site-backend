@@ -18,9 +18,9 @@ input AddressInput {
   secondLine: String
   city: String
   state: String
+  country: String
   zipCode: String
   zipPlus4: String
-  country: String
   landmark: String
 }
 
@@ -63,8 +63,8 @@ type Address {
   secondLine: String
   city: String
   state: String
+  country: String
   zipCode: String
   zipPlus4: String
-  country: String
   landmark: String
 }

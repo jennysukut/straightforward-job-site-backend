@@ -1,26 +1,12 @@
 package com.sfjs.dto;
 
+import com.sfjs.entity.BaseEntity;
 import com.sfjs.entity.FellowEntity;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class Fellow extends BaseData {
-
-  public Fellow() {
-  }
-
-  public Fellow(FellowEntity entity) {
-    if (entity != null) {
-      this.setId(entity.getId());
-      this.setName(entity.getName());
-      this.setLabel(entity.getLabel());
-      this.setFirstName(entity.getFirstName());
-      this.setLastName(entity.getLastName());
-      this.setEmail(entity.getEmail());
-      this.setPassword(entity.getPassword());
-    }
-  }
+public class Fellow extends BaseBody<Fellow, FellowEntity> {
 
   @Getter
   @Setter
@@ -30,11 +16,17 @@ public class Fellow extends BaseData {
   @Setter
   private String lastName;
 
-  @Getter
-  @Setter
-  private String email;
-
-  @Getter
-  @Setter
-  private String password;
+  @Override
+  public <E extends BaseEntity<?, ?>> void refresh(E entity) {
+    super.refresh(entity);
+    if (entity instanceof FellowEntity) {
+      FellowEntity fellowEntity = (FellowEntity) entity;
+      if (fellowEntity.getFirstName() != null) {
+        this.setFirstName(fellowEntity.getFirstName());
+      }
+      if (fellowEntity.getLastName() != null) {
+        this.setLastName(fellowEntity.getLastName());
+      }
+    }
+  }
 }

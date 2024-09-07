@@ -5,33 +5,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.sfjs.entity.AccountEntity;
+import com.sfjs.entity.BaseEntity;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class Account extends BaseData {
-
-  public Account() {
-
-  }
-
-  public Account(AccountEntity entity) {
-    if (entity != null) {
-      this.setId(entity.getId());
-      this.setName(entity.getName());
-      this.setLabel(entity.getLabel());
-      this.setEmail(entity.getEmail());
-      this.setPassword(entity.getPassword());
-      this.setEnabled(entity.isEnabled());
-      this.setRoles(entity.getRoles() == null ? Collections.emptySet() : entity.getRoles().stream().map(roleEntity -> {
-        Role role = new Role();
-        role.setId(roleEntity.getId());
-        role.setName(roleEntity.getName());
-        role.setLabel(roleEntity.getLabel());
-        return role;
-      }).collect(Collectors.toSet()));
-    }
-  }
+public class Account extends BaseBody<Account, AccountEntity> {
 
   @Getter
   @Setter
@@ -43,9 +22,32 @@ public class Account extends BaseData {
 
   @Getter
   @Setter
-  private Set<Role> roles;
+  private boolean enabled;
 
   @Getter
   @Setter
-  private boolean enabled;
+  private Set<Role> roles;
+
+  @Override
+  public <E extends BaseEntity<?, ?>> void refresh(E entity) {
+    super.refresh(entity);
+    if (entity instanceof AccountEntity) {
+      AccountEntity accountEntity = (AccountEntity) entity;
+      if (accountEntity.getEmail() != null) {
+        this.setEmail(accountEntity.getEmail());
+      }
+      if (accountEntity.getPassword() != null) {
+        this.setPassword(accountEntity.getPassword());
+      }
+      if (accountEntity.getRoles() != null) {
+        this.setRoles(accountEntity.getRoles().stream().map(roleEntity -> {
+          Role role = new Role();
+          role.refresh(roleEntity);
+          return role;
+        }).collect(Collectors.toSet()));
+      } else {
+        this.setRoles(Collections.emptySet());
+      }
+    }
+  }
 }
