@@ -2,12 +2,21 @@ type Query {
   findAllRoles(limit: Int): [Role]
   findAllAccounts(limit: Int): [Account]
   findAllAddresses(limit: Int): [Address]
+  findAllPayments(limit: Int): [Payment]
 }
 
 type Mutation {
   saveRole(requestBody: RoleInput): Role
   saveAccount(requestBody: AccountInput) : Account
   saveAddress(requestBody: AddressInput): Address
+  savePayment(requestBody: PaymentInput): Payment
+}
+
+input PaymentInput {
+  id: ID
+  name: String
+  label: String
+  account: AccountInput
 }
 
 input AddressInput {
@@ -67,4 +76,11 @@ type Address {
   zipCode: String
   zipPlus4: String
   landmark: String
+}
+
+type Payment {
+  id: ID
+  name: String
+  label: String
+  account: Account
 }
