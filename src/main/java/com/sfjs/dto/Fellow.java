@@ -5,14 +5,9 @@ import com.sfjs.entity.FellowEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Fellow {
-
-  @Getter
-  @Setter
-  private Long id;
+public class Fellow extends BaseData {
 
   public Fellow() {
-
   }
 
   public Fellow(FellowEntity entity) {
@@ -26,14 +21,6 @@ public class Fellow {
       this.setPassword(entity.getPassword());
     }
   }
-
-  @Getter
-  @Setter
-  private String name;
-
-  @Getter
-  @Setter
-  private String label;
 
   @Getter
   @Setter

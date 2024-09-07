@@ -2,14 +2,7 @@ package com.sfjs.dto;
 
 import com.sfjs.entity.RoleEntity;
 
-import lombok.Getter;
-import lombok.Setter;
-
-public class Role {
-
-  @Getter
-  @Setter
-  private Long id;
+public class Role extends BaseData {
 
   public Role() {
 
@@ -23,16 +16,4 @@ public class Role {
     }
   }
 
-  @Getter
-  @Setter
-  private String name;
-
-  @Getter
-  @Setter
-  private String label;
-
-  @Override
-  public String toString() {
-    return String.format("name: %s label: %s", name, label);
-  }
 }

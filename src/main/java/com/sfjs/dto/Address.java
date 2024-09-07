@@ -5,19 +5,7 @@ import com.sfjs.entity.AddressEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Address {
-
-  @Getter
-  @Setter
-  private Long id;
-
-  @Getter
-  @Setter
-  private String name;
-
-  @Getter
-  @Setter
-  private String label;
+public class Address extends BaseData {
 
   @Getter
   @Setter
@@ -70,8 +58,4 @@ public class Address {
     }
   }
 
-  @Override
-  public String toString() {
-    return String.format("name: %s label: %s", name, label);
-  }
 }

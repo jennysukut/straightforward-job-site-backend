@@ -9,11 +9,7 @@ import com.sfjs.entity.AccountEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Account {
-
-  @Getter
-  @Setter
-  private Long id;
+public class Account extends BaseData {
 
   public Account() {
 
@@ -36,14 +32,6 @@ public class Account {
       }).collect(Collectors.toSet()));
     }
   }
-
-  @Getter
-  @Setter
-  private String name;
-
-  @Getter
-  @Setter
-  private String label;
 
   @Getter
   @Setter
