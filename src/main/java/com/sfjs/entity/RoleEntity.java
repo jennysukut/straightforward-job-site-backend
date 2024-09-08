@@ -3,6 +3,7 @@ package com.sfjs.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sfjs.dto.Role;
 
 import jakarta.persistence.Entity;
@@ -18,6 +19,7 @@ public class RoleEntity extends BaseEntity<RoleEntity, Role> {
 
   @Getter
   @Setter
+  @JsonIgnore
   @ManyToMany(mappedBy = "roles")
   private Set<AccountEntity> accounts = new HashSet<>();
 }

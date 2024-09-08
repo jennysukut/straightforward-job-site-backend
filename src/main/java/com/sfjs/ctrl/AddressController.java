@@ -22,16 +22,6 @@ import com.sfjs.svc.AddressService;
 @Transactional
 public class AddressController extends BaseController<AddressService, AddressEntity, Address> {
 
-  @Override
-  protected Class<Address> getBodyClass() {
-    return Address.class;
-  }
-
-  @Override
-  protected Class<AddressEntity> getEntityClass() {
-    return AddressEntity.class;
-  }
-
   @MutationMapping(name = "deleteAddress")
   public Boolean deleteAddress(@Argument(name = "id") Long id) {
     return delete(id);

@@ -22,16 +22,6 @@ import com.sfjs.svc.RoleService;
 @Transactional
 public class RoleController extends BaseController<RoleService, RoleEntity, Role> {
 
-  @Override
-  protected Class<Role> getBodyClass() {
-    return Role.class;
-  }
-
-  @Override
-  protected Class<RoleEntity> getEntityClass() {
-    return RoleEntity.class;
-  }
-
   @MutationMapping(name = "deleteRole")
   public Boolean deleteRole(@Argument(name = "id") Long id) {
     return delete(id);

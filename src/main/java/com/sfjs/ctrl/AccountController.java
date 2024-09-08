@@ -27,16 +27,6 @@ public class AccountController extends BaseController<AccountService, AccountEnt
   @Autowired
   PasswordEncoder passwordEncoder;
 
-  @Override
-  protected Class<Account> getBodyClass() {
-    return Account.class;
-  }
-
-  @Override
-  protected Class<AccountEntity> getEntityClass() {
-    return AccountEntity.class;
-  }
-
   @MutationMapping(name = "deleteAccount")
   public Boolean deleteAccount(@Argument(name = "id") Long id) {
     return delete(id);

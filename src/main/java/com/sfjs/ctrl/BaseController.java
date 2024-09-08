@@ -1,5 +1,7 @@
 package com.sfjs.ctrl;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sfjs.dto.BaseBody;
 import com.sfjs.entity.BaseEntity;
@@ -23,42 +28,71 @@ import com.sfjs.svc.BaseService;
 @Transactional
 public abstract class BaseController<SERVICE extends BaseService<ENTITY>, ENTITY extends BaseEntity<?, ?>, BODY extends BaseBody<?, ?>> {
 
+  public BaseController() {
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+  }
+
+  private JavaType getType(int index) {
+    Type genericSuperclass = getClass().getGenericSuperclass();
+    if (genericSuperclass instanceof ParameterizedType) {
+      Type[] typeArguments = ((ParameterizedType) genericSuperclass).getActualTypeArguments();
+      return mapper.getTypeFactory().constructType(typeArguments[index]);
+    } else {
+      throw new IllegalArgumentException("Type parameter is required.");
+    }
+  }
+
+  private JavaType bodyType = getBodyClass();
+
+  private JavaType entityType = getEntityClass();
+
   @Autowired
   private SERVICE service;
 
   Logger logger = Logger.getLogger(getClass().getName());
-  ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+  static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
 
-  protected abstract Class<BODY> getBodyClass();
-
-  protected abstract Class<ENTITY> getEntityClass();
-
-  protected BODY createBody(ENTITY entity) {
-    BODY body = BaseBody.createInstance(getBodyClass());
-    body.refresh(entity);
-    return body;
+  protected JavaType getBodyClass() {
+    return getType(2);
   }
 
-  protected ENTITY createEntity() {
-    return BaseEntity.createInstance(getEntityClass());
+  protected JavaType getEntityClass() {
+    return getType(1);
+  }
+
+  private BODY createBody(ENTITY entity) {
+    String json;
+    try {
+      json = mapper.writeValueAsString(entity);
+      return mapper.readValue(json, bodyType);
+    } catch (JsonProcessingException e) {
+      throw new IllegalArgumentException(e);
+    }
+  }
+
+  protected ENTITY createEntity(BODY body) {
+    String json;
+    try {
+      json = mapper.writeValueAsString(body);
+      return mapper.readValue(json, entityType);
+    } catch (JsonProcessingException e) {
+      throw new IllegalArgumentException(e);
+    }
   }
 
   public Boolean delete(@PathVariable(name = "id") Long id) {
     return service.delete(id);
   }
 
-  public BODY saveData(@Argument(name = "requestBody") BODY requestBody) {
-    return save(requestBody);
-  }
-
   public BODY save(@RequestBody BODY requestBody) {
     ENTITY entity;
     if (requestBody.getId() == null) {
-      entity = createEntity();
+      entity = createEntity(requestBody);
     } else {
       entity = service.getById(requestBody.getId());
+      // TODO Merge entity and request body
+      // entity.refresh(requestBody);
     }
-    entity.refresh(requestBody);
     entity = service.save(entity);
     return createBody(entity);
   }

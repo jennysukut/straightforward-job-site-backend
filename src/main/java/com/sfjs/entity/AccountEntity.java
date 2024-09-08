@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sfjs.dto.Account;
 import com.sfjs.dto.BaseBody;
 
@@ -45,6 +46,7 @@ public class AccountEntity extends BaseEntity<AccountEntity, Account> {
 
   @Getter
   @Setter
+  @JsonIgnore
   @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<PaymentEntity> payments = new ArrayList<>();
 

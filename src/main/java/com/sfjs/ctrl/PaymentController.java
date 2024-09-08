@@ -36,16 +36,6 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
   @Autowired
   PasswordEncoder passwordEncoder;
 
-  @Override
-  protected Class<Payment> getBodyClass() {
-    return Payment.class;
-  }
-
-  @Override
-  protected Class<PaymentEntity> getEntityClass() {
-    return PaymentEntity.class;
-  }
-
   @MutationMapping(name = "deletePayment")
   public Boolean deletePayment(@Argument(name = "id") Long id) {
     return delete(id);
@@ -113,9 +103,7 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
     return helcimService.initializeCheckout(payment).flatMap(response -> {
       // Save a field to the database
       return Mono.fromCallable(() -> {
-        PaymentEntity paymentEntity = new PaymentEntity();
-        // update fields from payment request argument
-        paymentEntity.refresh(payment);
+        PaymentEntity paymentEntity = this.createEntity(payment);
         // update this one field from response from helcim service
         // TODO Use two-way encryption
         String rawToken = response.getSecretToken();

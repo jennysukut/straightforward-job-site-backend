@@ -22,16 +22,6 @@ import com.sfjs.svc.FellowService;
 @Transactional
 public class FellowController extends BaseController<FellowService, FellowEntity, Fellow> {
 
-  @Override
-  protected Class<Fellow> getBodyClass() {
-    return Fellow.class;
-  }
-
-  @Override
-  protected Class<FellowEntity> getEntityClass() {
-    return FellowEntity.class;
-  }
-
   @MutationMapping(name = "deleteFellow")
   public Boolean deleteFellow(@Argument(name = "id") Long id) {
     return delete(id);
