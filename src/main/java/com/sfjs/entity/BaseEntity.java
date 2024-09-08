@@ -85,4 +85,9 @@ public class BaseEntity<ENTITY extends BaseEntity<?, ?>, BODY extends BaseBody<?
       this.setLabel(body.getLabel());
     }
   }
+
+  @Override
+  public String toString() {
+    return String.format("ID: %d, Name: %s Label: %s Version: %d", this.id, this.name, this.label, this.version);
+  }
 }
