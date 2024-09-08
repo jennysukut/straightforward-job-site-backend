@@ -14,12 +14,16 @@ type Mutation {
   deleteAddress(id: ID): Boolean
   savePayment(requestBody: PaymentInput): Payment
   deletePayment(id: ID): Boolean
+  initializePayment(payment: PaymentInput): Payment
 }
 
 input PaymentInput {
   id: ID
   name: String
   label: String
+  paymentType: String
+  amount: String
+  currency: String
   account: AccountInput
 }
 
@@ -86,5 +90,9 @@ type Payment {
   id: ID
   name: String
   label: String
+  paymentType: String
+  amount: String
+  currency: String
   account: Account
+  checkoutToken: String
 }
