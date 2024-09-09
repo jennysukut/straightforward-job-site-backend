@@ -5,7 +5,7 @@ import com.sfjs.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-public class BaseBody<BODY extends BaseBody<?, ?>, ENTITY extends BaseEntity<?, ?>> {
+public class BaseBody {
 
   @Getter
   @Setter

@@ -7,7 +7,7 @@ import com.sfjs.entity.AccountEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Account extends BaseBody<Account, AccountEntity> {
+public class Account extends BaseBody {
 
   @Getter
   @Setter

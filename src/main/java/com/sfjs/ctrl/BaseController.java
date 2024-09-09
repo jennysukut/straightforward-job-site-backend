@@ -26,7 +26,7 @@ import com.sfjs.svc.BaseService;
 @RestController
 @EnableWebMvc
 @Transactional
-public abstract class BaseController<SERVICE extends BaseService<ENTITY>, ENTITY extends BaseEntity<?, ?>, BODY extends BaseBody<?, ?>> {
+public abstract class BaseController<SERVICE extends BaseService<ENTITY>, ENTITY extends BaseEntity, BODY extends BaseBody> {
 
   public BaseController() {
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

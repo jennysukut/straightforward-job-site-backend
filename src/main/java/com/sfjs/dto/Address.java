@@ -5,7 +5,7 @@ import com.sfjs.entity.AddressEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Address extends BaseBody<Address, AddressEntity> {
+public class Address extends BaseBody {
 
   @Getter
   @Setter

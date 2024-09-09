@@ -15,7 +15,7 @@ import lombok.Setter;
 
 @Entity(name = "role")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class RoleEntity extends BaseEntity<RoleEntity, Role> {
+public class RoleEntity extends BaseEntity {
 
   @Getter
   @Setter

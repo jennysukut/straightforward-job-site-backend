@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import com.sfjs.entity.BaseEntity;
 
 @NoRepositoryBean
-public interface BaseRepository<ENTITY extends BaseEntity<?, ?>> extends JpaRepository<ENTITY, Long>, CrudRepository<ENTITY, Long> {
+public interface BaseRepository<ENTITY extends BaseEntity> extends JpaRepository<ENTITY, Long>, CrudRepository<ENTITY, Long> {
 
   @Override
   @Modifying

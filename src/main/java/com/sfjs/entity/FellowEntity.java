@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Entity(name = "fellow")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class FellowEntity extends BaseEntity<FellowEntity, Fellow> {
+public class FellowEntity extends BaseEntity {
 
   @Getter
   @Setter

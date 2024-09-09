@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import com.sfjs.entity.BaseEntity;
 import com.sfjs.repo.BaseRepository;
 
-public abstract class BaseService<ENTITY extends BaseEntity<?, ?>> {
+public abstract class BaseService<ENTITY extends BaseEntity> {
 
   public abstract BaseRepository<ENTITY> getBaseRepository();
 

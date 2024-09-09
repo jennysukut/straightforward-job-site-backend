@@ -6,7 +6,7 @@ import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Payment extends BaseBody<Payment, PaymentEntity> {
+public class Payment extends BaseBody {
 
   @Getter
   @Setter

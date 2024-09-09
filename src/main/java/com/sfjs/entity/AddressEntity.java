@@ -12,7 +12,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "address")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class AddressEntity extends BaseEntity<AddressEntity, Address> {
+public class AddressEntity extends BaseEntity {
 
   @Getter
   @Setter

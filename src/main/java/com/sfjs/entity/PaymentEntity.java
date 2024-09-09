@@ -18,7 +18,7 @@ import lombok.Setter;
 @Entity(name = "payment")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Proxy(lazy = false)
-public class PaymentEntity extends BaseEntity<PaymentEntity, Payment> {
+public class PaymentEntity extends BaseEntity {
 
   @Getter
   @Setter
