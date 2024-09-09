@@ -7,7 +7,6 @@ import java.util.Set;
 import org.hibernate.annotations.Proxy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sfjs.dto.Account;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

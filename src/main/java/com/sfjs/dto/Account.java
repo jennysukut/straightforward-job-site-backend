@@ -2,8 +2,6 @@ package com.sfjs.dto;
 
 import java.util.Set;
 
-import com.sfjs.entity.AccountEntity;
-
 import lombok.Getter;
 import lombok.Setter;
 

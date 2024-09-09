@@ -2,8 +2,6 @@ package com.sfjs.entity;
 
 import org.hibernate.annotations.Proxy;
 
-import com.sfjs.dto.Payment;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;

@@ -1,7 +1,5 @@
 package com.sfjs.dto;
 
-import com.sfjs.entity.PaymentEntity;
-
 import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;

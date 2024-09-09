@@ -1,7 +1,5 @@
 package com.sfjs.dto;
 
-import com.sfjs.entity.AddressEntity;
-
 import lombok.Getter;
 import lombok.Setter;
 

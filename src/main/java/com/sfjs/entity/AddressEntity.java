@@ -1,7 +1,5 @@
 package com.sfjs.entity;
 
-import com.sfjs.dto.Address;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;

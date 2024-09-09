@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sfjs.dto.Role;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
