@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,4 +46,16 @@ public class AccountEntity extends BaseEntity {
   @JsonIgnore
   @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<PaymentEntity> payments = new ArrayList<>();
+
+  @Getter
+  @Setter
+  @JsonIgnore
+  @OneToOne(mappedBy = "account", optional = true)
+  private BusinessEntity business;
+
+  @Getter
+  @Setter
+  @JsonIgnore
+  @OneToOne(mappedBy = "account", optional = true)
+  private FellowEntity fellow;
 }

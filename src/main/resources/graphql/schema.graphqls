@@ -3,6 +3,7 @@ type Query {
   findAllAccounts(limit: Int): [Account]
   findAllAddresses(limit: Int): [Address]
   findAllPayments(limit: Int): [Payment]
+  findAllBusinesses(limit: Int): [Business]
 }
 
 type Mutation {
@@ -15,6 +16,28 @@ type Mutation {
   savePayment(requestBody: PaymentInput): Payment
   deletePayment(id: ID): Boolean
   initializePayment(payment: PaymentInput): Payment
+  saveBusiness(requestBody: BusinessInput) : Business
+  deleteBusiness(id: ID): Boolean
+  saveFellow(requestBody: FellowInput): Fellow
+  deleteFellow(id: ID): Boolean
+}
+
+input FellowInput {
+  id: ID
+  name: String
+  label: String
+  firstName: String
+  lastName: String
+  account: AccountInput
+}
+
+type Fellow {
+  id: ID
+  name: String
+  label: String
+  firstName: String
+  lastName: String
+  account: Account
 }
 
 input PaymentInput {
@@ -39,6 +62,26 @@ input AddressInput {
   zipCode: String
   zipPlus4: String
   landmark: String
+}
+
+input BusinessInput {
+  id: ID
+  name: String
+  label: String
+  account: AccountInput
+  smallBio: String
+  missionAndVision: String
+  aboutSection: String
+}
+
+type Business {
+  id: ID
+  name: String
+  label: String
+  account: Account
+  smallBio: String
+  missionAndVision: String
+  aboutSection: String
 }
 
 input AccountInput {

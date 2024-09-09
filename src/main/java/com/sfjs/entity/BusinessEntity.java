@@ -8,21 +8,25 @@ import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity(name = "fellow")
+@Entity(name = "business")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class FellowEntity extends BaseEntity {
+public class BusinessEntity extends BaseEntity {
 
   @Getter
   @Setter
-  @OneToOne(optional = true)
+  @OneToOne(optional = false)
   @JoinColumn(name = "account_id", unique = true)
   private AccountEntity account;
 
   @Getter
   @Setter
-  private String firstName;
+  private String smallBio;
 
   @Getter
   @Setter
-  private String lastName;
+  private String missionAndVision;
+
+  @Getter
+  @Setter
+  private String aboutSection;
 }

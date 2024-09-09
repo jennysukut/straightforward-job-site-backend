@@ -4,30 +4,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.entity.AccountEntity;
-import com.sfjs.entity.FellowEntity;
+import com.sfjs.entity.BusinessEntity;
 import com.sfjs.repo.AccountRepository;
 import com.sfjs.repo.BaseRepository;
-import com.sfjs.repo.FellowRepository;
+import com.sfjs.repo.BusinessRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class FellowService extends BaseService<FellowEntity> {
+public class BusinessService extends BaseService<BusinessEntity> {
 
   @Autowired
-  FellowRepository repository;
+  BusinessRepository repository;
 
   @Autowired
   AccountRepository accountRepository;
 
   @Override
-  public BaseRepository<FellowEntity> getBaseRepository() {
+  public BaseRepository<BusinessEntity> getBaseRepository() {
     return this.repository;
   }
 
   @Override
-  public FellowEntity save(FellowEntity entity) {
+  public BusinessEntity save(BusinessEntity entity) {
     if (entity.getAccount() != null) {
       Long accountId = entity.getAccount().getId();
       AccountEntity accountEntity = accountRepository.findById(accountId).orElseThrow(); // Need to load the role
