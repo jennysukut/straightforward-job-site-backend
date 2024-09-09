@@ -112,9 +112,9 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
         // save the entity and return it
         return service.save(paymentEntity);
       }).map(savedEntity -> {
-        payment.setId(savedEntity.getId());
-        payment.setCheckoutToken(response.getCheckoutToken());
-        return payment;
+        Payment anotherPayment = this.createBody(savedEntity);
+        anotherPayment.setCheckoutToken(response.getCheckoutToken());
+        return anotherPayment;
       });
     });
   }

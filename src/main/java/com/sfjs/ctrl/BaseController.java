@@ -60,7 +60,7 @@ public abstract class BaseController<SERVICE extends BaseService<ENTITY>, ENTITY
     return getType(1);
   }
 
-  private BODY createBody(ENTITY entity) {
+  protected BODY createBody(ENTITY entity) {
     String json;
     try {
       json = mapper.writeValueAsString(entity);
