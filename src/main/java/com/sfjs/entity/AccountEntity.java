@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.annotations.Proxy;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -20,10 +18,8 @@ import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
-@SuppressWarnings("deprecation")
 @Entity(name = "account")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Proxy(lazy = false)
 public class AccountEntity extends BaseEntity {
 
   @Getter

@@ -1,7 +1,5 @@
 package com.sfjs.entity;
 
-import org.hibernate.annotations.Proxy;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;
@@ -12,10 +10,8 @@ import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 
-@SuppressWarnings("deprecation")
 @Entity(name = "payment")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Proxy(lazy = false)
 public class PaymentEntity extends BaseEntity {
 
   @Getter
@@ -41,7 +37,7 @@ public class PaymentEntity extends BaseEntity {
 
   @Getter
   @Setter
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "account_id", nullable = true)
   private AccountEntity account;
 }

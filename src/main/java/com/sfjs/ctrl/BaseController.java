@@ -19,7 +19,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sfjs.dto.BaseBody;
 import com.sfjs.entity.BaseEntity;
 import com.sfjs.svc.BaseService;
@@ -31,7 +30,6 @@ public abstract class BaseController<SERVICE extends BaseService<ENTITY>, ENTITY
 
   public BaseController() {
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
   }
 
   private JavaType getType(int index) {
