@@ -66,26 +66,6 @@ public class BaseEntity<ENTITY extends BaseEntity<?, ?>, BODY extends BaseBody<?
   @Setter
   private String label;
 
-  public static <T extends BaseEntity<?, ?>> T createInstance(Class<T> clazz) {
-    try {
-      return clazz.getDeclaredConstructor().newInstance();
-    } catch (Exception e) {
-      throw new RuntimeException("Failed to create instance", e);
-    }
-  }
-
-  public <B extends BaseBody<?, ?>> void refresh(B body) {
-    if (body.getId() != null) {
-      this.setId(body.getId());
-    }
-    if (body.getName() != null) {
-      this.setName(body.getName());
-    }
-    if (body.getLabel() != null) {
-      this.setLabel(body.getLabel());
-    }
-  }
-
   @Override
   public String toString() {
     return String.format("ID: %d, Name: %s Label: %s Version: %d", this.id, this.name, this.label, this.version);

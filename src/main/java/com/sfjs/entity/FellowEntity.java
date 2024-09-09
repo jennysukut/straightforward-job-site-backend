@@ -1,6 +1,5 @@
 package com.sfjs.entity;
 
-import com.sfjs.dto.BaseBody;
 import com.sfjs.dto.Fellow;
 
 import jakarta.persistence.Entity;
@@ -20,18 +19,4 @@ public class FellowEntity extends BaseEntity<FellowEntity, Fellow> {
   @Getter
   @Setter
   private String lastName;
-
-  @Override
-  public <B extends BaseBody<?, ?>> void refresh(B body) {
-    super.refresh(body);
-    if (body instanceof Fellow) {
-      Fellow fellowBody = (Fellow) body;
-      if (fellowBody.getFirstName() != null) {
-        this.setFirstName(fellowBody.getFirstName());
-      }
-      if (fellowBody.getLastName() != null) {
-        this.setLastName(fellowBody.getLastName());
-      }
-    }
-  }
 }
