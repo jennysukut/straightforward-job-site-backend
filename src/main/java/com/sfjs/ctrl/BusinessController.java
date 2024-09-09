@@ -77,7 +77,7 @@ public class BusinessController extends BaseController<BusinessService, Business
     return super.findAllByLabel(label);
   }
 
-  @QueryMapping(name = "findAllBusinesss")
+  @QueryMapping(name = "findAllBusinesses")
   @RequestMapping(path = "/business/findall", method = RequestMethod.GET)
   public List<Business> findAll(@Argument Integer limit) {
     return super.findAll(limit);
