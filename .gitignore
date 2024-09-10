@@ -36,3 +36,4 @@ run.sh
 build.sh
 data
 test/
+bin/
