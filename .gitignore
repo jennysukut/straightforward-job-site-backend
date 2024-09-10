@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+run.sh
+build.sh
+data
+test/
