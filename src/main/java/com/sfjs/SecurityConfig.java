@@ -10,14 +10,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .cors().and()
-            .csrf().disable()
-            .authorizeRequests()
-//                .requestMatchers("/graphql/**").permitAll()
-                .anyRequest().permitAll();
-        return http.build();
-    }
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+      .cors().and()
+      .csrf().disable()
+      .headers().frameOptions().sameOrigin().and()
+      .authorizeRequests()
+      .anyRequest().permitAll();
+
+    return http.build();
+  }
 }
