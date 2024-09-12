@@ -2,6 +2,7 @@ package com.sfjs.svc;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,8 @@ import com.sfjs.entity.BaseEntity;
 import com.sfjs.repo.BaseRepository;
 
 public abstract class BaseService<ENTITY extends BaseEntity> {
+
+  Logger logger = Logger.getLogger(getClass().getName());
 
   public abstract BaseRepository<ENTITY> getBaseRepository();
 

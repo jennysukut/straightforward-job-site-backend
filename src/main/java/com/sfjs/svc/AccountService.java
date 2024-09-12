@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.entity.AccountEntity;
@@ -25,6 +26,9 @@ public class AccountService extends BaseService<AccountEntity> {
   @Autowired
   private RoleRepository roleRepository;
 
+  @Autowired
+  PasswordEncoder passwordEncoder;
+
   @Override
   public BaseRepository<AccountEntity> getBaseRepository() {
     return this.repository;
@@ -32,6 +36,12 @@ public class AccountService extends BaseService<AccountEntity> {
 
   @Override
   public AccountEntity save(AccountEntity entity) {
+    if (entity.getPassword() != null) {
+      String rawPassword = entity.getPassword();
+      String encryptedPassword = passwordEncoder.encode(rawPassword);
+      logger.info("Encrypted password: " + encryptedPassword);
+      entity.setPassword(encryptedPassword);
+    }
     if (entity.getRoles() != null) {
       Set<RoleEntity> roles = entity.getRoles().stream().map(role -> {
         return roleRepository.findById(role.getId()).orElseThrow(); // Need to load the role

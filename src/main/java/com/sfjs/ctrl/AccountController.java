@@ -2,11 +2,9 @@ package com.sfjs.ctrl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,9 +21,6 @@ import com.sfjs.svc.AccountService;
 @EnableWebMvc
 @Transactional
 public class AccountController extends BaseController<AccountService, AccountEntity, Account> {
-
-  @Autowired
-  PasswordEncoder passwordEncoder;
 
   @MutationMapping(name = "deleteAccount")
   public Boolean deleteAccount(@Argument(name = "id") Long id) {
@@ -44,12 +39,6 @@ public class AccountController extends BaseController<AccountService, AccountEnt
 
   @RequestMapping(path = "/account", method = RequestMethod.POST)
   public Account save(@RequestBody Account requestBody) {
-    if (requestBody.getPassword() != null) {
-      String rawPassword = requestBody.getPassword();
-      String encryptedPassword = passwordEncoder.encode(rawPassword);
-      logger.info("Encrypted password: " + encryptedPassword);
-      requestBody.setPassword(encryptedPassword);
-    }
     return super.save(requestBody);
   }
 
