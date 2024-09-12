@@ -1,5 +1,7 @@
 package com.sfjs.entity;
 
+import com.sfjs.dto.Payment;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;
@@ -44,4 +46,17 @@ public class PaymentEntity extends BaseEntity {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "account_id", nullable = true)
   private AccountEntity account;
+
+  public PaymentEntity() {
+  }
+
+  public PaymentEntity(Payment payment) {
+    this.amount = payment.getAmount();
+    this.checkoutToken = payment.getCheckoutToken();
+    this.currency = payment.getCurrency();
+    this.paymentType = payment.getPaymentType();
+    this.account = new AccountEntity();
+    this.account.setName(payment.getAccountName());
+    this.account.setEmail(payment.getEmail());
+ }
 }

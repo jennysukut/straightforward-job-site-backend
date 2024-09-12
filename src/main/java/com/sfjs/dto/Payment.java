@@ -1,5 +1,7 @@
 package com.sfjs.dto;
 
+import com.sfjs.entity.PaymentEntity;
+
 import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,5 +27,22 @@ public class Payment extends BaseBody {
 
   @Getter
   @Setter
-  private Account account;
+  private String accountName;
+
+  @Getter
+  @Setter
+  private String email;
+
+  public Payment() {
+  }
+
+  public Payment(PaymentEntity entity) {
+    super(entity);
+    this.accountName = entity.getAccount().getName();
+    this.email = entity.getAccount().getEmail();
+    this.amount = entity.getAmount();
+    this.checkoutToken = entity.getCheckoutToken();
+    this.currency = entity.getCurrency();
+    this.paymentType = entity.getPaymentType();
+  }
 }

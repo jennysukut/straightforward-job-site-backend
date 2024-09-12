@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -18,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.Account;
-import com.sfjs.dto.BaseConverter;
 import com.sfjs.dto.Payment;
 import com.sfjs.entity.PaymentEntity;
 import com.sfjs.svc.HelcimService;
@@ -33,8 +32,19 @@ import reactor.core.publisher.Mono;
 public class PaymentController extends BaseController<PaymentService, PaymentEntity, Payment> {
 
   public PaymentController() {
-    super(new BaseConverter<PaymentEntity, Payment>(Payment.class),
-        new BaseConverter<Payment, PaymentEntity>(PaymentEntity.class));
+    super(new Converter<PaymentEntity, Payment>() {
+
+      @Override
+      public Payment convert(PaymentEntity entity) {
+        return new Payment(entity);
+      }
+    }, new Converter<Payment, PaymentEntity>() {
+
+      @Override
+      public PaymentEntity convert(Payment business) {
+        return new PaymentEntity(business);
+      }
+    });
   }
 
   @Autowired
@@ -45,9 +55,6 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
 
   @Value("${helcim.encrypt.password}")
   private String PASSWORD;
-
-  @Autowired
-  private AccountController accountController;
 
   @MutationMapping(name = "deletePayment")
   public Boolean deletePayment(@Argument(name = "id") Long id) {
@@ -117,10 +124,6 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
     return helcimService.initializeCheckout(payment).flatMap(response -> {
       // Save a field to the database
       return Mono.fromCallable(() -> {
-        if (payment.getAccount().getId() == null) {
-          Account account = accountController.save(payment.getAccount());
-          payment.setAccount(account);
-        }
         PaymentEntity paymentEntity = this.createEntity(payment);
         // update this one field from response from helcim service
         String rawToken = response.getSecretToken();

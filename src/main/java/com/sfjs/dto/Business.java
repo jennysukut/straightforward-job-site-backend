@@ -61,7 +61,7 @@ public class Business extends BaseBody {
   }
 
   public Business(BusinessEntity entity) {
-    this.setId(entity.getId());
+    super(entity);
     this.businessName = entity.getName();
     AccountEntity accountEntity = entity.getAccount();
     this.userName = accountEntity.getName();

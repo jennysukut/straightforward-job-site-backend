@@ -1,79 +1,30 @@
 type Query {
-  findAllRoles(limit: Int): [Role]
-  findAllAccounts(limit: Int): [Account]
-  findAllAddresses(limit: Int): [Address]
   findAllPayments(limit: Int): [Payment]
   findAllBusinesses(limit: Int): [Business]
-  findAllContactInfo(limit: Int): [ContactInfo]
 }
 
 type Mutation {
-  saveRole(requestBody: RoleInput): Role
-  deleteRole(id: ID): Boolean
-  saveAccount(requestBody: AccountInput) : Account
-  deleteAccount(id: ID): Boolean
-  saveAddress(requestBody: AddressInput): Address
-  deleteAddress(id: ID): Boolean
-  savePayment(requestBody: PaymentInput): Payment
-  deletePayment(id: ID): Boolean
   initializePayment(payment: PaymentInput): Payment
   saveBusiness(requestBody: BusinessInput) : Business
-  deleteBusiness(id: ID): Boolean
-  saveFellow(requestBody: FellowInput): Fellow
-  deleteFellow(id: ID): Boolean
-  saveContactInfo(requestBody: ContactInfoInput): ContactInfo
-  deleteContactInfo(id: ID): Boolean
-}
-
-input ContactInfoInput {
-  id: ID
-  name: String
-  label: String
-  website: String
-  phoneNumber: String
-  socials: String
-}
-
-input FellowInput {
-  id: ID
-  name: String
-  label: String
-  firstName: String
-  lastName: String
-  account: AccountInput
-}
-
-type Fellow {
-  id: ID
-  name: String
-  label: String
-  firstName: String
-  lastName: String
-  account: Account
 }
 
 input PaymentInput {
   id: ID
-  name: String
-  label: String
   paymentType: String
   amount: String
   currency: String
-  account: AccountInput
+  accountName: String
+  email: String
 }
 
-input AddressInput {
+type Payment {
   id: ID
-  name: String
-  label: String
-  streetAddress: String
-  secondLine: String
-  city: String
-  state: String
-  country: String
-  zipCode: String
-  zipPlus4: String
-  landmark: String
+  paymentType: String
+  amount: String
+  currency: String
+  accountName: String
+  email: String
+  checkoutToken: String
 }
 
 input BusinessInput {
@@ -118,71 +69,6 @@ type Business {
   location: String
   website: String
   email: String
-  phoneNumber: String
-  socials: String
-}
-
-input AccountInput {
-  id: ID
-  name: String
-  label: String
-  email: String
-  password: String
-  enabled: Boolean
-  roles: [RoleInput]
-}
-
-input RoleInput {
-  id: ID
-  name: String
-  label: String
-}
-
-type Role {
-  id: ID
-  name: String
-  label: String
-}
-
-type Account {
-  id: ID
-  name: String
-  label: String
-  email: String
-  enabled: Boolean
-  roles: [Role]
-}
-
-type Address {
-  id: ID
-  name: String
-  label: String
-  streetAddress: String
-  secondLine: String
-  city: String
-  state: String
-  country: String
-  zipCode: String
-  zipPlus4: String
-  landmark: String
-}
-
-type Payment {
-  id: ID
-  name: String
-  label: String
-  paymentType: String
-  amount: String
-  currency: String
-  account: Account
-  checkoutToken: String
-}
-
-type ContactInfo {
-  id: ID
-  name: String
-  label: String
-  website: String
   phoneNumber: String
   socials: String
 }

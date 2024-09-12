@@ -8,4 +8,6 @@ import com.sfjs.entity.AccountEntity;
 @Repository
 @Transactional
 public interface AccountRepository extends BaseRepository<AccountEntity> {
+
+  AccountEntity findByEmail(String email);
 }

@@ -28,9 +28,13 @@ public class PaymentService extends BaseService<PaymentEntity> {
 
   @Override
   public PaymentEntity save(PaymentEntity entity) {
-    if (entity.getAccount() != null) {
-      Long accountId = entity.getAccount().getId();
-      AccountEntity accountEntity = accountRepository.findById(accountId).orElseThrow(); // Need to load the role
+    AccountEntity accountEntity = entity.getAccount();
+    if (accountEntity.getId() == null) {
+      accountEntity = accountRepository.save(accountEntity);
+      entity.setAccount(accountEntity);
+    } else {
+      Long accountId = accountEntity.getId();
+      accountEntity = accountRepository.findById(accountId).orElseThrow(); // Need to load the role
       entity.setAccount(accountEntity);
     }
     return super.save(entity);

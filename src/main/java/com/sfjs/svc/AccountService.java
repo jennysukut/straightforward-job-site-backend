@@ -50,6 +50,15 @@ public class AccountService extends BaseService<AccountEntity> {
     } else {
       entity.setRoles(Collections.emptySet());
     }
+    if (entity.getId() == null) {
+      AccountEntity accountEntity = this.findByEmail(entity.getEmail());
+      return accountEntity;
+    }
     return super.save(entity);
+  }
+
+  public AccountEntity findByEmail(String email) {
+    AccountEntity entity = repository.findByEmail(email);
+    return entity;
   }
 }
