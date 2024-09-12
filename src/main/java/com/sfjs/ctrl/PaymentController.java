@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.dto.Account;
+import com.sfjs.dto.BaseConverter;
 import com.sfjs.dto.Payment;
 import com.sfjs.entity.PaymentEntity;
 import com.sfjs.svc.HelcimService;
@@ -30,6 +31,11 @@ import reactor.core.publisher.Mono;
 @EnableWebMvc
 @Transactional
 public class PaymentController extends BaseController<PaymentService, PaymentEntity, Payment> {
+
+  public PaymentController() {
+    super(new BaseConverter<PaymentEntity, Payment>(Payment.class),
+        new BaseConverter<Payment, PaymentEntity>(PaymentEntity.class));
+  }
 
   @Autowired
   private HelcimService helcimService;

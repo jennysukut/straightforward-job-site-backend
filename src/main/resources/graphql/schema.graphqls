@@ -77,25 +77,49 @@ input AddressInput {
 }
 
 input BusinessInput {
+    ## Business
   id: ID
-  name: String
-  label: String
-  account: AccountInput
+  businessName: String
+
+    ## Account
+  userName: String
+  password: String
+
+    ## Business
   smallBio: String
   missionAndVision: String
   aboutSection: String
-  contactInfo: ContactInfoInput
+  industry: String
+
+    ## Contact Info
+  location: String
+  website: String
+  email: String
+  phoneNumber: String
+  socials: String
 }
 
 type Business {
+    ## Business
   id: ID
-  name: String
-  label: String
-  account: Account
+  businessName: String
+
+    ## Account
+  userName: String
+##  password: String
+
+    ## Business
   smallBio: String
   missionAndVision: String
   aboutSection: String
-  contactInfo: ContactInfo
+  industry: String
+
+    ## Contact Info
+  location: String
+  website: String
+  email: String
+  phoneNumber: String
+  socials: String
 }
 
 input AccountInput {

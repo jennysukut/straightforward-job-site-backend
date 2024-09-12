@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.dto.Account;
+import com.sfjs.dto.BaseConverter;
 import com.sfjs.entity.AccountEntity;
 import com.sfjs.svc.AccountService;
 
@@ -21,6 +22,11 @@ import com.sfjs.svc.AccountService;
 @EnableWebMvc
 @Transactional
 public class AccountController extends BaseController<AccountService, AccountEntity, Account> {
+
+  public AccountController() {
+    super(new BaseConverter<AccountEntity, Account>(Account.class),
+        new BaseConverter<Account, AccountEntity>(AccountEntity.class));
+  }
 
   @MutationMapping(name = "deleteAccount")
   public Boolean deleteAccount(@Argument(name = "id") Long id) {

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.sfjs.dto.BaseConverter;
 import com.sfjs.dto.ContactInfo;
 import com.sfjs.entity.ContactInfoEntity;
 import com.sfjs.svc.ContactInfoService;
@@ -21,6 +22,11 @@ import com.sfjs.svc.ContactInfoService;
 @EnableWebMvc
 @Transactional
 public class ContactInfoController extends BaseController<ContactInfoService, ContactInfoEntity, ContactInfo> {
+
+  public ContactInfoController() {
+    super(new BaseConverter<ContactInfoEntity, ContactInfo>(ContactInfo.class),
+        new BaseConverter<ContactInfo, ContactInfoEntity>(ContactInfoEntity.class));
+  }
 
   @MutationMapping(name = "deleteContactInfo")
   public Boolean deleteContactInfo(@Argument(name = "id") Long id) {

@@ -1,13 +1,12 @@
 package com.sfjs.ctrl;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sfjs.dto.BaseBody;
 import com.sfjs.entity.BaseEntity;
@@ -28,23 +25,15 @@ import com.sfjs.svc.BaseService;
 @Transactional
 public abstract class BaseController<SERVICE extends BaseService<ENTITY>, ENTITY extends BaseEntity, BODY extends BaseBody> {
 
-  public BaseController() {
+  public BaseController(Converter<ENTITY, BODY> entityConverter, Converter<BODY, ENTITY> bodyConverter) {
+    this.entityConverter = entityConverter;
+    this.bodyConverter = bodyConverter;
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   }
 
-  private JavaType getType(int index) {
-    Type genericSuperclass = getClass().getGenericSuperclass();
-    if (genericSuperclass instanceof ParameterizedType) {
-      Type[] typeArguments = ((ParameterizedType) genericSuperclass).getActualTypeArguments();
-      return mapper.getTypeFactory().constructType(typeArguments[index]);
-    } else {
-      throw new IllegalArgumentException("Type parameter is required.");
-    }
-  }
+  private Converter<BODY, ENTITY> bodyConverter;
 
-  private JavaType bodyType = getBodyClass();
-
-  private JavaType entityType = getEntityClass();
+  private Converter<ENTITY, BODY> entityConverter;
 
   @Autowired
   private SERVICE service;
@@ -52,32 +41,12 @@ public abstract class BaseController<SERVICE extends BaseService<ENTITY>, ENTITY
   Logger logger = Logger.getLogger(getClass().getName());
   static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
 
-  protected JavaType getBodyClass() {
-    return getType(2);
-  }
-
-  protected JavaType getEntityClass() {
-    return getType(1);
-  }
-
   protected BODY createBody(ENTITY entity) {
-    String json;
-    try {
-      json = mapper.writeValueAsString(entity);
-      return mapper.readValue(json, bodyType);
-    } catch (JsonProcessingException e) {
-      throw new IllegalArgumentException(e);
-    }
+    return this.entityConverter.convert(entity);
   }
 
   protected ENTITY createEntity(BODY body) {
-    String json;
-    try {
-      json = mapper.writeValueAsString(body);
-      return mapper.readValue(json, entityType);
-    } catch (JsonProcessingException e) {
-      throw new IllegalArgumentException(e);
-    }
+    return this.bodyConverter.convert(body);
   }
 
   public Boolean delete(@PathVariable(name = "id") Long id) {
