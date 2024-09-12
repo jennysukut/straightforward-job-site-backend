@@ -142,7 +142,7 @@ public abstract class BaseController<SERVICE extends BaseService<ENTITY>, ENTITY
     }).collect(Collectors.toList());
   }
 
-  public List<BODY> findAll(@Argument Integer limit) {
+  public List<BODY> findAll(@Argument(name = "limit") Integer limit) {
     logger.info("Request param limit: " + limit);
     Stream<ENTITY> stream = service.findAll().stream();
     if (limit != null) {

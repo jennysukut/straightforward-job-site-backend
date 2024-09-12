@@ -90,7 +90,7 @@ public class AccountController extends BaseController<AccountService, AccountEnt
 
   @QueryMapping(name = "findAllAccounts")
   @RequestMapping(path = "/account/findall", method = RequestMethod.GET)
-  public List<Account> findAll(@Argument Integer limit) {
+  public List<Account> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 }

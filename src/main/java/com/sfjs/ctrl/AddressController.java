@@ -79,7 +79,7 @@ public class AddressController extends BaseController<AddressService, AddressEnt
 
   @QueryMapping(name = "findAllAddresses")
   @RequestMapping(path = "/address/findall", method = RequestMethod.GET)
-  public List<Address> findAll(@Argument Integer limit) {
+  public List<Address> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 }

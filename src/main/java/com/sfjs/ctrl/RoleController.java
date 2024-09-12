@@ -79,7 +79,7 @@ public class RoleController extends BaseController<RoleService, RoleEntity, Role
 
   @QueryMapping(name = "findAllRoles")
   @RequestMapping(path = "/role/findall", method = RequestMethod.GET)
-  public List<Role> findAll(@Argument Integer limit) {
+  public List<Role> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 }

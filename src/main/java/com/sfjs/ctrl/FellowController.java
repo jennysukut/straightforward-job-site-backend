@@ -79,7 +79,7 @@ public class FellowController extends BaseController<FellowService, FellowEntity
 
   @QueryMapping(name = "findAllFellows")
   @RequestMapping(path = "/fellow/findall", method = RequestMethod.GET)
-  public List<Fellow> findAll(@Argument Integer limit) {
+  public List<Fellow> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 }

@@ -93,7 +93,7 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
 
   @QueryMapping(name = "findAllPayments")
   @RequestMapping(path = "/payment/findall", method = RequestMethod.GET)
-  public List<Payment> findAll(@Argument Integer limit) {
+  public List<Payment> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 

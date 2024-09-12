@@ -79,7 +79,7 @@ public class BusinessController extends BaseController<BusinessService, Business
 
   @QueryMapping(name = "findAllBusinesses")
   @RequestMapping(path = "/business/findall", method = RequestMethod.GET)
-  public List<Business> findAll(@Argument Integer limit) {
+  public List<Business> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 }

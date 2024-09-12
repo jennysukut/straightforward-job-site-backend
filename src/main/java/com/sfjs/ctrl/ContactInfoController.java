@@ -79,7 +79,7 @@ public class ContactInfoController extends BaseController<ContactInfoService, Co
 
   @QueryMapping(name = "findAllContactInfo")
   @RequestMapping(path = "/contactInfo/findall", method = RequestMethod.GET)
-  public List<ContactInfo> findAll(@Argument Integer limit) {
+  public List<ContactInfo> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 }
