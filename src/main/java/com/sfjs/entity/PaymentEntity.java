@@ -32,6 +32,10 @@ public class PaymentEntity extends BaseEntity {
 
   @Getter
   @Setter
+  private String SALT; // For encryption of secret token
+
+  @Getter
+  @Setter
   @Transient
   private String checkoutToken; // from helcim - don't store
 

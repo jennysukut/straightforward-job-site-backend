@@ -3,10 +3,13 @@ package com.sfjs.ctrl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.sfjs.dto.Account;
 import com.sfjs.dto.Payment;
 import com.sfjs.entity.PaymentEntity;
 import com.sfjs.svc.HelcimService;
@@ -33,8 +37,11 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
   @Autowired
   private PaymentService service;
 
+  @Value("${helcim.encrypt.password}")
+  private String PASSWORD;
+
   @Autowired
-  PasswordEncoder passwordEncoder;
+  private AccountController accountController;
 
   @MutationMapping(name = "deletePayment")
   public Boolean deletePayment(@Argument(name = "id") Long id) {
@@ -100,14 +107,21 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
   @MutationMapping(name = "initializePayment")
   public Mono<Payment> initializePayment(@Argument(name = "payment") Payment payment) {
     logger.info("Starting initialize");
+
     return helcimService.initializeCheckout(payment).flatMap(response -> {
       // Save a field to the database
       return Mono.fromCallable(() -> {
+        if (payment.getAccount().getId() == null) {
+          Account account = accountController.save(payment.getAccount());
+          payment.setAccount(account);
+        }
         PaymentEntity paymentEntity = this.createEntity(payment);
         // update this one field from response from helcim service
-        // TODO Use two-way encryption
         String rawToken = response.getSecretToken();
-        String encryptedToken = passwordEncoder.encode(rawToken);
+        String SALT = KeyGenerators.string().generateKey();
+        paymentEntity.setSALT(SALT);
+        TextEncryptor encryptor = Encryptors.text(PASSWORD, SALT);
+        String encryptedToken = encryptor.encrypt(rawToken);
         paymentEntity.setSecretToken(encryptedToken);
         // save the entity and return it
         return service.save(paymentEntity);
