@@ -71,6 +71,7 @@ Application configuration can be found in `src/main/resources/application.proper
 - External service URLs
 - Helcim api key
 - Email service provider credentials
+- Encryption parameters
 
 ## API Documentation
 
