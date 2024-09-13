@@ -1,4 +1,4 @@
-package com.sfjs.ctrl;
+package com.sfjs.rest;
 
 import java.util.List;
 
