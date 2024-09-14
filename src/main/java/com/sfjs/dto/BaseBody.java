@@ -30,6 +30,6 @@ public class BaseBody {
 
   @Override
   public String toString() {
-    return String.format("name: %s label: %s", name, label);
+    return String.format("id: %s name: %s label: %s", id, name, label);
   }
 }
