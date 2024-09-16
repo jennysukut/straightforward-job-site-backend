@@ -5,29 +5,27 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import com.sfjs.entity.BaseEntity;
-import com.sfjs.repo.BaseRepository;
+import com.sfjs.persist.BasePersist;
 
 public abstract class BaseService<ENTITY extends BaseEntity> {
 
   Logger logger = Logger.getLogger(getClass().getName());
 
-  public abstract BaseRepository<ENTITY> getBaseRepository();
+  public abstract BasePersist<ENTITY> getBaseRepository();
 
   public Boolean delete(Long id) {
-    getBaseRepository().deleteById(id);
+    getBaseRepository().delete(id);
     return true;
   }
 
   public ENTITY save(ENTITY entity) {
-    return getBaseRepository().save(entity);
+    return getBaseRepository().customSave(entity);
   }
 
   public ENTITY getById(Long id) {
-    return getBaseRepository().getReferenceById(id);
+    return getBaseRepository().getById(id);
   }
 
   public ENTITY findById(Long id) {
@@ -60,7 +58,6 @@ public abstract class BaseService<ENTITY extends BaseEntity> {
   }
 
   public Page<ENTITY> findAll(Optional<Integer> limit) {
-    Pageable pageable = PageRequest.of(0, limit.isPresent() ? limit.get() : 3);
-    return getBaseRepository().findAll(pageable);
+    return getBaseRepository().findAll(limit);
   }
 }

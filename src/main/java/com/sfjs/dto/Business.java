@@ -2,7 +2,6 @@ package com.sfjs.dto;
 
 import com.sfjs.entity.AccountEntity;
 import com.sfjs.entity.BusinessEntity;
-import com.sfjs.entity.ContactInfoEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -75,10 +74,9 @@ public class Business extends BaseBody {
     // TODO location
 //    AddressEntity address = null; // entity.getAddress();
 //    this.location = String.format("%s %s", address.getCity(), address.getState());
-    ContactInfoEntity contactInfoEntity = entity.getContactInfo();
-    this.website = contactInfoEntity.getWebsite();
+    this.website = entity.getWebsite();
     this.email = accountEntity.getEmail();
-    this.phoneNumber = contactInfoEntity.getPhoneNumber();
-    this.socials = contactInfoEntity.getSocials();
+    this.phoneNumber = entity.getPhoneNumber();
+    this.socials = entity.getSocials();
   }
 }

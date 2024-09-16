@@ -1,23 +1,23 @@
-package com.sfjs.svc;
+package com.sfjs.persist;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.entity.AddressEntity;
-import com.sfjs.persist.AddressPersist;
-import com.sfjs.persist.BasePersist;
+import com.sfjs.repo.AddressRepository;
+import com.sfjs.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class AddressService extends BaseService<AddressEntity> {
+public class AddressPersist extends BasePersist<AddressEntity> {
 
   @Autowired
-  AddressPersist repository;
+  AddressRepository repository;
 
   @Override
-  public BasePersist<AddressEntity> getBaseRepository() {
+  public BaseRepository<AddressEntity> getBaseRepository() {
     return this.repository;
   }
 }

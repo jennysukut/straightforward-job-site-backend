@@ -38,9 +38,15 @@ public class BusinessEntity extends BaseEntity {
 
   @Getter
   @Setter
-  @ManyToOne(fetch = FetchType.EAGER, optional = true)
-  @JoinColumn(name = "contact_info_id", unique = false)
-  private ContactInfoEntity contactInfo;
+  private String website;
+
+  @Getter
+  @Setter
+  private String phoneNumber;
+
+  @Getter
+  @Setter
+  private String socials;
 
   public BusinessEntity() {
   }
@@ -56,12 +62,11 @@ public class BusinessEntity extends BaseEntity {
     RoleEntity roleEntity = new RoleEntity();
     roleEntity.setName("BUSINESS");
     this.account.setRoles(Set.of(roleEntity));
-    this.contactInfo = new ContactInfoEntity();
-    this.contactInfo.setWebsite(business.getWebsite());
-    this.contactInfo.setPhoneNumber(business.getPhoneNumber());
-    this.contactInfo.setSocials(business.getSocials());
     this.missionAndVision = business.getMissionAndVision();
     this.name = business.getBusinessName();
     this.smallBio = business.getSmallBio();
+    this.website = business.getWebsite();
+    this.phoneNumber = business.getPhoneNumber();
+    this.socials = business.getSocials();
   }
 }
