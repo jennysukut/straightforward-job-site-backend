@@ -66,6 +66,6 @@ public class BaseEntity {
 
   @Override
   public String toString() {
-    return String.format("ID: %d, Name: %s Label: %s Version: %d", this.id, this.name, this.label, this.version);
+    return String.format("Type: %s, ID: %d, Name: %s Label: %s Version: %d", this.getClass().getName(), this.id, this.name, this.label, this.version);
   }
 }
