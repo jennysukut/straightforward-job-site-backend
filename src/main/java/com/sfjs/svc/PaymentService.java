@@ -3,6 +3,9 @@ package com.sfjs.svc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sfjs.conv.AccountConverter;
+import com.sfjs.conv.PaymentConverter;
+import com.sfjs.dto.Payment;
 import com.sfjs.entity.PaymentEntity;
 import com.sfjs.persist.BasePersist;
 import com.sfjs.persist.PaymentPersist;
@@ -11,10 +14,14 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class PaymentService extends BaseService<PaymentEntity> {
+public class PaymentService extends BaseService<PaymentEntity, Payment> {
 
   @Autowired
   PaymentPersist repository;
+
+  public PaymentService(AccountConverter accountConverter) {
+    super(new PaymentConverter(accountConverter));
+  }
 
   @Override
   public BasePersist<PaymentEntity> getBaseRepository() {

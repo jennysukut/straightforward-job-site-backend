@@ -13,6 +13,15 @@ import com.sfjs.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * This class does persistence for AccountEntity
+ * 
+ * Overrides customSave to call customSave on role entities
+ * Overrides customSearch to search using email field
+ * Implements findByEmail
+ * @author carl
+ *
+ */
 @Service
 @Transactional
 public class AccountPersist extends BasePersist<AccountEntity> {
@@ -35,12 +44,10 @@ public class AccountPersist extends BasePersist<AccountEntity> {
 
   @Override
   public AccountEntity customSave(AccountEntity entity) {
-    logger.info("Account override custom save entity: " + entity);
     if (entity.getRoles() != null) {
       Set<RoleEntity> roleEntities = entity.getRoles().stream().map(roleEntity -> {
         return rolePersist.customSave(roleEntity);
       }).collect(Collectors.toSet());
-      logger.info("Role entities: " + roleEntities);
       entity.setRoles(roleEntities);
     }
     return super.customSave(entity);
@@ -48,6 +55,13 @@ public class AccountPersist extends BasePersist<AccountEntity> {
 
   @Override
   protected AccountEntity customSearch(AccountEntity entity) {
-    return this.repository.findByEmail(entity.getEmail());
+    AccountEntity existingEntity = this.repository.findByEmail(entity.getEmail());
+    if (existingEntity != null) {
+      if (entity.getPassword() != null && existingEntity.getPassword() == null) {
+        existingEntity.setPassword(entity.getPassword());
+        existingEntity = this.save(existingEntity);
+      }
+    }
+    return existingEntity;
   }
 }

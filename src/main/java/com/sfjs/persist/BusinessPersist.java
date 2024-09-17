@@ -10,6 +10,14 @@ import com.sfjs.repo.BusinessRepository;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * This class does persistence for BusinessEntity
+ * 
+ * Overrides customSave to call customSave on account entities
+ * 
+ * @author carl
+ *
+ */
 @Service
 @Transactional
 public class BusinessPersist extends BasePersist<BusinessEntity> {
@@ -27,8 +35,6 @@ public class BusinessPersist extends BasePersist<BusinessEntity> {
 
   @Override
   public BusinessEntity customSave(BusinessEntity entity) {
-    logger.info("Business override custom save entity: " + entity);
-
     // Account child entity
     AccountEntity accountEntity = entity.getAccount();
     accountEntity = accountPersist.customSave(accountEntity);

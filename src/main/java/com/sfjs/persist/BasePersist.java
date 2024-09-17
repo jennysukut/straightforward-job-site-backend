@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +14,16 @@ import com.sfjs.repo.BaseRepository;
 
 import jakarta.persistence.EntityManager;
 
+/**
+ * Handles persistence for generic entities
+ * 
+ * Implements a custom save method
+ * Delegates behavior to generic repositoy
+ * 
+ * @author carl
+ *
+ * @param <ENTITY>
+ */
 public abstract class BasePersist<ENTITY extends BaseEntity> {
 
   Logger logger = Logger.getLogger(getClass().getName());
@@ -24,22 +33,29 @@ public abstract class BasePersist<ENTITY extends BaseEntity> {
 
   public abstract BaseRepository<ENTITY> getBaseRepository();
 
+  /**
+   * Special handling for saving an entity
+   * 
+   * If entity is already in the transaction, just save it
+   * If not, try to find it in the DB
+   * Save it
+   * 
+   * @param entity
+   * @return
+   */
   public ENTITY customSave(ENTITY entity) {
-    logger.info("Base custom save entity: " + entity);
     if (entityManager.contains(entity)) {
       return getBaseRepository().save(entity);
     }
 
     ENTITY e = customSearch(entity);
     if (e != null) {
-      logger.info("Found entity by custom search: " + e);
       return e;
     }
 
     if (entity.getName() != null) {
       e = getBaseRepository().findByName(entity.getName());
       if (e != null) {
-        logger.info("Found entity by name: " + e);
         return e;
       }
     }
@@ -47,38 +63,12 @@ public abstract class BasePersist<ENTITY extends BaseEntity> {
     if (entity.getLabel() != null) {
       e = getBaseRepository().findByLabel(entity.getLabel());
       if (e != null) {
-        logger.info("Found entity by label: " + e);
         return e;
       }
     }
 
-    e = findByExample(entity);
-    if (e != null) {
-      logger.info("Found entity by example: " + e);
-      return e;
-    }
-
     // Save new entity
-    logger.info("Entity not found");
     return getBaseRepository().save(entity);
-  }
-
-  protected ENTITY findByExample(ENTITY entity) {
-    // Create example matcher
-    Example<ENTITY> example = Example.of(entity);
-    logger.info("Example entity: " + example);
-
-    // Try to find existing entity
-    Optional<ENTITY> existingEntity = getBaseRepository().findOne(example);
-
-    if (existingEntity.isPresent()) {
-      // Merge detached entity
-      logger.info("Example entity exists: " + existingEntity);
-      ENTITY e = entityManager.merge(existingEntity.get());
-      logger.info("Merged entity: " + e);
-      return e;
-    }
-    return null;
   }
 
   protected ENTITY customSearch(ENTITY entity) {

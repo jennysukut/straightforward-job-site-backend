@@ -10,6 +10,13 @@ import com.sfjs.repo.FellowRepository;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * This class does persistence for FellowEntity
+ * 
+ * Overrides customSave to call customSave on account entity
+ * @author carl
+ *
+ */
 @Service
 @Transactional
 public class FellowPersist extends BasePersist<FellowEntity> {
@@ -27,12 +34,9 @@ public class FellowPersist extends BasePersist<FellowEntity> {
 
   @Override
   public FellowEntity customSave(FellowEntity entity) {
-    logger.info("Fellow override custom save entity: " + entity);
-
     // Account child entity
     AccountEntity accountEntity = entity.getAccount();
     accountEntity = accountPersist.customSave(accountEntity);
-    logger.info("Account entity: " + accountEntity);
     entity.setAccount(accountEntity);
     return super.customSave(entity);
   }

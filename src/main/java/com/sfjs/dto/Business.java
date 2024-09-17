@@ -1,8 +1,5 @@
 package com.sfjs.dto;
 
-import com.sfjs.entity.AccountEntity;
-import com.sfjs.entity.BusinessEntity;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -55,28 +52,4 @@ public class Business extends BaseBody {
   @Getter
   @Setter
   private String socials;
-
-  public Business() {
-  }
-
-  public Business(BusinessEntity entity) {
-    super(entity);
-    this.businessName = entity.getName();
-    AccountEntity accountEntity = entity.getAccount();
-    this.userName = accountEntity.getName();
-    // Password is not returned to the client
-//    this.password = accountEntity.getPassword(); // Not passed to client
-    this.smallBio = entity.getSmallBio();
-    this.missionAndVision = entity.getMissionAndVision();
-    this.aboutSection = entity.getAboutSection();
-    // TODO industry
-//    this.industry = entity.getIndustry();
-    // TODO location
-//    AddressEntity address = null; // entity.getAddress();
-//    this.location = String.format("%s %s", address.getCity(), address.getState());
-    this.website = entity.getWebsite();
-    this.email = accountEntity.getEmail();
-    this.phoneNumber = entity.getPhoneNumber();
-    this.socials = entity.getSocials();
-  }
 }

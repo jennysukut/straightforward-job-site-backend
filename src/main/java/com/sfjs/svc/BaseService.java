@@ -3,15 +3,32 @@ package com.sfjs.svc;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 
+import com.sfjs.conv.BaseConverter;
+import com.sfjs.dto.BaseBody;
 import com.sfjs.entity.BaseEntity;
 import com.sfjs.persist.BasePersist;
 
-public abstract class BaseService<ENTITY extends BaseEntity> {
+public abstract class BaseService<ENTITY extends BaseEntity, BODY extends BaseBody> {
 
   Logger logger = Logger.getLogger(getClass().getName());
+
+  private BaseConverter<ENTITY, BODY> converter;
+
+  public BaseService(BaseConverter<ENTITY, BODY> converter) {
+    this.converter = converter;
+  }
+
+  protected BODY createBody(ENTITY entity) {
+    return this.converter.convertToBody(entity);
+  }
+
+  protected ENTITY createEntity(BODY body) {
+    return this.converter.convertToEntity(body);
+  }
 
   public abstract BasePersist<ENTITY> getBaseRepository();
 
@@ -20,44 +37,62 @@ public abstract class BaseService<ENTITY extends BaseEntity> {
     return true;
   }
 
-  public ENTITY save(ENTITY entity) {
-    return getBaseRepository().customSave(entity);
+  public BODY customSave(BODY body) {
+    ENTITY entity = createEntity(body);
+    entity = getBaseRepository().customSave(entity);
+    return createBody(entity);
   }
 
-  public ENTITY getById(Long id) {
-    return getBaseRepository().getById(id);
+  public BODY getById(Long id) {
+    ENTITY entity = getBaseRepository().getById(id);
+    return this.createBody(entity);
   }
 
-  public ENTITY findById(Long id) {
-    return getBaseRepository().findById(id).get();
+  public BODY findById(Long id) {
+    ENTITY entity = getBaseRepository().findById(id).get();
+    return this.createBody(entity);
   }
 
-  public List<ENTITY> findAllById(Long id) {
-    return getBaseRepository().findAllById(id);
+  public List<BODY> findAllById(Long id) {
+    List<ENTITY> entities = getBaseRepository().findAllById(id);
+    return entities.stream().map(entity -> {
+      return this.createBody(entity);
+    }).collect(Collectors.toList());
   }
 
-  public List<ENTITY> findAll() {
-    return getBaseRepository().findAll();
+  public List<BODY> findAll() {
+    List<ENTITY> entities = getBaseRepository().findAll();
+    return entities.stream().map(entity -> {
+      return this.createBody(entity);
+    }).collect(Collectors.toList());
   }
 
-  public ENTITY findByName(String name) {
+  public BODY findByName(String name) {
     ENTITY entity = getBaseRepository().findByName(name);
-    return entity;
+    return this.createBody(entity);
   }
 
-  public List<ENTITY> findAllByName(String name) {
-    return getBaseRepository().findAllByName(name);
+  public List<BODY> findAllByName(String name) {
+    List<ENTITY> entities = getBaseRepository().findAllByName(name);
+    return entities.stream().map(entity -> {
+      return this.createBody(entity);
+    }).collect(Collectors.toList());
   }
 
-  public ENTITY findByLabel(String label) {
-    return getBaseRepository().findByLabel(label);
+  public BODY findByLabel(String label) {
+    ENTITY entity = getBaseRepository().findByLabel(label);
+    return this.createBody(entity);
   }
 
-  public List<ENTITY> findAllByLabel(String label) {
-    return getBaseRepository().findAllByLabel(label);
+  public List<BODY> findAllByLabel(String label) {
+    List<ENTITY> entities = getBaseRepository().findAllByLabel(label);
+    return entities.stream().map(entity -> {
+      return this.createBody(entity);
+    }).collect(Collectors.toList());
   }
 
-  public Page<ENTITY> findAll(Optional<Integer> limit) {
-    return getBaseRepository().findAll(limit);
+  public Page<BODY> findAll(Optional<Integer> limit) {
+    Page<ENTITY> page = getBaseRepository().findAll(limit);
+    return page.map(entity -> this.createBody(entity));
   }
 }

@@ -10,6 +10,13 @@ import com.sfjs.repo.PaymentRepository;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * This class does persistence for PaymentEntity
+ * 
+ * Overrides customSave to call customSave on account entity
+ * @author carl
+ *
+ */
 @Service
 @Transactional
 public class PaymentPersist extends BasePersist<PaymentEntity> {
@@ -27,10 +34,8 @@ public class PaymentPersist extends BasePersist<PaymentEntity> {
 
   @Override
   public PaymentEntity customSave(PaymentEntity entity) {
-    logger.info("Payment override custom save entity: " + entity);
     AccountEntity accountEntity = entity.getAccount();
     accountEntity = accountPersist.customSave(accountEntity);
-    logger.info("Account entity: " + accountEntity);
     entity.setAccount(accountEntity);
     return super.customSave(entity);
   }
