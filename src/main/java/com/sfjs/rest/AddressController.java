@@ -1,4 +1,4 @@
-package com.sfjs.ctrl;
+package com.sfjs.rest;
 
 import java.util.List;
 
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.dto.Address;
-import com.sfjs.dto.BaseConverter;
 import com.sfjs.entity.AddressEntity;
 import com.sfjs.svc.AddressService;
 
@@ -22,11 +21,6 @@ import com.sfjs.svc.AddressService;
 @EnableWebMvc
 @Transactional
 public class AddressController extends BaseController<AddressService, AddressEntity, Address> {
-
-  public AddressController() {
-    super(new BaseConverter<AddressEntity, Address>(Address.class),
-        new BaseConverter<Address, AddressEntity>(AddressEntity.class));
-  }
 
   @MutationMapping(name = "deleteAddress")
   public Boolean deleteAddress(@Argument(name = "id") Long id) {

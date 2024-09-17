@@ -1,60 +1,38 @@
 package com.sfjs.svc;
 
-import java.util.Collections;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.sfjs.conv.BaseConverter;
+import com.sfjs.dto.Account;
 import com.sfjs.entity.AccountEntity;
-import com.sfjs.entity.RoleEntity;
-import com.sfjs.repo.AccountRepository;
-import com.sfjs.repo.BaseRepository;
-import com.sfjs.repo.RoleRepository;
+import com.sfjs.persist.AccountPersist;
+import com.sfjs.persist.BasePersist;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * Handles business logic for service objects
+ * 
+ * Implements findByEmail method
+ * 
+ * @author carl
+ *
+ */
 @Service
 @Transactional
-public class AccountService extends BaseService<AccountEntity> {
+public class AccountService extends BaseService<AccountEntity, Account> {
 
   @Autowired
-  AccountRepository repository;
-
-  @Autowired
-  private RoleRepository roleRepository;
-
-  @Autowired
-  PasswordEncoder passwordEncoder;
+  AccountPersist repository;
 
   @Override
-  public BaseRepository<AccountEntity> getBaseRepository() {
+  public BasePersist<AccountEntity> getBaseRepository() {
     return this.repository;
   }
 
-  @Override
-  public AccountEntity save(AccountEntity entity) {
-    if (entity.getPassword() != null) {
-      String rawPassword = entity.getPassword();
-      String encryptedPassword = passwordEncoder.encode(rawPassword);
-      logger.info("Encrypted password: " + encryptedPassword);
-      entity.setPassword(encryptedPassword);
-    }
-    if (entity.getRoles() != null) {
-      Set<RoleEntity> roles = entity.getRoles().stream().map(role -> {
-        return roleRepository.findById(role.getId()).orElseThrow(); // Need to load the role
-      }).collect(Collectors.toSet());
-      entity.setRoles(roles);
-    } else {
-      entity.setRoles(Collections.emptySet());
-    }
-    if (entity.getId() == null) {
-      AccountEntity accountEntity = this.findByEmail(entity.getEmail());
-      return accountEntity;
-    }
-    return super.save(entity);
+  public AccountService() {
+    super(new BaseConverter<AccountEntity, Account>(AccountEntity.class, Account.class));
   }
 
   public AccountEntity findByEmail(String email) {

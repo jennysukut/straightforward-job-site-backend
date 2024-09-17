@@ -1,6 +1,6 @@
 package com.sfjs.dto;
 
-import com.sfjs.entity.PaymentEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Transient;
 import lombok.Getter;
@@ -33,16 +33,13 @@ public class Payment extends BaseBody {
   @Setter
   private String email;
 
-  public Payment() {
-  }
+  @Getter
+  @Setter
+  @JsonIgnore
+  private String SALT;
 
-  public Payment(PaymentEntity entity) {
-    super(entity);
-    this.accountName = entity.getAccount().getName();
-    this.email = entity.getAccount().getEmail();
-    this.amount = entity.getAmount();
-    this.checkoutToken = entity.getCheckoutToken();
-    this.currency = entity.getCurrency();
-    this.paymentType = entity.getPaymentType();
-  }
+  @Getter
+  @Setter
+  @JsonIgnore
+  private String secretToken;
 }

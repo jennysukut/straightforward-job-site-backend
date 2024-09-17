@@ -6,6 +6,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +23,8 @@ import lombok.Setter;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
 
+  static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+  
   // Every entity needs an id
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,6 +71,10 @@ public class BaseEntity {
 
   @Override
   public String toString() {
-    return String.format("ID: %d, Name: %s Label: %s Version: %d", this.id, this.name, this.label, this.version);
+    try {
+      return mapper.writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      return e.getLocalizedMessage();
+    }
   }
 }

@@ -3,21 +3,27 @@ package com.sfjs.svc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sfjs.conv.BaseConverter;
+import com.sfjs.dto.Role;
 import com.sfjs.entity.RoleEntity;
-import com.sfjs.repo.BaseRepository;
-import com.sfjs.repo.RoleRepository;
+import com.sfjs.persist.BasePersist;
+import com.sfjs.persist.RolePersist;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class RoleService extends BaseService<RoleEntity> {
+public class RoleService extends BaseService<RoleEntity, Role> {
 
   @Autowired
-  RoleRepository repository;
+  RolePersist repository;
+
+  public RoleService() {
+    super(new BaseConverter<RoleEntity, Role>(RoleEntity.class, Role.class));
+  }
 
   @Override
-  public BaseRepository<RoleEntity> getBaseRepository() {
+  public BasePersist<RoleEntity> getBaseRepository() {
     return this.repository;
   }
 }

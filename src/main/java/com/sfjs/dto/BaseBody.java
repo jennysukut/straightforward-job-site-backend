@@ -1,12 +1,15 @@
 package com.sfjs.dto;
 
-import com.sfjs.entity.BaseEntity;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Getter;
 import lombok.Setter;
 
 public class BaseBody {
 
+  static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+  
   @Getter
   @Setter
   private Long id;
@@ -19,17 +22,12 @@ public class BaseBody {
   @Setter
   private String label;
 
-  public BaseBody() {
-  }
-
-  public BaseBody(BaseEntity entity) {
-    this.setId(entity.getId());
-    this.setName(entity.getName());
-    this.setLabel(entity.getLabel());
-  }
-
   @Override
   public String toString() {
-    return String.format("name: %s label: %s", name, label);
+    try {
+      return mapper.writeValueAsString(this);
+    } catch (JsonProcessingException e) {
+      return e.getLocalizedMessage();
+    }
   }
 }

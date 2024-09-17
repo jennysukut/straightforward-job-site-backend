@@ -1,4 +1,4 @@
-package com.sfjs.ctrl;
+package com.sfjs.rest;
 
 import java.util.List;
 
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.BaseConverter;
 import com.sfjs.dto.Role;
 import com.sfjs.entity.RoleEntity;
 import com.sfjs.svc.RoleService;
@@ -22,10 +21,6 @@ import com.sfjs.svc.RoleService;
 @EnableWebMvc
 @Transactional
 public class RoleController extends BaseController<RoleService, RoleEntity, Role> {
-
-  public RoleController() {
-    super(new BaseConverter<RoleEntity, Role>(Role.class), new BaseConverter<Role, RoleEntity>(RoleEntity.class));
-  }
 
   @MutationMapping(name = "deleteRole")
   public Boolean deleteRole(@Argument(name = "id") Long id) {

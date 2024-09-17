@@ -1,8 +1,7 @@
-package com.sfjs.ctrl;
+package com.sfjs.rest;
 
 import java.util.List;
 
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -22,22 +21,6 @@ import com.sfjs.svc.BusinessService;
 @EnableWebMvc
 @Transactional
 public class BusinessController extends BaseController<BusinessService, BusinessEntity, Business> {
-
-  public BusinessController() {
-    super(new Converter<BusinessEntity, Business>() {
-
-      @Override
-      public Business convert(BusinessEntity entity) {
-        return new Business(entity);
-      }
-    }, new Converter<Business, BusinessEntity>() {
-
-      @Override
-      public BusinessEntity convert(Business business) {
-        return new BusinessEntity(business);
-      }
-    });
-  }
 
   @MutationMapping(name = "deleteBusiness")
   public Boolean deleteBusiness(@Argument(name = "id") Long id) {

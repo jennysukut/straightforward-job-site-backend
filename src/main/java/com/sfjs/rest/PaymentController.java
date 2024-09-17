@@ -1,16 +1,10 @@
-package com.sfjs.ctrl;
+package com.sfjs.rest;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.crypto.encrypt.Encryptors;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
-import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,40 +15,12 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.dto.Payment;
 import com.sfjs.entity.PaymentEntity;
-import com.sfjs.svc.HelcimService;
 import com.sfjs.svc.PaymentService;
-
-import reactor.core.publisher.Mono;
 
 @RestController
 @EnableWebMvc
 @Transactional
 public class PaymentController extends BaseController<PaymentService, PaymentEntity, Payment> {
-
-  public PaymentController() {
-    super(new Converter<PaymentEntity, Payment>() {
-
-      @Override
-      public Payment convert(PaymentEntity entity) {
-        return new Payment(entity);
-      }
-    }, new Converter<Payment, PaymentEntity>() {
-
-      @Override
-      public PaymentEntity convert(Payment business) {
-        return new PaymentEntity(business);
-      }
-    });
-  }
-
-  @Autowired
-  private HelcimService helcimService;
-
-  @Autowired
-  private PaymentService service;
-
-  @Value("${helcim.encrypt.password}")
-  private String PASSWORD;
 
   @MutationMapping(name = "deletePayment")
   public Boolean deletePayment(@Argument(name = "id") Long id) {
@@ -115,30 +81,5 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
   @RequestMapping(path = "/payment/findall", method = RequestMethod.GET)
   public List<Payment> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
-  }
-
-  @MutationMapping(name = "initializePayment")
-  public Mono<Payment> initializePayment(@Argument(name = "payment") Payment payment) {
-    logger.info("Starting initialize");
-
-    return helcimService.initializeCheckout(payment).flatMap(response -> {
-      // Save a field to the database
-      return Mono.fromCallable(() -> {
-        PaymentEntity paymentEntity = this.createEntity(payment);
-        // update this one field from response from helcim service
-        String rawToken = response.getSecretToken();
-        String SALT = KeyGenerators.string().generateKey();
-        paymentEntity.setSALT(SALT);
-        TextEncryptor encryptor = Encryptors.text(PASSWORD, SALT);
-        String encryptedToken = encryptor.encrypt(rawToken);
-        paymentEntity.setSecretToken(encryptedToken);
-        // save the entity and return it
-        return service.save(paymentEntity);
-      }).map(savedEntity -> {
-        Payment anotherPayment = this.createBody(savedEntity);
-        anotherPayment.setCheckoutToken(response.getCheckoutToken());
-        return anotherPayment;
-      });
-    });
   }
 }
