@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @EnableWebMvc
 @Transactional
-public class CheckoutController {
+public class Donation {
 
   Logger logger = Logger.getLogger(getClass().getName());
 
