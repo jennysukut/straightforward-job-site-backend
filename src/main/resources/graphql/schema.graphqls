@@ -1,74 +1,28 @@
 type Query {
-  findAllPayments(limit: Int): [Payment]
-  findAllBusinesses(limit: Int): [Business]
+  helloWorld: String
 }
 
 type Mutation {
-  initializePayment(payment: PaymentInput): Payment
-  saveBusiness(requestBody: BusinessInput) : Business
+  signupBusiness(requestBody: BusinessInput) : ID
+  acceptBusinessDonation(donation: BusinessDonationInput) : Payment
 }
 
-input PaymentInput {
-  id: ID
-  paymentType: String
-  amount: String
-  currency: String
-  accountName: String
+input BusinessInput {
+  business: String
   email: String
+  earlySignup: Boolean
+  betaTester: Boolean
+}
+
+input BusinessDonationInput {
+  businessName: String
+  contactName: String
+  email: String
+  amount: String
+  referral: String
 }
 
 type Payment {
   id: ID
-  paymentType: String
-  amount: String
-  currency: String
-  accountName: String
-  email: String
   checkoutToken: String
-}
-
-input BusinessInput {
-    ## Business
-  id: ID
-  businessName: String
-
-    ## Account
-  userName: String
-  password: String
-
-    ## Business
-  smallBio: String
-  missionAndVision: String
-  aboutSection: String
-  industry: String
-
-    ## Contact Info
-  location: String
-  website: String
-  email: String
-  phoneNumber: String
-  socials: String
-}
-
-type Business {
-    ## Business
-  id: ID
-  businessName: String
-
-    ## Account
-  userName: String
-##  password: String
-
-    ## Business
-  smallBio: String
-  missionAndVision: String
-  aboutSection: String
-  industry: String
-
-    ## Contact Info
-  location: String
-  website: String
-  email: String
-  phoneNumber: String
-  socials: String
 }

@@ -42,6 +42,6 @@ public class PaymentEntity extends BaseEntity {
   @Getter
   @Setter
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "account_id", nullable = true)
-  private AccountEntity account;
+  @JoinColumn(name = "business_id", nullable = true)
+  private BusinessEntity business;
 }

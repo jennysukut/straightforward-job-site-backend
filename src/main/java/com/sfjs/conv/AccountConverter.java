@@ -17,6 +17,14 @@ public class AccountConverter extends BaseConverter<AccountEntity, Account> {
     super(AccountEntity.class, Account.class);
   }
 
+  /**
+   * This maps an Account dto to an AccountEntity
+   *
+   * This function is necessary to encrypt the password
+   *
+   * @param body - Account data transfer object
+   * @return AccountEntity
+   */
   @Override
   public AccountEntity convertToEntity(Account body) {
     AccountEntity entity = super.convertToEntity(body);

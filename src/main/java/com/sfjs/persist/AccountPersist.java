@@ -19,6 +19,7 @@ import jakarta.transaction.Transactional;
  * Overrides customSave to call customSave on role entities
  * Overrides customSearch to search using email field
  * Implements findByEmail
+ *
  * @author carl
  *
  */
@@ -43,25 +44,28 @@ public class AccountPersist extends BasePersist<AccountEntity> {
   }
 
   @Override
-  public AccountEntity customSave(AccountEntity entity) {
-    if (entity.getRoles() != null) {
-      Set<RoleEntity> roleEntities = entity.getRoles().stream().map(roleEntity -> {
-        return rolePersist.customSave(roleEntity);
-      }).collect(Collectors.toSet());
-      entity.setRoles(roleEntities);
-    }
-    return super.customSave(entity);
+  protected AccountEntity customSearch(AccountEntity entity) {
+    AccountEntity existingEntity = this.repository.findByEmail(entity.getEmail());
+    return existingEntity;
   }
 
   @Override
-  protected AccountEntity customSearch(AccountEntity entity) {
-    AccountEntity existingEntity = this.repository.findByEmail(entity.getEmail());
-    if (existingEntity != null) {
-      if (entity.getPassword() != null && existingEntity.getPassword() == null) {
-        existingEntity.setPassword(entity.getPassword());
-        existingEntity = this.save(existingEntity);
-      }
+  protected AccountEntity customMerge(AccountEntity entity, AccountEntity existingEntity) {
+    if (entity.getPassword() != null) {
+      existingEntity.setPassword(entity.getPassword());
     }
+    // TODO we may need to update the roles of an existing entity
+//    if (entity.getRoles() != null) {
+//      existingEntity.setRoles(entity.getRoles());
+//    }
     return existingEntity;
+  }
+
+  @Override
+  protected AccountEntity manageChildEntities(AccountEntity entity) {
+    Set<RoleEntity> roles = entity.getRoles().stream().map(role -> rolePersist.customSave(role))
+        .collect(Collectors.toSet());
+    entity.setRoles(roles);
+    return entity;
   }
 }

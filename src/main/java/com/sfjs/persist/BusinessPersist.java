@@ -34,13 +34,45 @@ public class BusinessPersist extends BasePersist<BusinessEntity> {
   }
 
   @Override
-  public BusinessEntity customSave(BusinessEntity entity) {
-    // Account child entity
-    AccountEntity accountEntity = entity.getAccount();
-    accountEntity = accountPersist.customSave(accountEntity);
-    logger.info("Account entity: " + accountEntity);
-    entity.setAccount(accountEntity);
+  protected BusinessEntity customMerge(BusinessEntity entity, BusinessEntity existingEntity) {
+    {
+      Boolean newProperty = entity.getBetaTester();
+      Boolean existingProperty = existingEntity.getBetaTester();
+      if (newProperty != null && existingProperty != newProperty) {
+        existingEntity.setBetaTester(newProperty);
+      }
+    }
+    {
+      Boolean newProperty = entity.getEarlySignup();
+      Boolean existingProperty = existingEntity.getEarlySignup();
+      if (newProperty != null && existingProperty != newProperty) {
+        existingEntity.setEarlySignup(newProperty);
+      }
+    }
+    if (existingEntity.getAccount().getId() != entity.getAccount().getId()) {
+      existingEntity.setAccount(entity.getAccount());
+    }
+    {
+      String newProperty = entity.getContactName();
+      String existingProperty = existingEntity.getContactName();
+      if (newProperty != null && (existingProperty == null || existingProperty.contentEquals(newProperty))) {
+        existingEntity.setContactName(newProperty);
+      }
+    }
+    {
+      String newProperty = entity.getReferral();
+      String existingProperty = existingEntity.getReferral();
+      if (newProperty != null && (existingProperty == null || existingProperty.contentEquals(newProperty))) {
+        existingEntity.setReferral(newProperty);
+      }
+    }
+    return super.customMerge(entity, existingEntity);
+  }
 
-    return super.customSave(entity);
+  @Override
+  protected BusinessEntity manageChildEntities(BusinessEntity entity) {
+    AccountEntity e = accountPersist.customSave(entity.getAccount());
+    entity.setAccount(e);
+    return entity;
   }
 }

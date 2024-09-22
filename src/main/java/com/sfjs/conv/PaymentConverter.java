@@ -2,58 +2,66 @@ package com.sfjs.conv;
 
 import org.springframework.stereotype.Service;
 
-import com.sfjs.dto.Account;
+import com.sfjs.dto.Business;
 import com.sfjs.dto.Payment;
-import com.sfjs.entity.AccountEntity;
+import com.sfjs.entity.BusinessEntity;
 import com.sfjs.entity.PaymentEntity;
 
 @Service
 public class PaymentConverter extends BaseConverter<PaymentEntity, Payment> {
 
-  AccountConverter accountConverter;
+  BusinessConverter businessConverter;
 
-  public PaymentConverter(AccountConverter accountConverter) {
+  public PaymentConverter(BusinessConverter businessConverter) {
     super(PaymentEntity.class, Payment.class);
-    this.accountConverter = accountConverter;
+    this.businessConverter = businessConverter;
   }
 
+  /**
+   * This maps a Payment dto to PaymentEntity
+   *
+   * This function is necessary because the dto object is flattened; whereas, the
+   * entity is not
+   *
+   * @param payment - Payment data transfer object
+   * @return PaymentEntity
+   */
   @Override
   public PaymentEntity convertToEntity(Payment payment) {
-    Account account = new Account();
-    account.setName(payment.getAccountName());
-    account.setEmail(payment.getEmail());
-    account.setEnabled(true);
-    // A payment does not have a password
-//    account.setPassword(business.getPassword());
-    // TODO consider getting rid of role entities
-//    Role role = new Role();
-//    role.setName("BUSINESS");
-//    account.setRoles(Set.of(role));
+    // Create a business entity with business name and email
+    // This is all the information we have about the business and account
+    Business business = new Business();
+    business.setBusiness(payment.getBusinessName());
+    business.setEmail(payment.getEmail());
+    BusinessEntity businessEntity = businessConverter.convertToEntity(business);
 
-    // This is where the password would get encrypted if there was one
-    AccountEntity accountEntity = accountConverter.convertToEntity(account);
-
+    // Default conversion
     PaymentEntity entity = super.convertToEntity(payment);
-    entity.setAccount(accountEntity);
-    entity.setAmount(payment.getAmount());
-    entity.setCheckoutToken(payment.getCheckoutToken());
-    entity.setCurrency(payment.getCurrency());
-    entity.setPaymentType(payment.getPaymentType());
+
+    // Fields that are not directly mapped by default conversion
+    entity.setBusiness(businessEntity);
     entity.setSALT(payment.getSALT());
     entity.setSecretToken(payment.getSecretToken());
 
     return entity;
   }
 
+  /**
+   * This maps a PaymentEntity object to a Payment dto
+   *
+   * This function is necessary because the dto is flattened; whereas, the entity
+   * is not
+   *
+   * @param entity - PaymentEntity object
+   * @return Payment - data transfer object
+   */
   @Override
   public Payment convertToBody(PaymentEntity entity) {
-    Payment payment = new Payment();
-    payment.setAccountName(entity.getAccount().getName());
-    payment.setAmount(entity.getAmount());
-    payment.setCheckoutToken(entity.getCheckoutToken());
-    payment.setCurrency(entity.getCurrency());
-    payment.setEmail(entity.getAccount().getEmail());
-    payment.setPaymentType(entity.getPaymentType());
+    // Default conversion
+    Payment payment = super.convertToBody(entity);
+    // Fields that are not directly mapped by default conversion
+    payment.setBusinessName(entity.getBusiness().getName());
+    payment.setEmail(entity.getBusiness().getAccount().getEmail());
     return payment;
   }
 

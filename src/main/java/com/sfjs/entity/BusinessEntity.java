@@ -1,10 +1,16 @@
 package com.sfjs.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,31 +20,29 @@ public class BusinessEntity extends BaseEntity {
 
   @Getter
   @Setter
-  @OneToOne(optional = false)
-  @JoinColumn(name = "account_id", unique = true)
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "account_id", unique = false)
   private AccountEntity account;
 
   @Getter
   @Setter
-  private String smallBio;
+  private Boolean betaTester;
 
   @Getter
   @Setter
-  private String missionAndVision;
+  private Boolean earlySignup;
 
   @Getter
   @Setter
-  private String aboutSection;
+  private String contactName;
 
   @Getter
   @Setter
-  private String website;
+  private String referral;
 
   @Getter
   @Setter
-  private String phoneNumber;
-
-  @Getter
-  @Setter
-  private String socials;
+  @JsonIgnore
+  @OneToMany(mappedBy = "business")
+  private List<PaymentEntity> payments = new ArrayList<>();
 }

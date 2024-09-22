@@ -7,39 +7,7 @@ public class Business extends BaseBody {
 
   @Getter
   @Setter
-  private String businessName;
-
-  @Getter
-  @Setter
-  private String userName;
-
-  @Getter
-  @Setter
-  private String password;
-
-  @Getter
-  @Setter
-  private String smallBio;
-
-  @Getter
-  @Setter
-  private String missionAndVision;
-
-  @Getter
-  @Setter
-  private String aboutSection;
-
-  @Getter
-  @Setter
-  private String industry;
-
-  @Getter
-  @Setter
-  private String location;
-
-  @Getter
-  @Setter
-  private String website;
+  private String business;
 
   @Getter
   @Setter
@@ -47,9 +15,17 @@ public class Business extends BaseBody {
 
   @Getter
   @Setter
-  private String phoneNumber;
+  private Boolean earlySignup;
 
   @Getter
   @Setter
-  private String socials;
+  private Boolean betaTester;
+
+  @Getter
+  @Setter
+  private String contactName;
+
+  @Getter
+  @Setter
+  private String referral;
 }

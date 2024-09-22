@@ -27,7 +27,7 @@ public class Payment extends BaseBody {
 
   @Getter
   @Setter
-  private String accountName;
+  private String businessName;
 
   @Getter
   @Setter

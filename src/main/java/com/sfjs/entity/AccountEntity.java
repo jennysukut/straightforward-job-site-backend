@@ -1,12 +1,10 @@
 package com.sfjs.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;
@@ -44,14 +42,8 @@ public class AccountEntity extends BaseEntity {
   @Getter
   @Setter
   @JsonIgnore
-  @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<PaymentEntity> payments = new ArrayList<>();
-
-  @Getter
-  @Setter
-  @JsonIgnore
-  @OneToOne(mappedBy = "account", optional = true)
-  private BusinessEntity business;
+  @OneToMany(mappedBy = "account")
+  private List<BusinessEntity> businesses;
 
   @Getter
   @Setter
