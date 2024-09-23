@@ -25,4 +25,8 @@ public class FellowEntity extends BaseEntity {
   @Getter
   @Setter
   private String lastName;
+
+  @Getter
+  @Setter
+  private Boolean betaTester;
 }

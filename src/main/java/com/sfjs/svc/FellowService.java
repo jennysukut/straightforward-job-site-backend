@@ -3,7 +3,8 @@ package com.sfjs.svc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sfjs.conv.BaseConverter;
+import com.sfjs.conv.AccountConverter;
+import com.sfjs.conv.FellowConverter;
 import com.sfjs.dto.Fellow;
 import com.sfjs.entity.FellowEntity;
 import com.sfjs.persist.BasePersist;
@@ -18,8 +19,8 @@ public class FellowService extends BaseService<FellowEntity, Fellow> {
   @Autowired
   FellowPersist repository;
 
-  public FellowService() {
-    super(new BaseConverter<FellowEntity, Fellow>(FellowEntity.class, Fellow.class));
+  public FellowService(AccountConverter accountConverter) {
+    super(new FellowConverter(accountConverter));
   }
 
   @Override

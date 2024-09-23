@@ -15,5 +15,9 @@ public class Fellow extends BaseBody {
 
   @Getter
   @Setter
-  private Account account;
+  private String email;
+
+  @Getter
+  @Setter
+  private Boolean betaTester;
 }
