@@ -1,9 +1,15 @@
 package com.sfjs.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,4 +35,10 @@ public class FellowEntity extends BaseEntity {
   @Getter
   @Setter
   private Boolean betaTester;
+
+  @Getter
+  @Setter
+  @JsonIgnore
+  @OneToMany(mappedBy = "fellow")
+  private List<PaymentEntity> payments = new ArrayList<>();
 }

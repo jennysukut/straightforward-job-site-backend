@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.dto.BusinessDonation;
+import com.sfjs.dto.FellowDonation;
 import com.sfjs.dto.Payment;
 import com.sfjs.svc.DonationService;
 
@@ -29,5 +30,11 @@ public class Donation {
   public Mono<Payment> acceptBusinessDonation(@Argument(name = "donation") BusinessDonation donation) {
     logger.info("Donation: " + donation);
     return service.acceptBusinessDonation(donation);
+  }
+
+  @MutationMapping(name = "acceptFellowDonation")
+  public Mono<Payment> acceptFellowDonation(@Argument(name = "donation") FellowDonation donation) {
+    logger.info("Donation: " + donation);
+    return service.acceptFellowDonation(donation);
   }
 }

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.dto.Business;
 import com.sfjs.dto.BusinessDonation;
+import com.sfjs.dto.Fellow;
+import com.sfjs.dto.FellowDonation;
 import com.sfjs.dto.Payment;
 
 import jakarta.transaction.Transactional;
@@ -31,6 +33,9 @@ public class CheckoutService {
 
   @Autowired
   BusinessService businessService;
+
+  @Autowired
+  FellowService fellowService;
 
   Logger logger = Logger.getLogger(getClass().getName());
 
@@ -55,6 +60,43 @@ public class CheckoutService {
         business.setContactName(donation.getContactName());
         business.setReferral(donation.getReferral());
         businessService.customSave(business);
+
+        // update this one field from response from helcim service
+        String rawToken = response.getSecretToken();
+        String SALT = KeyGenerators.string().generateKey();
+        payment.setSALT(SALT);
+        TextEncryptor encryptor = Encryptors.text(PASSWORD, SALT);
+        String encryptedToken = encryptor.encrypt(rawToken);
+        payment.setSecretToken(encryptedToken);
+        // save the entity and return it
+        logger.info("Save payment: " + payment);
+        return paymentService.customSave(payment);
+      }).map(anotherPayment -> {
+        anotherPayment.setCheckoutToken(response.getCheckoutToken());
+        return anotherPayment;
+      });
+    });
+  }
+
+  public Mono<Payment> acceptFellowDonation(FellowDonation donation) {
+
+    logger.info("Starting initialize");
+    Payment payment = new Payment();
+    payment.setAmount(donation.getAmount());
+    payment.setCurrency("USD");
+    payment.setEmail(donation.getEmail());
+    payment.setPaymentType("purchase");
+    payment.setFellowName(donation.getName());
+
+    return helcimService.initializeCheckout(payment).flatMap(response -> {
+      logger.info("Response: " + response);
+      // Save a field to the database
+      return Mono.fromCallable(() -> {
+        logger.info("fromCallable");
+        Fellow fellow = new Fellow();
+        fellow.setName(donation.getName());
+        fellow.setEmail(donation.getEmail());
+        fellowService.customSave(fellow);
 
         // update this one field from response from helcim service
         String rawToken = response.getSecretToken();

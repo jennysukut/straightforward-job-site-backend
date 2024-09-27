@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.entity.BusinessEntity;
+import com.sfjs.entity.FellowEntity;
 import com.sfjs.entity.PaymentEntity;
 import com.sfjs.repo.BaseRepository;
 import com.sfjs.repo.PaymentRepository;
@@ -28,6 +29,9 @@ public class PaymentPersist extends BasePersist<PaymentEntity> {
   @Autowired
   BusinessPersist businessPersist;
 
+  @Autowired
+  FellowPersist fellowPersist;
+
   @Override
   public BaseRepository<PaymentEntity> getBaseRepository() {
     return this.repository;
@@ -35,8 +39,13 @@ public class PaymentPersist extends BasePersist<PaymentEntity> {
 
   @Override
   protected PaymentEntity manageChildEntities(PaymentEntity entity) {
-    BusinessEntity e = businessPersist.customSave(entity.getBusiness());
-    entity.setBusiness(e);
+    if (entity.getBusiness() != null) {
+      BusinessEntity e = businessPersist.customSave(entity.getBusiness());
+      entity.setBusiness(e);
+    } else if (entity.getFellow() != null) {
+      FellowEntity e = fellowPersist.customSave(entity.getFellow());
+      entity.setFellow(e);
+    }
     return entity;
   }
 }

@@ -2,11 +2,17 @@ package com.sfjs.conv;
 
 import java.util.Set;
 
+import org.springframework.stereotype.Service;
+
 import com.sfjs.dto.Account;
 import com.sfjs.dto.Fellow;
 import com.sfjs.dto.Role;
 import com.sfjs.entity.FellowEntity;
 
+import jakarta.transaction.Transactional;
+
+@Service
+@Transactional
 public class FellowConverter extends BaseConverter<FellowEntity, Fellow> {
 
   AccountConverter accountConverter;

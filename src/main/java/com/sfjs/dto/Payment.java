@@ -31,6 +31,10 @@ public class Payment extends BaseBody {
 
   @Getter
   @Setter
+  private String fellowName;
+
+  @Getter
+  @Setter
   private String email;
 
   @Getter

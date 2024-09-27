@@ -4,8 +4,15 @@ type Query {
 
 type Mutation {
   signUp(name: String, email: String, betaTester: Boolean) : Result
+  acceptFellowDonation(donation: FellowDonationInput) : Payment
   signupBusiness(requestBody: BusinessInput) : ID
   acceptBusinessDonation(donation: BusinessDonationInput) : Payment
+}
+
+input FellowDonationInput {
+  name: String
+  amount: String
+  email: String
 }
 
 type Result {
