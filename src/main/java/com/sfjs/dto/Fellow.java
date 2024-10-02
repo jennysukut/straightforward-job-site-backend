@@ -7,11 +7,15 @@ public class Fellow extends BaseBody {
 
   @Getter
   @Setter
-  private String firstName;
+  private String message;
 
   @Getter
   @Setter
-  private String lastName;
+  private String referralCode;
+
+  @Getter
+  @Setter
+  private boolean referralPartner;
 
   @Getter
   @Setter

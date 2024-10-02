@@ -29,6 +29,12 @@ public class Signup {
     return businessService.customSave(requestBody).getId();
   }
 
+  @MutationMapping(name = "signupFellow")
+  public Long signupFellow(@Argument(name = "requestBody") Fellow requestBody) {
+    return fellowService.customSave(requestBody).getId();
+  }
+
+  @Deprecated
   @MutationMapping(name = "signUp")
   public Result signupIndividual(@Argument(name = "name") String name,
       @Argument(name = "email") String email,

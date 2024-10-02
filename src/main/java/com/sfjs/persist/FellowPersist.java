@@ -48,6 +48,19 @@ public class FellowPersist extends BasePersist<FellowEntity> {
     if (entity.getBetaTester() != existingEntity.getBetaTester()) {
       existingEntity.setBetaTester(entity.getBetaTester());
     }
+    if (entity.getMessage() != null && (existingEntity.getMessage() == null
+        || !entity.getMessage().contentEquals(existingEntity.getMessage()))) {
+      existingEntity.setMessage(entity.getMessage());
+    }
+    if (entity.isReferralPartner() != existingEntity.isReferralPartner()) {
+      existingEntity.setReferralPartner(entity.isReferralPartner());
+      existingEntity.setReferralCode(entity.getReferralCode());
+    } else if (entity.isReferralPartner()) {
+      if (entity.getReferralCode() != null && (existingEntity.getReferralCode() == null
+          || !entity.getReferralCode().contentEquals(existingEntity.getReferralCode()))) {
+        existingEntity.setReferralCode(entity.getReferralCode());
+      }
+    }
     return existingEntity;
   }
 }
