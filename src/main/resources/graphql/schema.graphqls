@@ -14,6 +14,7 @@ input FellowInput {
   name: String
   email: String
   betaTester: Boolean
+  collaborator: Boolean
   message: String
   referralPartner: Boolean
   referralCode: String
