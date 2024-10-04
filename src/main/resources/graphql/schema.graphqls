@@ -1,5 +1,5 @@
 type Query {
-  helloWorld: String
+  currentDonations: String
 }
 
 type Mutation {
