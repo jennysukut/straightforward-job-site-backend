@@ -1,4 +1,4 @@
-package com.sfjs;
+package com.sfjs.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;

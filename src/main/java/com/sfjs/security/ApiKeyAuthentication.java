@@ -1,4 +1,4 @@
-package com.sfjs;
+package com.sfjs.security;
 
 import java.util.Collection;
 
