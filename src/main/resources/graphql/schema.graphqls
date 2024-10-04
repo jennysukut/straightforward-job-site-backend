@@ -8,6 +8,7 @@ type Mutation {
   acceptFellowDonation(donation: FellowDonationInput) : Payment
   signupBusiness(requestBody: BusinessInput) : ID
   acceptBusinessDonation(donation: BusinessDonationInput) : Payment
+  completePayment(input: PaymentResultInput): PaymentResult
 }
 
 input FellowInput {
@@ -49,4 +50,39 @@ input BusinessDonationInput {
 type Payment {
   id: ID
   checkoutToken: String
+  status: String
+}
+
+input PaymentResultInput {
+  hash: String
+  data: TransactionDataInput
+  paymentId: ID
+}
+
+input TransactionDataInput {
+  transactionId: String
+  dateCreated: String
+  cardBatchId: String
+  status: String
+  type: String
+  amount: String
+  currency: String
+  avsResponse: String
+  cvvResponse: String
+  approvalCode: String
+  cardToken: String
+  cardNumber: String
+  cardHolderName: String
+  customerCode: String
+  invoiceNumber: String
+  warning: String
+}
+
+# Assuming you have a type to represent the result of the transaction
+type PaymentResult {
+  # Define fields for the result
+  success: Boolean
+  message: String
+  # Add any other fields you need for the result
+  payment: Payment
 }

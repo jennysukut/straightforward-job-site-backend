@@ -1,6 +1,9 @@
 package com.sfjs.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -50,4 +53,10 @@ public class PaymentEntity extends BaseEntity {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "fellow_id", nullable = true)
   private FellowEntity fellow;
+
+  @Getter
+  @Setter
+  @Enumerated(EnumType.ORDINAL)
+  @Column(name = "status")
+  private PaymentStatus status;
 }

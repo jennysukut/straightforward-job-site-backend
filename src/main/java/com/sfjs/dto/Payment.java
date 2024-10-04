@@ -46,4 +46,8 @@ public class Payment extends BaseBody {
   @Setter
   @JsonIgnore
   private String secretToken;
+
+  @Getter
+  @Setter
+  private String status;
 }

@@ -14,6 +14,7 @@ import com.sfjs.dto.BusinessDonation;
 import com.sfjs.dto.Fellow;
 import com.sfjs.dto.FellowDonation;
 import com.sfjs.dto.Payment;
+import com.sfjs.entity.PaymentStatus;
 
 import jakarta.transaction.Transactional;
 import reactor.core.publisher.Mono;
@@ -48,6 +49,7 @@ public class CheckoutService {
     payment.setEmail(donation.getEmail());
     payment.setPaymentType("purchase");
     payment.setBusinessName(donation.getBusinessName());
+    payment.setStatus(PaymentStatus.PENDING.name());
 
     return helcimService.initializeCheckout(payment).flatMap(response -> {
       logger.info("Response: " + response);

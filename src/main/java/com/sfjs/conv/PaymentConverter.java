@@ -8,6 +8,7 @@ import com.sfjs.dto.Payment;
 import com.sfjs.entity.BusinessEntity;
 import com.sfjs.entity.FellowEntity;
 import com.sfjs.entity.PaymentEntity;
+import com.sfjs.entity.PaymentStatus;
 
 @Service
 public class PaymentConverter extends BaseConverter<PaymentEntity, Payment> {
@@ -38,6 +39,7 @@ public class PaymentConverter extends BaseConverter<PaymentEntity, Payment> {
     // Fields that are not directly mapped by default conversion
     entity.setSALT(payment.getSALT());
     entity.setSecretToken(payment.getSecretToken());
+    entity.setStatus(stringToEnum(PaymentStatus.class, payment.getStatus()));
 
     if (payment.getBusinessName() != null) {
       // Create a business entity with business name and email
@@ -81,7 +83,7 @@ public class PaymentConverter extends BaseConverter<PaymentEntity, Payment> {
       payment.setFellowName(entity.getFellow().getName());
       payment.setEmail(entity.getFellow().getAccount().getEmail());
     }
+    payment.setStatus(entity.getStatus() != null ? entity.getStatus().name() : PaymentStatus.PENDING.name());
     return payment;
   }
-
 }
