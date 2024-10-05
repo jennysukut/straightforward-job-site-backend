@@ -75,4 +75,15 @@ Application configuration can be found in `src/main/resources/application.proper
 
 ## API Documentation
 
-API documentation is available via Swagger UI. After starting the application, visit:
+API documentation is available via Altair GQL client.
+- Open a new tab
+- Enter the URL http://localhost:8082/graphql
+- Click on the button on the upper left corner to set a header
+- Enter x-api-key for the header key
+- Enter whatever for the header value
+- Click on the "Docs" in the upper left area to show docs area
+- Click on "Reaload Docs" icon to populate the docs area with the schema
+
+At this point you should see Query and Mutation.  You can click on these and drill down to get as much detail as you need.
+
+If you hover over a query or mutation there will be some text that appears that you can click on to add the element to your query.
