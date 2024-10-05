@@ -79,8 +79,8 @@ API documentation is available via Altair GQL client.
 - Open a new tab
 - Enter the URL http://localhost:8082/graphql
 - Click on the button on the upper left corner to set a header
-- Enter x-api-key for the header key
-- Enter whatever for the header value
+- Enter "x-api-key" for the header key
+- Enter "whatever" for the header value
 - Click on the "Docs" in the upper left area to show docs area
 - Click on "Reaload Docs" icon to populate the docs area with the schema
 
