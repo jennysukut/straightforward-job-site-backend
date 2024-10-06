@@ -1,10 +1,14 @@
 package com.sfjs;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import com.sfjs.entity.NumericMetricEntity;
 import com.sfjs.entity.RoleEntity;
+import com.sfjs.repo.NumericMetricRepository;
 import com.sfjs.repo.RoleRepository;
 
 @Component
@@ -12,6 +16,9 @@ public class DataInitializer implements CommandLineRunner {
 
   @Autowired
   private RoleRepository roleRepository;
+
+  @Autowired
+  private NumericMetricRepository numericMetricRepository;
 
   @Override
   public void run(String... args) throws Exception {
@@ -28,6 +35,16 @@ public class DataInitializer implements CommandLineRunner {
       fellow.setName("FELLOW");
       fellow.setLabel("Fellow");
       roleRepository.save(fellow);
+    }
+    if (numericMetricRepository.count() == 0) {
+      NumericMetricEntity fellowDonation = new NumericMetricEntity();
+      fellowDonation.setName("CURRENT_FELLOW_DONATION");
+      fellowDonation.setMetric(BigDecimal.ZERO);
+      numericMetricRepository.save(fellowDonation);
+      NumericMetricEntity businessDonation = new NumericMetricEntity();
+      businessDonation.setName("CURRENT_BUSINESS_DONATION");
+      businessDonation.setMetric(BigDecimal.ZERO);
+      numericMetricRepository.save(businessDonation);
     }
   }
 }

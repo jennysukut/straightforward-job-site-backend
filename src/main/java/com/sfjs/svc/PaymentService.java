@@ -1,5 +1,6 @@
 package com.sfjs.svc;
 
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -17,9 +18,11 @@ import com.sfjs.conv.PaymentConverter;
 import com.sfjs.dto.Payment;
 import com.sfjs.dto.PaymentResult;
 import com.sfjs.dto.PaymentResultInput;
+import com.sfjs.entity.NumericMetricEntity;
 import com.sfjs.entity.PaymentEntity;
 import com.sfjs.entity.PaymentStatus;
 import com.sfjs.persist.BasePersist;
+import com.sfjs.persist.NumericMetricPersist;
 import com.sfjs.persist.PaymentPersist;
 
 import jakarta.transaction.Transactional;
@@ -35,6 +38,9 @@ public class PaymentService extends BaseService<PaymentEntity, Payment> {
 
   @Autowired
   PaymentPersist repository;
+
+  @Autowired
+  private NumericMetricPersist numericMetricPersist;
 
   public PaymentService(BusinessConverter businessConverter,
       FellowConverter fellowConverter) {
@@ -66,6 +72,15 @@ public class PaymentService extends BaseService<PaymentEntity, Payment> {
       paymentEntity = this.getBaseRepository().customSave(paymentEntity);
     } else {
       result.setSuccess(false);
+    }
+    if (paymentEntity.getFellow() != null) {
+      NumericMetricEntity metric = numericMetricPersist.findByName("CURRENT_FELLOW_DONATION");
+      metric.setMetric(metric.getMetric().add(new BigDecimal(paymentEntity.getAmount())));
+      numericMetricPersist.customSave(metric);
+    } else if (paymentEntity.getBusiness() != null) {
+      NumericMetricEntity metric = numericMetricPersist.findByName("CURRENT_BUSINESS_DONATION");
+      metric.setMetric(metric.getMetric().add(new BigDecimal(paymentEntity.getAmount())));
+      numericMetricPersist.customSave(metric);
     }
     result.setPayment(createBody(paymentEntity));
     return result;
