@@ -1,14 +1,12 @@
 package com.sfjs.svc;
 
-import java.math.BigDecimal;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.dto.BusinessDonation;
 import com.sfjs.dto.FellowDonation;
+import com.sfjs.dto.NumericMetric;
 import com.sfjs.dto.Payment;
-import com.sfjs.entity.PaymentStatus;
 
 import jakarta.transaction.Transactional;
 import reactor.core.publisher.Mono;
@@ -24,7 +22,7 @@ public class DonationService {
   CheckoutService checkoutService;
 
   @Autowired
-  PaymentService paymentService;
+  NumericMetricService numericMetricService;
 
   public Mono<Payment> acceptBusinessDonation(BusinessDonation donation) {
     return checkoutService.acceptBusinessDonation(donation);
@@ -35,12 +33,8 @@ public class DonationService {
   }
 
   public String getCurrentDonations() {
-    BigDecimal currentDonations = BigDecimal.ZERO;
-    for (Payment payment: paymentService.findAll()) {
-      if (payment.getStatus().contentEquals(PaymentStatus.APPROVED.name())) {
-        currentDonations = currentDonations.add(new BigDecimal(payment.getAmount()));
-      }
-    }
-    return currentDonations.toString();
+    NumericMetric fellowDonations = numericMetricService.findByName("CURRENT_FELLOW_DONATION");
+    NumericMetric businessDonations = numericMetricService.findByName("CURRENT_BUSINESS_DONATION");
+    return fellowDonations.getMetric().add(businessDonations.getMetric()).toString();
   }
 }
