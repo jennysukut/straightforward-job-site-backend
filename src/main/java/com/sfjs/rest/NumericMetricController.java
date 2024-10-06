@@ -27,7 +27,7 @@ public class NumericMetricController extends BaseController<NumericMetricService
     return delete(id);
   }
 
-  @RequestMapping(path = "/address/{id}", method = RequestMethod.DELETE)
+  @RequestMapping(path = "/numericMetric/{id}", method = RequestMethod.DELETE)
   public Boolean delete(@PathVariable(name = "id") Long id) {
     return super.delete(id);
   }
@@ -37,48 +37,48 @@ public class NumericMetricController extends BaseController<NumericMetricService
     return save(requestBody);
   }
 
-  @RequestMapping(path = "/address", method = RequestMethod.POST)
+  @RequestMapping(path = "/numericMetric", method = RequestMethod.POST)
   public NumericMetric save(@RequestBody NumericMetric requestBody) {
     return super.save(requestBody);
   }
 
-  @RequestMapping(path = "/address/getbyid/{id}", method = RequestMethod.GET)
+  @RequestMapping(path = "/numericMetric/getbyid/{id}", method = RequestMethod.GET)
   public NumericMetric getById(@PathVariable("id") Long id) {
     return super.getById(id);
   }
 
-  @RequestMapping(path = "/address/findbyid/{id}", method = RequestMethod.GET)
+  @RequestMapping(path = "/numericMetric/findbyid/{id}", method = RequestMethod.GET)
   public NumericMetric findById(@PathVariable("id") Long id) {
     return super.findById(id);
   }
 
-  @RequestMapping(path = "/address/findallbyid/{id}", method = RequestMethod.GET)
+  @RequestMapping(path = "/numericMetric/findallbyid/{id}", method = RequestMethod.GET)
   public List<NumericMetric> findAllById(@PathVariable("id") Long id) {
     return super.findAllById(id);
   }
 
-  @RequestMapping(path = "/address/findbyname/{name}", method = RequestMethod.GET)
+  @RequestMapping(path = "/numericMetric/findbyname/{name}", method = RequestMethod.GET)
   public NumericMetric findByName(@PathVariable("name") String name) {
     return super.findByName(name);
   }
 
-  @RequestMapping(path = "/address/findallbyname/{name}", method = RequestMethod.GET)
+  @RequestMapping(path = "/numericMetric/findallbyname/{name}", method = RequestMethod.GET)
   public List<NumericMetric> findAllByName(@PathVariable("name") String name) {
     return super.findAllByName(name);
   }
 
-  @RequestMapping(path = "/address/findbylabel/{label}", method = RequestMethod.GET)
+  @RequestMapping(path = "/numericMetric/findbylabel/{label}", method = RequestMethod.GET)
   public NumericMetric findByLabel(@PathVariable("label") String label) {
     return super.findByLabel(label);
   }
 
-  @RequestMapping(path = "/address/findallbylabel/{label}", method = RequestMethod.GET)
+  @RequestMapping(path = "/numericMetric/findallbylabel/{label}", method = RequestMethod.GET)
   public List<NumericMetric> findAllByLabel(@PathVariable("label") String label) {
     return super.findAllByLabel(label);
   }
 
   @QueryMapping(name = "findAllNumericMetrices")
-  @RequestMapping(path = "/address/findall", method = RequestMethod.GET)
+  @RequestMapping(path = "/numericMetric/findall", method = RequestMethod.GET)
   public List<NumericMetric> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
