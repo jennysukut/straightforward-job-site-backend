@@ -12,6 +12,7 @@ import com.sfjs.dto.Fellow;
 import com.sfjs.dto.Result;
 import com.sfjs.svc.BusinessService;
 import com.sfjs.svc.FellowService;
+import com.sfjs.svc.SignupService;
 
 @RestController
 @EnableWebMvc
@@ -24,6 +25,9 @@ public class Signup {
   @Autowired
   private FellowService fellowService;
 
+  @Autowired
+  private SignupService signupService;
+
   @MutationMapping(name = "signupBusiness")
   public Long signupBusiness(@Argument(name = "requestBody") Business requestBody) {
     return businessService.customSave(requestBody).getId();
@@ -31,7 +35,7 @@ public class Signup {
 
   @MutationMapping(name = "signupFellow")
   public Long signupFellow(@Argument(name = "requestBody") Fellow requestBody) {
-    return fellowService.customSave(requestBody).getId();
+    return signupService.signupFellow(requestBody).getId();
   }
 
   @Deprecated

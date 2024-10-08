@@ -51,7 +51,7 @@ public class FellowConverter extends BaseConverter<FellowEntity, Fellow> {
 
   @Override
   public Fellow convertToBody(FellowEntity src) {
-    Fellow dest = new Fellow();
+    Fellow dest = super.convertToBody(src);
     dest.setId(src.getId());
     dest.setName(src.getName());
     dest.setEmail(src.getAccount().getEmail());
