@@ -98,7 +98,7 @@ public class CheckoutService {
         Fellow fellow = new Fellow();
         fellow.setName(donation.getName());
         fellow.setEmail(donation.getEmail());
-        fellowService.customSave(fellow);
+        Fellow savedFellow = fellowService.customSave(fellow);
 
         // update this one field from response from helcim service
         String rawToken = response.getSecretToken();
@@ -109,7 +109,9 @@ public class CheckoutService {
         payment.setSecretToken(encryptedToken);
         // save the entity and return it
         logger.info("Save payment: " + payment);
-        return paymentService.customSave(payment);
+        Payment savedPayment = paymentService.customSave(payment);
+        savedPayment.setFellow(savedFellow);
+        return savedPayment;
       }).map(anotherPayment -> {
         anotherPayment.setCheckoutToken(response.getCheckoutToken());
         return anotherPayment;
