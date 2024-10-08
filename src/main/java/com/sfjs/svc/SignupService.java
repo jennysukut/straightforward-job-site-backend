@@ -63,15 +63,50 @@ public class SignupService {
   }
 
   private FellowEntity updateExistingFellow(Fellow requestBody, FellowEntity existingFellowEntity) {
-    existingFellowEntity.setBetaTester(requestBody.getBetaTester());
-    existingFellowEntity.setCollaborator(requestBody.isCollaborator());
-    existingFellowEntity.setMessage(requestBody.getMessage());
-    existingFellowEntity.setReferralCode(requestBody.getReferralCode());
-    existingFellowEntity.setReferralPartner(requestBody.isReferralPartner());
+    if (valueChanged(requestBody.getBetaTester(), existingFellowEntity.getBetaTester())) {
+      existingFellowEntity.setBetaTester(requestBody.getBetaTester());
+    }
+    if (valueChanged(requestBody.getCollaborator(), existingFellowEntity.isCollaborator())) {
+      existingFellowEntity.setCollaborator(requestBody.getCollaborator());
+    }
+    if (valueChanged(requestBody.getMessage(), existingFellowEntity.getMessage())) {
+      existingFellowEntity.setMessage(requestBody.getMessage());
+    }
+    if (valueChanged(requestBody.getReferralCode(), existingFellowEntity.getReferralCode())) {
+      existingFellowEntity.setReferralCode(requestBody.getReferralCode());
+    }
+    if (valueChanged(requestBody.getReferralPartner(), existingFellowEntity.isReferralPartner())) {
+      existingFellowEntity.setReferralPartner(requestBody.getReferralPartner());
+    }
     FellowEntity savedFellowEntity = fellowRepository.save(existingFellowEntity);
     return savedFellowEntity;
   }
 
+  private boolean valueChanged(String newValue, String original) {
+    if (newValue == null) return false;
+    if (original == null) return true;
+    return !newValue.contentEquals(original);
+  }
+
+  private boolean valueChanged(Boolean newValue, Boolean original) {
+    if (newValue == null) return false;
+    if (original == null) return true;
+    return newValue.booleanValue() != original.booleanValue();
+  }
+
+  /**
+   * Create a new fellow entity
+   *
+   * Because the is a new entity, we don't
+   * need to worry about changing value of
+   * existing fields.
+   * If an input field is null
+   * Then it's okay to set the entity field to null
+   *
+   * @param requestBody
+   * @param existingAccountEntity
+   * @return
+   */
   private FellowEntity createNewFellow(Fellow requestBody, AccountEntity existingAccountEntity) {
     // Create a new FellowEntity
     // Associate new fellow with existing account
@@ -79,14 +114,26 @@ public class SignupService {
     newFellowEntity.setAccount(existingAccountEntity);
     existingAccountEntity.setFellow(newFellowEntity);
     newFellowEntity.setBetaTester(requestBody.getBetaTester());
-    newFellowEntity.setCollaborator(requestBody.isCollaborator());
+    newFellowEntity.setCollaborator(requestBody.getCollaborator());
     newFellowEntity.setMessage(requestBody.getMessage());
     newFellowEntity.setReferralCode(requestBody.getReferralCode());
-    newFellowEntity.setReferralPartner(requestBody.isReferralPartner());
+    newFellowEntity.setReferralPartner(requestBody.getReferralPartner());
     FellowEntity savedFellowEntity = fellowRepository.save(newFellowEntity);
     return savedFellowEntity;
   }
 
+  /**
+   * Create a new fellow entity and account entity
+   *
+   * Because the is a new entity, we don't
+   * need to worry about changing value of
+   * existing fields.
+   * If an input field is null
+   * Then it's okay to set the entity field to null
+   *
+   * @param requestBody
+   * @return
+   */
   private FellowEntity createNewFellowAndNewAccount(Fellow requestBody) {
     // Create a new FellowEntity
     // Create a new AccountEntity
@@ -98,12 +145,12 @@ public class SignupService {
     AccountEntity savedAccountEntity = accountRepository.save(newAccountEntity);
     FellowEntity newFellowEntity = new FellowEntity();
     newFellowEntity.setAccount(savedAccountEntity);
-    newFellowEntity.setBetaTester(requestBody.getBetaTester());
-    newFellowEntity.setCollaborator(requestBody.isCollaborator());
+    newFellowEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
+    newFellowEntity.setCollaborator(requestBody.getCollaborator() != null ? requestBody.getCollaborator() : false);
     newFellowEntity.setMessage(requestBody.getMessage());
     newFellowEntity.setName(requestBody.getName());
     newFellowEntity.setReferralCode(requestBody.getReferralCode());
-    newFellowEntity.setReferralPartner(requestBody.isReferralPartner());
+    newFellowEntity.setReferralPartner(requestBody.getReferralPartner() != null ? requestBody.getReferralPartner() : false);
     FellowEntity savedFellowEntity = fellowRepository.save(newFellowEntity);
     return savedFellowEntity;
   }
