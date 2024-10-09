@@ -16,9 +16,10 @@ import com.sfjs.dto.BusinessDonation;
 import com.sfjs.dto.Fellow;
 import com.sfjs.dto.FellowDonation;
 import com.sfjs.dto.Payment;
+import com.sfjs.entity.BusinessEntity;
 import com.sfjs.entity.FellowEntity;
 import com.sfjs.entity.PaymentEntity;
-import com.sfjs.entity.PaymentStatus;
+import com.sfjs.repo.BusinessRepository;
 import com.sfjs.repo.FellowRepository;
 import com.sfjs.repo.PaymentRepository;
 
@@ -34,9 +35,6 @@ public class CheckoutService {
 
   @Autowired
   HelcimService helcimService;
-
-  @Autowired
-  PaymentService paymentService;
 
   @Autowired
   BusinessService businessService;
@@ -56,41 +54,52 @@ public class CheckoutService {
   @Autowired
   PaymentRepository paymentRepository;
 
+  @Autowired
+  BusinessRepository businessRepository;
+
   Logger logger = Logger.getLogger(getClass().getName());
 
   public Mono<Payment> acceptBusinessDonation(BusinessDonation donation) {
 
-    logger.info("Starting initialize");
+    logger.info("Implicit business signup");
+    Business business = new Business();
+    business.setBusiness(donation.getBusinessName());
+    business.setEmail(donation.getEmail());
+    business.setContactName(donation.getContactName());
+    business.setReferral(donation.getReferral());
+    business = signupService.signupBusiness(business);
+
     Payment payment = new Payment();
+    payment.setBusiness(business);
     payment.setAmount(donation.getAmount());
     payment.setCurrency("USD");
     payment.setEmail(donation.getEmail());
     payment.setPaymentType("purchase");
     payment.setBusinessName(donation.getBusinessName());
-    payment.setStatus(PaymentStatus.PENDING.name());
 
     return helcimService.initializeCheckout(payment).flatMap(response -> {
       logger.info("Response: " + response);
       // Save a field to the database
       return Mono.fromCallable(() -> {
         logger.info("fromCallable");
-        Business business = new Business();
-        business.setBusiness(donation.getBusinessName());
-        business.setEmail(donation.getEmail());
-        business.setContactName(donation.getContactName());
-        business.setReferral(donation.getReferral());
-        businessService.customSave(business);
 
         // update this one field from response from helcim service
         String rawToken = response.getSecretToken();
+        logger.info("Raw token: " + rawToken);
         String SALT = KeyGenerators.string().generateKey();
+        logger.info("Encryption SALT: " + SALT);
         payment.setSALT(SALT);
+        logger.info("Encryption password: " + PASSWORD);
         TextEncryptor encryptor = Encryptors.text(PASSWORD, SALT);
         String encryptedToken = encryptor.encrypt(rawToken);
         payment.setSecretToken(encryptedToken);
         // save the entity and return it
         logger.info("Save payment: " + payment);
-        return paymentService.customSave(payment);
+        PaymentEntity paymentEntity = paymentConverter.convertToEntity(payment);
+        Optional<BusinessEntity> businessEntity = businessRepository.findById(payment.getBusiness().getId());
+        paymentEntity.setBusiness(businessEntity.get());
+        PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
+        return paymentConverter.convertToBody(savedPaymentEntity);
       }).map(anotherPayment -> {
         anotherPayment.setCheckoutToken(response.getCheckoutToken());
         return anotherPayment;
