@@ -63,7 +63,7 @@ public class BusinessConverter extends BaseConverter<BusinessEntity, Business> {
    */
   @Override
   public Business convertToBody(BusinessEntity src) {
-    Business dest = new Business();
+    Business dest = super.convertToBody(src);
     dest.setId(src.getId());
     dest.setBusiness(src.getName());
     dest.setEmail(src.getAccount().getEmail());
