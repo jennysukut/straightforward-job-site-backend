@@ -10,7 +10,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.sfjs.dto.Business;
 import com.sfjs.dto.Fellow;
 import com.sfjs.dto.Result;
-import com.sfjs.svc.BusinessService;
 import com.sfjs.svc.FellowService;
 import com.sfjs.svc.SignupService;
 
@@ -20,9 +19,6 @@ import com.sfjs.svc.SignupService;
 public class Signup {
 
   @Autowired
-  private BusinessService businessService;
-
-  @Autowired
   private FellowService fellowService;
 
   @Autowired
@@ -30,7 +26,7 @@ public class Signup {
 
   @MutationMapping(name = "signupBusiness")
   public Long signupBusiness(@Argument(name = "requestBody") Business requestBody) {
-    return businessService.customSave(requestBody).getId();
+    return signupService.signupBusiness(requestBody).getId();
   }
 
   @MutationMapping(name = "signupFellow")

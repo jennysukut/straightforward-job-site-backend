@@ -1,16 +1,23 @@
 package com.sfjs.svc;
 
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sfjs.conv.BusinessConverter;
 import com.sfjs.conv.FellowConverter;
+import com.sfjs.dto.Business;
 import com.sfjs.dto.Fellow;
 import com.sfjs.entity.AccountEntity;
+import com.sfjs.entity.BusinessEntity;
 import com.sfjs.entity.FellowEntity;
 import com.sfjs.entity.RoleEntity;
 import com.sfjs.repo.AccountRepository;
+import com.sfjs.repo.BusinessRepository;
 import com.sfjs.repo.FellowRepository;
 import com.sfjs.repo.RoleRepository;
 
@@ -19,6 +26,8 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class SignupService {
+
+  Logger logger = Logger.getLogger(getClass().getName());
 
   @Autowired
   FellowConverter fellowConverter;
@@ -31,6 +40,12 @@ public class SignupService {
 
   @Autowired
   FellowRepository fellowRepository;
+
+  @Autowired
+  BusinessConverter businessConverter;
+
+  @Autowired
+  BusinessRepository businessRepository;
 
   public Fellow signupFellow(Fellow requestBody) {
     String email = requestBody.getEmail();
@@ -111,6 +126,7 @@ public class SignupService {
     // Create a new FellowEntity
     // Associate new fellow with existing account
     FellowEntity newFellowEntity = new FellowEntity();
+    newFellowEntity.setName(requestBody.getName());
     newFellowEntity.setAccount(existingAccountEntity);
     existingAccountEntity.setFellow(newFellowEntity);
     newFellowEntity.setBetaTester(requestBody.getBetaTester());
@@ -144,14 +160,100 @@ public class SignupService {
     newAccountEntity.setRoles(Set.of(fellowRoleEntity));
     AccountEntity savedAccountEntity = accountRepository.save(newAccountEntity);
     FellowEntity newFellowEntity = new FellowEntity();
+    newFellowEntity.setName(requestBody.getName());
     newFellowEntity.setAccount(savedAccountEntity);
     newFellowEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
     newFellowEntity.setCollaborator(requestBody.getCollaborator() != null ? requestBody.getCollaborator() : false);
     newFellowEntity.setMessage(requestBody.getMessage());
-    newFellowEntity.setName(requestBody.getName());
     newFellowEntity.setReferralCode(requestBody.getReferralCode());
     newFellowEntity.setReferralPartner(requestBody.getReferralPartner() != null ? requestBody.getReferralPartner() : false);
     FellowEntity savedFellowEntity = fellowRepository.save(newFellowEntity);
     return savedFellowEntity;
+  }
+
+  public Business signupBusiness(Business requestBody) {
+    String email = requestBody.getEmail();
+    AccountEntity existingAccountEntity = accountRepository.findByEmail(email);
+    if (existingAccountEntity == null) {
+      // This email has never been used
+      BusinessEntity savedBusinessEntity = createNewBusinessAndNewAccount(requestBody);
+      Business response = businessConverter.convertToBody(savedBusinessEntity);
+      return response;
+    } else {
+      Optional<BusinessEntity> existingBusinessEntity = existingAccountEntity.getBusinesses().stream()
+          .filter(new Predicate<BusinessEntity>() {
+
+            @Override
+            public boolean test(BusinessEntity t) {
+              String tName = t.getName();
+              if (tName == null) {
+                logger.info("business entity with null name: " + t);
+                return false;
+              }
+              return t.getName().contentEquals(requestBody.getBusiness());
+            }
+          }).findFirst();
+      if (!existingBusinessEntity.isPresent()) {
+        // No Business with this name
+        BusinessEntity savedBusinessEntity = createNewBusiness(requestBody, existingAccountEntity);
+        Business response = businessConverter.convertToBody(savedBusinessEntity);
+        return response;
+      } else {
+        // There is a business with this name
+        BusinessEntity savedBusinessEntity = updateExistingBusiness(requestBody, existingBusinessEntity.get());
+        Business response = businessConverter.convertToBody(savedBusinessEntity);
+        return response;
+      }
+    }
+  }
+
+  private BusinessEntity updateExistingBusiness(Business requestBody, BusinessEntity existingBusinessEntity) {
+    if (valueChanged(requestBody.getBetaTester(), existingBusinessEntity.getBetaTester())) {
+      existingBusinessEntity.setBetaTester(requestBody.getBetaTester());
+    }
+    if (valueChanged(requestBody.getContactName(), existingBusinessEntity.getContactName())) {
+      existingBusinessEntity.setContactName(requestBody.getContactName());
+    }
+    if (valueChanged(requestBody.getEarlySignup(), existingBusinessEntity.getEarlySignup())) {
+      existingBusinessEntity.setEarlySignup(requestBody.getEarlySignup());
+    }
+    if (valueChanged(requestBody.getReferral(), existingBusinessEntity.getReferral())) {
+      existingBusinessEntity.setReferral(requestBody.getReferral());
+    }
+    BusinessEntity savedBusinessEntity = businessRepository.save(existingBusinessEntity);
+    return savedBusinessEntity;
+  }
+
+  private BusinessEntity createNewBusiness(Business requestBody, AccountEntity existingAccountEntity) {
+    // Create a new BusinessEntity
+    // Associate new business with existing account
+    BusinessEntity newBusinessEntity = new BusinessEntity();
+    newBusinessEntity.setName(requestBody.getBusiness());
+    newBusinessEntity.setAccount(existingAccountEntity);
+//    existingAccountEntity.setBusiness(newBusinessEntity);
+    newBusinessEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
+    newBusinessEntity.setContactName(requestBody.getContactName());
+    newBusinessEntity.setEarlySignup(requestBody.getEarlySignup() != null ? requestBody.getEarlySignup() : false);
+    BusinessEntity savedBusinessEntity = businessRepository.save(newBusinessEntity);
+    return savedBusinessEntity;
+  }
+
+  private BusinessEntity createNewBusinessAndNewAccount(Business requestBody) {
+    // Create a new BusinessEntity
+    // Create a new AccountEntity
+    RoleEntity businessRoleEntity = roleRepository.findByName("BUSINESS");
+    AccountEntity newAccountEntity = new AccountEntity();
+    newAccountEntity.setEmail(requestBody.getEmail());
+    newAccountEntity.setEnabled(true);
+    newAccountEntity.setRoles(Set.of(businessRoleEntity));
+    AccountEntity savedAccountEntity = accountRepository.save(newAccountEntity);
+    BusinessEntity newBusinessEntity = new BusinessEntity();
+    newBusinessEntity.setName(requestBody.getBusiness());
+    newBusinessEntity.setAccount(savedAccountEntity);
+    newBusinessEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
+    newBusinessEntity.setContactName(requestBody.getContactName());
+    newBusinessEntity.setEarlySignup(requestBody.getEarlySignup() != null ? requestBody.getEarlySignup() : false);
+    BusinessEntity savedBusinessEntity = businessRepository.save(newBusinessEntity);
+    return savedBusinessEntity;
   }
 }
