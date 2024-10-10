@@ -43,7 +43,7 @@ public class Signup {
     fellow.setName(name);
     fellow.setEmail(email);
     fellow.setBetaTester(betaTester);
-    fellow = fellowService.customSave(fellow);
+    fellow = signupService.signupFellow(fellow);
     Result result = new Result();
     result.setSuccess(true);
     result.setMessage("Success");
