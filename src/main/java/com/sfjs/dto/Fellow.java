@@ -7,7 +7,7 @@ public class Fellow extends BaseBody {
 
   @Getter
   @Setter
-  private boolean collaborator;
+  private Boolean collaborator;
 
   @Getter
   @Setter
@@ -15,7 +15,7 @@ public class Fellow extends BaseBody {
 
   @Getter
   @Setter
-  private boolean referralPartner;
+  private Boolean referralPartner;
 
   @Getter
   @Setter
@@ -28,4 +28,8 @@ public class Fellow extends BaseBody {
   @Getter
   @Setter
   private Boolean betaTester;
+
+  @Getter
+  @Setter
+  private Account account;
 }

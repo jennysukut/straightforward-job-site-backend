@@ -31,7 +31,15 @@ public class Payment extends BaseBody {
 
   @Getter
   @Setter
+  private Business business;
+
+  @Getter
+  @Setter
   private String fellowName;
+
+  @Getter
+  @Setter
+  private Fellow fellow;
 
   @Getter
   @Setter

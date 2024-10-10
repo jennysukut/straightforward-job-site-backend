@@ -38,10 +38,10 @@ public class FellowConverter extends BaseConverter<FellowEntity, Fellow> {
     dest.setAccount(accountConverter.convertToEntity(account));
 
     dest.setBetaTester(src.getBetaTester());
-    if (src.isCollaborator()) {
+    if (src.getCollaborator() != null && src.getCollaborator().booleanValue()) {
       dest.setCollaborator(true);
       dest.setMessage(src.getMessage());
-      if (src.isReferralPartner()) {
+      if (src.getReferralPartner() != null && src.getReferralPartner().booleanValue()) {
         dest.setReferralPartner(true);
         dest.setReferralCode(src.getReferralCode());
       }
@@ -51,7 +51,7 @@ public class FellowConverter extends BaseConverter<FellowEntity, Fellow> {
 
   @Override
   public Fellow convertToBody(FellowEntity src) {
-    Fellow dest = new Fellow();
+    Fellow dest = super.convertToBody(src);
     dest.setId(src.getId());
     dest.setName(src.getName());
     dest.setEmail(src.getAccount().getEmail());

@@ -28,4 +28,8 @@ public class Business extends BaseBody {
   @Getter
   @Setter
   private String referral;
+
+  @Getter
+  @Setter
+  private Account account;
 }
