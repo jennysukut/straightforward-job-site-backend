@@ -7,8 +7,7 @@ import com.sfjs.conv.BaseConverter;
 import com.sfjs.dto.NumericMetric;
 import com.sfjs.dto.response.NumericMetricResponse;
 import com.sfjs.entity.NumericMetricEntity;
-import com.sfjs.persist.BasePersist;
-import com.sfjs.persist.NumericMetricPersist;
+import com.sfjs.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -17,7 +16,7 @@ import jakarta.transaction.Transactional;
 public class NumericMetricService extends BaseService<NumericMetricEntity, NumericMetric, NumericMetricResponse> {
 
   @Autowired
-  NumericMetricPersist repository;
+  BaseRepository<NumericMetricEntity> repository;
 
   public NumericMetricService() {
     super(new BaseConverter<NumericMetricEntity, NumericMetric, NumericMetricResponse>(NumericMetricEntity.class,
@@ -25,7 +24,7 @@ public class NumericMetricService extends BaseService<NumericMetricEntity, Numer
   }
 
   @Override
-  public BasePersist<NumericMetricEntity> getBaseRepository() {
+  public BaseRepository<NumericMetricEntity> getBaseRepository() {
     return this.repository;
   }
 }

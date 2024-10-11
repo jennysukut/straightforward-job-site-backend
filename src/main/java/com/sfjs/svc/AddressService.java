@@ -7,8 +7,7 @@ import com.sfjs.conv.BaseConverter;
 import com.sfjs.dto.Address;
 import com.sfjs.dto.response.AddressResponse;
 import com.sfjs.entity.AddressEntity;
-import com.sfjs.persist.AddressPersist;
-import com.sfjs.persist.BasePersist;
+import com.sfjs.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -17,14 +16,14 @@ import jakarta.transaction.Transactional;
 public class AddressService extends BaseService<AddressEntity, Address, AddressResponse> {
 
   @Autowired
-  AddressPersist repository;
+  BaseRepository<AddressEntity> repository;
 
   public AddressService() {
     super(new BaseConverter<AddressEntity, Address, AddressResponse>(AddressEntity.class, AddressResponse.class));
   }
 
   @Override
-  public BasePersist<AddressEntity> getBaseRepository() {
+  public BaseRepository<AddressEntity> getBaseRepository() {
     return this.repository;
   }
 }

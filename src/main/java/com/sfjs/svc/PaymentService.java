@@ -3,6 +3,7 @@ package com.sfjs.svc;
 import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,9 +23,8 @@ import com.sfjs.dto.response.PaymentResponse;
 import com.sfjs.entity.NumericMetricEntity;
 import com.sfjs.entity.PaymentEntity;
 import com.sfjs.entity.PaymentStatus;
-import com.sfjs.persist.BasePersist;
-import com.sfjs.persist.NumericMetricPersist;
-import com.sfjs.persist.PaymentPersist;
+import com.sfjs.repo.BaseRepository;
+import com.sfjs.repo.NumericMetricRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -38,17 +38,17 @@ public class PaymentService extends BaseService<PaymentEntity, Payment, PaymentR
   private String PASSWORD;
 
   @Autowired
-  PaymentPersist repository;
+  BaseRepository<PaymentEntity> repository;
 
   @Autowired
-  private NumericMetricPersist numericMetricPersist;
+  private NumericMetricRepository numericMetricRepository;
 
   public PaymentService(BusinessConverter businessConverter, FellowConverter fellowConverter) {
     super(new PaymentConverter(businessConverter, fellowConverter));
   }
 
   @Override
-  public BasePersist<PaymentEntity> getBaseRepository() {
+  public BaseRepository<PaymentEntity> getBaseRepository() {
     return this.repository;
   }
 
@@ -58,7 +58,14 @@ public class PaymentService extends BaseService<PaymentEntity, Payment, PaymentR
     logger.info("Complete payment: hash: " + input.getHash());
     // Need to use the persistence layer to get sensitive data
     // That is not serialized by default
-    PaymentEntity paymentEntity = this.getBaseRepository().getById(input.getPaymentId());
+    Optional<PaymentEntity> optional = this.getBaseRepository().findById(input.getPaymentId());
+    if (optional.isEmpty()) {
+      PaymentResult result = new PaymentResult();
+      result.setSuccess(false);
+      result.setMessage("Payment not found by id");
+      return result;
+    }
+    PaymentEntity paymentEntity = optional.get();
     logger.info("Complete payment: Payment entity: " + paymentEntity);
     TextEncryptor encryptor = Encryptors.text(PASSWORD, paymentEntity.getSALT());
     String secretToken = encryptor.decrypt(paymentEntity.getSecretToken());
@@ -69,18 +76,18 @@ public class PaymentService extends BaseService<PaymentEntity, Payment, PaymentR
     if (input.getHash().contentEquals(expectedHash)) {
       result.setSuccess(true);
       paymentEntity.setStatus(PaymentStatus.APPROVED);
-      paymentEntity = this.getBaseRepository().customSave(paymentEntity);
+      paymentEntity = this.getBaseRepository().save(paymentEntity);
     } else {
       result.setSuccess(false);
     }
     if (paymentEntity.getFellow() != null) {
-      NumericMetricEntity metric = numericMetricPersist.findByName("CURRENT_FELLOW_DONATION");
+      NumericMetricEntity metric = numericMetricRepository.findByName("CURRENT_FELLOW_DONATION");
       metric.setMetric(metric.getMetric().add(new BigDecimal(paymentEntity.getAmount())));
-      numericMetricPersist.customSave(metric);
+      numericMetricRepository.save(metric);
     } else if (paymentEntity.getBusiness() != null) {
-      NumericMetricEntity metric = numericMetricPersist.findByName("CURRENT_BUSINESS_DONATION");
+      NumericMetricEntity metric = numericMetricRepository.findByName("CURRENT_BUSINESS_DONATION");
       metric.setMetric(metric.getMetric().add(new BigDecimal(paymentEntity.getAmount())));
-      numericMetricPersist.customSave(metric);
+      numericMetricRepository.save(metric);
     }
     result.setPayment(createBody(paymentEntity));
     return result;

@@ -8,8 +8,7 @@ import com.sfjs.conv.BusinessConverter;
 import com.sfjs.dto.Business;
 import com.sfjs.dto.response.BusinessResponse;
 import com.sfjs.entity.BusinessEntity;
-import com.sfjs.persist.BasePersist;
-import com.sfjs.persist.BusinessPersist;
+import com.sfjs.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -18,14 +17,14 @@ import jakarta.transaction.Transactional;
 public class BusinessService extends BaseService<BusinessEntity, Business, BusinessResponse> {
 
   @Autowired
-  BusinessPersist repository;
+  BaseRepository<BusinessEntity> repository;
 
   public BusinessService(AccountConverter accountConverter) {
     super(new BusinessConverter(accountConverter));
   }
 
   @Override
-  public BasePersist<BusinessEntity> getBaseRepository() {
+  public BaseRepository<BusinessEntity> getBaseRepository() {
     return this.repository;
   }
 }

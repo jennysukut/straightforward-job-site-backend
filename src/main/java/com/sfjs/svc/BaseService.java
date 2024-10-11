@@ -6,12 +6,14 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.sfjs.conv.BaseConverter;
 import com.sfjs.dto.BaseBody;
 import com.sfjs.dto.response.BaseResponse;
 import com.sfjs.entity.BaseEntity;
-import com.sfjs.persist.BasePersist;
+import com.sfjs.repo.BaseRepository;
 
 public abstract class BaseService<ENTITY extends BaseEntity, REQUEST extends BaseBody, BODY extends BaseResponse> {
 
@@ -31,22 +33,22 @@ public abstract class BaseService<ENTITY extends BaseEntity, REQUEST extends Bas
     return this.converter.convertToEntity(body);
   }
 
-  public abstract BasePersist<ENTITY> getBaseRepository();
+  public abstract BaseRepository<ENTITY> getBaseRepository();
 
   public Boolean delete(Long id) {
-    getBaseRepository().delete(id);
+    getBaseRepository().deleteById(id);
     return true;
   }
 
-  public BODY customSave(REQUEST body) {
+  public BODY save(REQUEST body) {
     ENTITY entity = createEntity(body);
-    entity = getBaseRepository().customSave(entity);
+    entity = getBaseRepository().save(entity);
     return createBody(entity);
   }
 
   public BODY getById(Long id) {
-    ENTITY entity = getBaseRepository().getById(id);
-    return this.createBody(entity);
+    Optional<ENTITY> optional = getBaseRepository().findById(id);
+    return this.createBody(optional.isPresent() ? optional.get() : null);
   }
 
   public BODY findById(Long id) {
@@ -93,7 +95,8 @@ public abstract class BaseService<ENTITY extends BaseEntity, REQUEST extends Bas
   }
 
   public Page<BODY> findAll(Optional<Integer> limit) {
-    Page<ENTITY> page = getBaseRepository().findAll(limit);
+    Pageable pageable = PageRequest.of(0, limit.isPresent() ? limit.get() : 3);
+    Page<ENTITY> page = getBaseRepository().findAll(pageable);
     return page.map(entity -> this.createBody(entity));
   }
 }

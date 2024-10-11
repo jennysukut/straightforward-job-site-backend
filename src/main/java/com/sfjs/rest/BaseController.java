@@ -33,7 +33,7 @@ public abstract class BaseController<SERVICE extends BaseService<ENTITY, REQUEST
   }
 
   public BODY save(@RequestBody REQUEST requestBody) {
-    return service.customSave(requestBody);
+    return service.save(requestBody);
   }
 
   public BODY getById(@PathVariable("id") Long id) {

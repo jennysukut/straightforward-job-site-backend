@@ -7,8 +7,7 @@ import com.sfjs.conv.BaseConverter;
 import com.sfjs.dto.Role;
 import com.sfjs.dto.response.RoleResponse;
 import com.sfjs.entity.RoleEntity;
-import com.sfjs.persist.BasePersist;
-import com.sfjs.persist.RolePersist;
+import com.sfjs.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -17,14 +16,14 @@ import jakarta.transaction.Transactional;
 public class RoleService extends BaseService<RoleEntity, Role, RoleResponse> {
 
   @Autowired
-  RolePersist repository;
+  BaseRepository<RoleEntity> repository;
 
   public RoleService() {
     super(new BaseConverter<RoleEntity, Role, RoleResponse>(RoleEntity.class, RoleResponse.class));
   }
 
   @Override
-  public BasePersist<RoleEntity> getBaseRepository() {
+  public BaseRepository<RoleEntity> getBaseRepository() {
     return this.repository;
   }
 }

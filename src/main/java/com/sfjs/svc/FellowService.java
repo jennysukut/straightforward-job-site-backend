@@ -8,8 +8,7 @@ import com.sfjs.conv.FellowConverter;
 import com.sfjs.dto.Fellow;
 import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.entity.FellowEntity;
-import com.sfjs.persist.BasePersist;
-import com.sfjs.persist.FellowPersist;
+import com.sfjs.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -18,14 +17,14 @@ import jakarta.transaction.Transactional;
 public class FellowService extends BaseService<FellowEntity, Fellow, FellowResponse> {
 
   @Autowired
-  FellowPersist repository;
+  BaseRepository<FellowEntity> repository;
 
   public FellowService(AccountConverter accountConverter) {
     super(new FellowConverter(accountConverter));
   }
 
   @Override
-  public BasePersist<FellowEntity> getBaseRepository() {
+  public BaseRepository<FellowEntity> getBaseRepository() {
     return this.repository;
   }
 }

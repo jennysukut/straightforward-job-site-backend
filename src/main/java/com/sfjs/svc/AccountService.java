@@ -7,8 +7,8 @@ import com.sfjs.conv.BaseConverter;
 import com.sfjs.dto.Account;
 import com.sfjs.dto.response.AccountResponse;
 import com.sfjs.entity.AccountEntity;
-import com.sfjs.persist.AccountPersist;
-import com.sfjs.persist.BasePersist;
+import com.sfjs.repo.AccountRepository;
+import com.sfjs.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -25,10 +25,10 @@ import jakarta.transaction.Transactional;
 public class AccountService extends BaseService<AccountEntity, Account, AccountResponse> {
 
   @Autowired
-  AccountPersist repository;
+  AccountRepository repository;
 
   @Override
-  public BasePersist<AccountEntity> getBaseRepository() {
+  public BaseRepository<AccountEntity> getBaseRepository() {
     return this.repository;
   }
 
