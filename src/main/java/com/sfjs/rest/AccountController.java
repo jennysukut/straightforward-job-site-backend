@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.Account;
+import com.sfjs.dto.AccountRequest;
 import com.sfjs.dto.response.AccountResponse;
 import com.sfjs.entity.AccountEntity;
 import com.sfjs.svc.AccountService;
@@ -21,7 +21,7 @@ import com.sfjs.svc.AccountService;
 @RestController
 @EnableWebMvc
 @Transactional
-public class AccountController extends BaseController<AccountService, AccountEntity, Account, AccountResponse> {
+public class AccountController extends BaseController<AccountService, AccountEntity, AccountRequest, AccountResponse> {
 
   @MutationMapping(name = "deleteAccount")
   public Boolean deleteAccount(@Argument(name = "id") Long id) {
@@ -34,12 +34,12 @@ public class AccountController extends BaseController<AccountService, AccountEnt
   }
 
   @MutationMapping(name = "saveAccount")
-  public AccountResponse saveAccount(@Argument(name = "requestBody") Account requestBody) {
+  public AccountResponse saveAccount(@Argument(name = "requestBody") AccountRequest requestBody) {
     return save(requestBody);
   }
 
   @RequestMapping(path = "/account", method = RequestMethod.POST)
-  public AccountResponse save(@RequestBody Account requestBody) {
+  public AccountResponse save(@RequestBody AccountRequest requestBody) {
     return super.save(requestBody);
   }
 

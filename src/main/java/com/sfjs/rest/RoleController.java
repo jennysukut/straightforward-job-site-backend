@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.Role;
+import com.sfjs.dto.RoleRequest;
 import com.sfjs.dto.response.RoleResponse;
 import com.sfjs.entity.RoleEntity;
 import com.sfjs.svc.RoleService;
@@ -21,7 +21,7 @@ import com.sfjs.svc.RoleService;
 @RestController
 @EnableWebMvc
 @Transactional
-public class RoleController extends BaseController<RoleService, RoleEntity, Role, RoleResponse> {
+public class RoleController extends BaseController<RoleService, RoleEntity, RoleRequest, RoleResponse> {
 
   @MutationMapping(name = "deleteRole")
   public Boolean deleteRole(@Argument(name = "id") Long id) {
@@ -34,12 +34,12 @@ public class RoleController extends BaseController<RoleService, RoleEntity, Role
   }
 
   @MutationMapping(name = "saveRole")
-  public RoleResponse saveRole(@Argument(name = "requestBody") Role requestBody) {
+  public RoleResponse saveRole(@Argument(name = "requestBody") RoleRequest requestBody) {
     return save(requestBody);
   }
 
   @RequestMapping(path = "/role", method = RequestMethod.POST)
-  public RoleResponse save(@RequestBody Role requestBody) {
+  public RoleResponse save(@RequestBody RoleRequest requestBody) {
     return super.save(requestBody);
   }
 

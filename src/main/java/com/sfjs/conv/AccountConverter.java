@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.sfjs.dto.Account;
+import com.sfjs.dto.AccountRequest;
 import com.sfjs.dto.response.AccountResponse;
 import com.sfjs.entity.AccountEntity;
 
 @Service
-public class AccountConverter extends BaseConverter<AccountEntity, Account, AccountResponse> {
+public class AccountConverter extends BaseConverter<AccountEntity, AccountRequest, AccountResponse> {
 
   @Autowired
   PasswordEncoder passwordEncoder;
@@ -27,7 +27,7 @@ public class AccountConverter extends BaseConverter<AccountEntity, Account, Acco
    * @return AccountEntity
    */
   @Override
-  public AccountEntity convertToEntity(Account body) {
+  public AccountEntity convertToEntity(AccountRequest body) {
     AccountEntity entity = super.convertToEntity(body);
     if (body.getPassword() != null) {
       String rawPassword = body.getPassword();

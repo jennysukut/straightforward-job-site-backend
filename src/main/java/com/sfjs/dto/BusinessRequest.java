@@ -3,7 +3,7 @@ package com.sfjs.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Business extends BaseBody {
+public class BusinessRequest extends BaseRequest {
 
   @Getter
   @Setter
@@ -31,5 +31,5 @@ public class Business extends BaseBody {
 
   @Getter
   @Setter
-  private Account account;
+  private AccountRequest account;
 }

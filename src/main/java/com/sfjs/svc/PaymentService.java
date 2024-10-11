@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sfjs.conv.BusinessConverter;
 import com.sfjs.conv.FellowConverter;
 import com.sfjs.conv.PaymentConverter;
-import com.sfjs.dto.Payment;
+import com.sfjs.dto.PaymentRequest;
 import com.sfjs.dto.PaymentResult;
 import com.sfjs.dto.PaymentResultInput;
 import com.sfjs.dto.response.PaymentResponse;
@@ -30,7 +30,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class PaymentService extends BaseService<PaymentEntity, Payment, PaymentResponse> {
+public class PaymentService extends BaseService<PaymentEntity, PaymentRequest, PaymentResponse> {
 
   static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
 

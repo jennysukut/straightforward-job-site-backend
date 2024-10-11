@@ -1,6 +1,6 @@
 package com.sfjs.dto.response;
 
-import com.sfjs.dto.Account;
+import com.sfjs.dto.AccountRequest;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -29,5 +29,5 @@ public class FellowResponse extends BaseResponse {
 
   @Getter
   @Setter
-  private Account account;
+  private AccountRequest account;
 }

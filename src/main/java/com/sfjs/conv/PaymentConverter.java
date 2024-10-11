@@ -2,9 +2,9 @@ package com.sfjs.conv;
 
 import org.springframework.stereotype.Service;
 
-import com.sfjs.dto.Business;
-import com.sfjs.dto.Fellow;
-import com.sfjs.dto.Payment;
+import com.sfjs.dto.BusinessRequest;
+import com.sfjs.dto.FellowRequest;
+import com.sfjs.dto.PaymentRequest;
 import com.sfjs.dto.response.PaymentResponse;
 import com.sfjs.entity.BusinessEntity;
 import com.sfjs.entity.FellowEntity;
@@ -12,7 +12,7 @@ import com.sfjs.entity.PaymentEntity;
 import com.sfjs.entity.PaymentStatus;
 
 @Service
-public class PaymentConverter extends BaseConverter<PaymentEntity, Payment, PaymentResponse> {
+public class PaymentConverter extends BaseConverter<PaymentEntity, PaymentRequest, PaymentResponse> {
 
   BusinessConverter businessConverter;
   FellowConverter fellowConverter;
@@ -33,7 +33,7 @@ public class PaymentConverter extends BaseConverter<PaymentEntity, Payment, Paym
    * @return PaymentEntity
    */
   @Override
-  public PaymentEntity convertToEntity(Payment payment) {
+  public PaymentEntity convertToEntity(PaymentRequest payment) {
     // Default conversion
     PaymentEntity entity = super.convertToEntity(payment);
 
@@ -45,7 +45,7 @@ public class PaymentConverter extends BaseConverter<PaymentEntity, Payment, Paym
     if (payment.getBusinessName() != null) {
       // Create a business entity with business name and email
       // This is all the information we have about the business and account
-      Business business = new Business();
+      BusinessRequest business = new BusinessRequest();
       business.setBusiness(payment.getBusinessName());
       business.setEmail(payment.getEmail());
       BusinessEntity businessEntity = businessConverter.convertToEntity(business);
@@ -53,7 +53,7 @@ public class PaymentConverter extends BaseConverter<PaymentEntity, Payment, Paym
     } else if (payment.getFellowName() != null) {
       // Create a fellow entity with name and email
       // This is all the information we have about the fellow and account
-      Fellow fellow = new Fellow();
+      FellowRequest fellow = new FellowRequest();
       fellow.setName(payment.getFellowName());
       fellow.setEmail(payment.getEmail());
       FellowEntity fellowEntity = fellowConverter.convertToEntity(fellow);

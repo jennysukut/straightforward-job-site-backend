@@ -4,9 +4,9 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.sfjs.dto.Account;
-import com.sfjs.dto.Business;
-import com.sfjs.dto.Role;
+import com.sfjs.dto.AccountRequest;
+import com.sfjs.dto.BusinessRequest;
+import com.sfjs.dto.RoleRequest;
 import com.sfjs.dto.response.BusinessResponse;
 import com.sfjs.entity.BusinessEntity;
 
@@ -14,7 +14,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class BusinessConverter extends BaseConverter<BusinessEntity, Business, BusinessResponse> {
+public class BusinessConverter extends BaseConverter<BusinessEntity, BusinessRequest, BusinessResponse> {
 
   AccountConverter accountConverter;
 
@@ -29,18 +29,18 @@ public class BusinessConverter extends BaseConverter<BusinessEntity, Business, B
    * This function is necessary because the dto object is flattened; whereas, the
    * entity is not
    *
-   * @param Business object
+   * @param BusinessRequest object
    * @return BusinessEntity object
    */
   @Override
-  public BusinessEntity convertToEntity(Business src) {
+  public BusinessEntity convertToEntity(BusinessRequest src) {
     BusinessEntity dest = new BusinessEntity();
 
     dest.setName(src.getBusiness());
-    Account account = new Account();
+    AccountRequest account = new AccountRequest();
     account.setEmail(src.getEmail());
     // TODO consider getting rid of role entities
-    Role role = new Role();
+    RoleRequest role = new RoleRequest();
     role.setName("BUSINESS");
     account.setRoles(Set.of(role));
     // This is where the password gets encrypted

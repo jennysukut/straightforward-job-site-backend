@@ -6,7 +6,7 @@ import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Payment extends BaseBody {
+public class PaymentRequest extends BaseRequest {
 
   @Getter
   @Setter
@@ -31,7 +31,7 @@ public class Payment extends BaseBody {
 
   @Getter
   @Setter
-  private Business business;
+  private BusinessRequest business;
 
   @Getter
   @Setter
@@ -39,7 +39,7 @@ public class Payment extends BaseBody {
 
   @Getter
   @Setter
-  private Fellow fellow;
+  private FellowRequest fellow;
 
   @Getter
   @Setter

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sfjs.dto.Payment;
+import com.sfjs.dto.PaymentRequest;
 import com.sfjs.entity.PaymentEntity;
 
 import jakarta.annotation.PostConstruct;
@@ -44,7 +44,7 @@ public class HelcimService {
     apiUrl = env.getProperty("helcim.api.url");
   }
 
-  public Mono<PaymentEntity> initializeCheckout(Payment checkout) {
+  public Mono<PaymentEntity> initializeCheckout(PaymentRequest checkout) {
     MediaType mediaType = MediaType.parse("application/json");
     String json;
     try {

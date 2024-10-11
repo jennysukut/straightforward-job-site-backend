@@ -2,7 +2,7 @@ package com.sfjs.dto.response;
 
 import java.util.Set;
 
-import com.sfjs.dto.Role;
+import com.sfjs.dto.RoleRequest;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,5 +23,5 @@ public class AccountResponse extends BaseResponse {
 
   @Getter
   @Setter
-  private Set<Role> roles;
+  private Set<RoleRequest> roles;
 }

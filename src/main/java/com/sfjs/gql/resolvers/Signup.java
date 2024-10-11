@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.Business;
-import com.sfjs.dto.Fellow;
+import com.sfjs.dto.BusinessRequest;
+import com.sfjs.dto.FellowRequest;
 import com.sfjs.dto.Result;
 import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.gql.svc.SignupService;
@@ -26,12 +26,12 @@ public class Signup {
   private SignupService signupService;
 
   @MutationMapping(name = "signupBusiness")
-  public Long signupBusiness(@Argument(name = "requestBody") Business requestBody) {
+  public Long signupBusiness(@Argument(name = "requestBody") BusinessRequest requestBody) {
     return signupService.signupBusiness(requestBody).getId();
   }
 
   @MutationMapping(name = "signupFellow")
-  public Long signupFellow(@Argument(name = "requestBody") Fellow requestBody) {
+  public Long signupFellow(@Argument(name = "requestBody") FellowRequest requestBody) {
     return signupService.signupFellow(requestBody).getId();
   }
 
@@ -39,7 +39,7 @@ public class Signup {
   @MutationMapping(name = "signUp")
   public Result signupIndividual(@Argument(name = "name") String name, @Argument(name = "email") String email,
       @Argument(name = "betaTester") Boolean betaTester) {
-    Fellow fellow = new Fellow();
+    FellowRequest fellow = new FellowRequest();
     fellow.setName(name);
     fellow.setEmail(email);
     fellow.setBetaTester(betaTester);

@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BusinessConverter;
 import com.sfjs.conv.FellowConverter;
-import com.sfjs.dto.Business;
-import com.sfjs.dto.Fellow;
+import com.sfjs.dto.BusinessRequest;
+import com.sfjs.dto.FellowRequest;
 import com.sfjs.dto.response.BusinessResponse;
 import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.entity.AccountEntity;
@@ -49,7 +49,7 @@ public class SignupService {
   @Autowired
   BusinessRepository businessRepository;
 
-  public FellowResponse signupFellow(Fellow requestBody) {
+  public FellowResponse signupFellow(FellowRequest requestBody) {
     String email = requestBody.getEmail();
     AccountEntity existingAccountEntity = accountRepository.findByEmail(email);
     if (existingAccountEntity == null) {
@@ -79,7 +79,7 @@ public class SignupService {
     }
   }
 
-  private FellowEntity updateExistingFellow(Fellow requestBody, FellowEntity existingFellowEntity) {
+  private FellowEntity updateExistingFellow(FellowRequest requestBody, FellowEntity existingFellowEntity) {
     if (valueChanged(requestBody.getBetaTester(), existingFellowEntity.getBetaTester())) {
       existingFellowEntity.setBetaTester(requestBody.getBetaTester());
     }
@@ -126,7 +126,7 @@ public class SignupService {
    * @param existingAccountEntity
    * @return
    */
-  private FellowEntity createNewFellow(Fellow requestBody, AccountEntity existingAccountEntity) {
+  private FellowEntity createNewFellow(FellowRequest requestBody, AccountEntity existingAccountEntity) {
     // Create a new FellowEntity
     // Associate new fellow with existing account
     FellowEntity newFellowEntity = new FellowEntity();
@@ -152,7 +152,7 @@ public class SignupService {
    * @param requestBody
    * @return
    */
-  private FellowEntity createNewFellowAndNewAccount(Fellow requestBody) {
+  private FellowEntity createNewFellowAndNewAccount(FellowRequest requestBody) {
     // Create a new FellowEntity
     // Create a new AccountEntity
     RoleEntity fellowRoleEntity = roleRepository.findByName("FELLOW");
@@ -174,7 +174,7 @@ public class SignupService {
     return savedFellowEntity;
   }
 
-  public BusinessResponse signupBusiness(Business requestBody) {
+  public BusinessResponse signupBusiness(BusinessRequest requestBody) {
     String email = requestBody.getEmail();
     AccountEntity existingAccountEntity = accountRepository.findByEmail(email);
     if (existingAccountEntity == null) {
@@ -210,7 +210,7 @@ public class SignupService {
     }
   }
 
-  private BusinessEntity updateExistingBusiness(Business requestBody, BusinessEntity existingBusinessEntity) {
+  private BusinessEntity updateExistingBusiness(BusinessRequest requestBody, BusinessEntity existingBusinessEntity) {
     if (valueChanged(requestBody.getBetaTester(), existingBusinessEntity.getBetaTester())) {
       existingBusinessEntity.setBetaTester(requestBody.getBetaTester());
     }
@@ -227,7 +227,7 @@ public class SignupService {
     return savedBusinessEntity;
   }
 
-  private BusinessEntity createNewBusiness(Business requestBody, AccountEntity existingAccountEntity) {
+  private BusinessEntity createNewBusiness(BusinessRequest requestBody, AccountEntity existingAccountEntity) {
     // Create a new BusinessEntity
     // Associate new business with existing account
     BusinessEntity newBusinessEntity = new BusinessEntity();
@@ -241,7 +241,7 @@ public class SignupService {
     return savedBusinessEntity;
   }
 
-  private BusinessEntity createNewBusinessAndNewAccount(Business requestBody) {
+  private BusinessEntity createNewBusinessAndNewAccount(BusinessRequest requestBody) {
     // Create a new BusinessEntity
     // Create a new AccountEntity
     RoleEntity businessRoleEntity = roleRepository.findByName("BUSINESS");

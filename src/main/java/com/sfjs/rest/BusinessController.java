@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.Business;
+import com.sfjs.dto.BusinessRequest;
 import com.sfjs.dto.response.BusinessResponse;
 import com.sfjs.entity.BusinessEntity;
 import com.sfjs.svc.BusinessService;
@@ -21,7 +21,7 @@ import com.sfjs.svc.BusinessService;
 @RestController
 @EnableWebMvc
 @Transactional
-public class BusinessController extends BaseController<BusinessService, BusinessEntity, Business, BusinessResponse> {
+public class BusinessController extends BaseController<BusinessService, BusinessEntity, BusinessRequest, BusinessResponse> {
 
   @MutationMapping(name = "deleteBusiness")
   public Boolean deleteBusiness(@Argument(name = "id") Long id) {
@@ -34,12 +34,12 @@ public class BusinessController extends BaseController<BusinessService, Business
   }
 
   @MutationMapping(name = "saveBusiness")
-  public BusinessResponse saveBusiness(@Argument(name = "requestBody") Business requestBody) {
+  public BusinessResponse saveBusiness(@Argument(name = "requestBody") BusinessRequest requestBody) {
     return save(requestBody);
   }
 
   @RequestMapping(path = "/business", method = RequestMethod.POST)
-  public BusinessResponse save(@RequestBody Business requestBody) {
+  public BusinessResponse save(@RequestBody BusinessRequest requestBody) {
     return super.save(requestBody);
   }
 

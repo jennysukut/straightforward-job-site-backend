@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 
-public class NumericMetric extends BaseBody {
+public class NumericMetricRequest extends BaseRequest {
 
   @Getter
   @Setter

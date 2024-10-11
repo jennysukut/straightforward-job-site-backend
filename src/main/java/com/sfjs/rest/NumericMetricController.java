@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.NumericMetric;
+import com.sfjs.dto.NumericMetricRequest;
 import com.sfjs.dto.response.NumericMetricResponse;
 import com.sfjs.entity.NumericMetricEntity;
 import com.sfjs.svc.NumericMetricService;
@@ -22,7 +22,7 @@ import com.sfjs.svc.NumericMetricService;
 @EnableWebMvc
 @Transactional
 public class NumericMetricController
-    extends BaseController<NumericMetricService, NumericMetricEntity, NumericMetric, NumericMetricResponse> {
+    extends BaseController<NumericMetricService, NumericMetricEntity, NumericMetricRequest, NumericMetricResponse> {
 
   @MutationMapping(name = "deleteNumericMetric")
   public Boolean deleteNumericMetric(@Argument(name = "id") Long id) {
@@ -35,12 +35,12 @@ public class NumericMetricController
   }
 
   @MutationMapping(name = "saveNumericMetric")
-  public NumericMetricResponse saveNumericMetric(@Argument(name = "requestBody") NumericMetric requestBody) {
+  public NumericMetricResponse saveNumericMetric(@Argument(name = "requestBody") NumericMetricRequest requestBody) {
     return save(requestBody);
   }
 
   @RequestMapping(path = "/numericMetric", method = RequestMethod.POST)
-  public NumericMetricResponse save(@RequestBody NumericMetric requestBody) {
+  public NumericMetricResponse save(@RequestBody NumericMetricRequest requestBody) {
     return super.save(requestBody);
   }
 

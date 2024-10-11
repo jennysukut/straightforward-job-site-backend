@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.Payment;
+import com.sfjs.dto.PaymentRequest;
 import com.sfjs.dto.response.PaymentResponse;
 import com.sfjs.entity.PaymentEntity;
 import com.sfjs.svc.PaymentService;
@@ -21,7 +21,7 @@ import com.sfjs.svc.PaymentService;
 @RestController
 @EnableWebMvc
 @Transactional
-public class PaymentController extends BaseController<PaymentService, PaymentEntity, Payment, PaymentResponse> {
+public class PaymentController extends BaseController<PaymentService, PaymentEntity, PaymentRequest, PaymentResponse> {
 
   @MutationMapping(name = "deletePayment")
   public Boolean deletePayment(@Argument(name = "id") Long id) {
@@ -34,12 +34,12 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
   }
 
   @MutationMapping(name = "savePayment")
-  public PaymentResponse savePayment(@Argument(name = "requestBody") Payment requestBody) {
+  public PaymentResponse savePayment(@Argument(name = "requestBody") PaymentRequest requestBody) {
     return save(requestBody);
   }
 
   @RequestMapping(path = "/payment", method = RequestMethod.POST)
-  public PaymentResponse save(@RequestBody Payment requestBody) {
+  public PaymentResponse save(@RequestBody PaymentRequest requestBody) {
     return super.save(requestBody);
   }
 

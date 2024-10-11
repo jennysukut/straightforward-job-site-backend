@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
-import com.sfjs.dto.Account;
+import com.sfjs.dto.AccountRequest;
 import com.sfjs.dto.response.AccountResponse;
 import com.sfjs.entity.AccountEntity;
 import com.sfjs.repo.AccountRepository;
@@ -22,7 +22,7 @@ import jakarta.transaction.Transactional;
  */
 @Service
 @Transactional
-public class AccountService extends BaseService<AccountEntity, Account, AccountResponse> {
+public class AccountService extends BaseService<AccountEntity, AccountRequest, AccountResponse> {
 
   @Autowired
   AccountRepository repository;
@@ -33,7 +33,7 @@ public class AccountService extends BaseService<AccountEntity, Account, AccountR
   }
 
   public AccountService() {
-    super(new BaseConverter<AccountEntity, Account, AccountResponse>(AccountEntity.class, AccountResponse.class));
+    super(new BaseConverter<AccountEntity, AccountRequest, AccountResponse>(AccountEntity.class, AccountResponse.class));
   }
 
   public AccountEntity findByEmail(String email) {

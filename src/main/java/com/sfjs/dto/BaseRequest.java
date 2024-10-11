@@ -14,7 +14,7 @@ import jakarta.persistence.Version;
 import lombok.Getter;
 import lombok.Setter;
 
-public class BaseBody {
+public class BaseRequest {
 
   static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
   

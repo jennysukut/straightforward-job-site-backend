@@ -5,7 +5,7 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Account extends BaseBody {
+public class AccountRequest extends BaseRequest {
 
   @Getter
   @Setter
@@ -21,5 +21,5 @@ public class Account extends BaseBody {
 
   @Getter
   @Setter
-  private Set<Role> roles;
+  private Set<RoleRequest> roles;
 }

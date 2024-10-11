@@ -4,9 +4,9 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.sfjs.dto.Account;
-import com.sfjs.dto.Fellow;
-import com.sfjs.dto.Role;
+import com.sfjs.dto.AccountRequest;
+import com.sfjs.dto.FellowRequest;
+import com.sfjs.dto.RoleRequest;
 import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.entity.FellowEntity;
 
@@ -14,7 +14,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class FellowConverter extends BaseConverter<FellowEntity, Fellow, FellowResponse> {
+public class FellowConverter extends BaseConverter<FellowEntity, FellowRequest, FellowResponse> {
 
   AccountConverter accountConverter;
 
@@ -24,14 +24,14 @@ public class FellowConverter extends BaseConverter<FellowEntity, Fellow, FellowR
   }
 
   @Override
-  public FellowEntity convertToEntity(Fellow src) {
+  public FellowEntity convertToEntity(FellowRequest src) {
     FellowEntity dest = new FellowEntity();
 
     dest.setName(src.getName());
-    Account account = new Account();
+    AccountRequest account = new AccountRequest();
     account.setEmail(src.getEmail());
     // TODO consider getting rid of role entities
-    Role role = new Role();
+    RoleRequest role = new RoleRequest();
     role.setName("FELLOW");
     account.setRoles(Set.of(role));
     // This is where the password gets encrypted

@@ -11,11 +11,11 @@ import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.PaymentConverter;
-import com.sfjs.dto.Business;
+import com.sfjs.dto.BusinessRequest;
 import com.sfjs.dto.BusinessDonation;
-import com.sfjs.dto.Fellow;
+import com.sfjs.dto.FellowRequest;
 import com.sfjs.dto.FellowDonation;
-import com.sfjs.dto.Payment;
+import com.sfjs.dto.PaymentRequest;
 import com.sfjs.dto.response.BusinessResponse;
 import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.dto.response.PaymentResponse;
@@ -67,7 +67,7 @@ public class CheckoutService {
   public Mono<PaymentResponse> acceptBusinessDonation(BusinessDonation donation) {
 
     logger.info("Implicit business signup");
-    Business business = new Business();
+    BusinessRequest business = new BusinessRequest();
     business.setBusiness(donation.getBusinessName());
     business.setEmail(donation.getEmail());
     business.setContactName(donation.getContactName());
@@ -75,7 +75,7 @@ public class CheckoutService {
     BusinessResponse businessResponse = signupService.signupBusiness(business);
     business.setId(businessResponse.getId());
 
-    Payment payment = new Payment();
+    PaymentRequest payment = new PaymentRequest();
     payment.setBusiness(business);
     payment.setAmount(donation.getAmount());
     payment.setCurrency("USD");
@@ -116,13 +116,13 @@ public class CheckoutService {
   public Mono<PaymentResponse> acceptFellowDonation(FellowDonation donation) {
 
     logger.info("Implicit fellow signup");
-    Fellow fellow = new Fellow();
+    FellowRequest fellow = new FellowRequest();
     fellow.setName(donation.getName());
     fellow.setEmail(donation.getEmail());
     FellowResponse fellowResponse = signupService.signupFellow(fellow);
     fellow.setId(fellowResponse.getId());
 
-    Payment payment = new Payment();
+    PaymentRequest payment = new PaymentRequest();
     payment.setFellow(fellow);
     payment.setAmount(donation.getAmount());
     payment.setCurrency("USD");

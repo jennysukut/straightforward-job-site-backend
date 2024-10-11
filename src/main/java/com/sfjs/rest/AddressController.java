@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.Address;
+import com.sfjs.dto.AddressRequest;
 import com.sfjs.dto.response.AddressResponse;
 import com.sfjs.entity.AddressEntity;
 import com.sfjs.svc.AddressService;
@@ -21,7 +21,7 @@ import com.sfjs.svc.AddressService;
 @RestController
 @EnableWebMvc
 @Transactional
-public class AddressController extends BaseController<AddressService, AddressEntity, Address, AddressResponse> {
+public class AddressController extends BaseController<AddressService, AddressEntity, AddressRequest, AddressResponse> {
 
   @MutationMapping(name = "deleteAddress")
   public Boolean deleteAddress(@Argument(name = "id") Long id) {
@@ -34,12 +34,12 @@ public class AddressController extends BaseController<AddressService, AddressEnt
   }
 
   @MutationMapping(name = "saveAddress")
-  public AddressResponse saveAddress(@Argument(name = "requestBody") Address requestBody) {
+  public AddressResponse saveAddress(@Argument(name = "requestBody") AddressRequest requestBody) {
     return save(requestBody);
   }
 
   @RequestMapping(path = "/address", method = RequestMethod.POST)
-  public AddressResponse save(@RequestBody Address requestBody) {
+  public AddressResponse save(@RequestBody AddressRequest requestBody) {
     return super.save(requestBody);
   }
 

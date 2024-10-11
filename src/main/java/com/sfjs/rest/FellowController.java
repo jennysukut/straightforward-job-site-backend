@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.Fellow;
+import com.sfjs.dto.FellowRequest;
 import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.entity.FellowEntity;
 import com.sfjs.svc.FellowService;
@@ -21,7 +21,7 @@ import com.sfjs.svc.FellowService;
 @RestController
 @EnableWebMvc
 @Transactional
-public class FellowController extends BaseController<FellowService, FellowEntity, Fellow, FellowResponse> {
+public class FellowController extends BaseController<FellowService, FellowEntity, FellowRequest, FellowResponse> {
 
   @MutationMapping(name = "deleteFellow")
   public Boolean deleteFellow(@Argument(name = "id") Long id) {
@@ -34,12 +34,12 @@ public class FellowController extends BaseController<FellowService, FellowEntity
   }
 
   @MutationMapping(name = "saveFellow")
-  public FellowResponse saveFellow(@Argument(name = "requestBody") Fellow requestBody) {
+  public FellowResponse saveFellow(@Argument(name = "requestBody") FellowRequest requestBody) {
     return save(requestBody);
   }
 
   @RequestMapping(path = "/fellow", method = RequestMethod.POST)
-  public FellowResponse save(@RequestBody Fellow requestBody) {
+  public FellowResponse save(@RequestBody FellowRequest requestBody) {
     return super.save(requestBody);
   }
 

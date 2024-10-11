@@ -3,7 +3,7 @@ package com.sfjs.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Fellow extends BaseBody {
+public class FellowRequest extends BaseRequest {
 
   @Getter
   @Setter
@@ -31,5 +31,5 @@ public class Fellow extends BaseBody {
 
   @Getter
   @Setter
-  private Account account;
+  private AccountRequest account;
 }

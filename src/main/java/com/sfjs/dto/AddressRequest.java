@@ -3,7 +3,7 @@ package com.sfjs.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Address extends BaseBody {
+public class AddressRequest extends BaseRequest {
 
   @Getter
   @Setter
