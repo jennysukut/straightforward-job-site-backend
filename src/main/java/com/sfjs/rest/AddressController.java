@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.dto.Address;
+import com.sfjs.dto.response.AddressResponse;
 import com.sfjs.entity.AddressEntity;
 import com.sfjs.svc.AddressService;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public class AddressController extends BaseController<AddressService, AddressEntity, Address> {
+public class AddressController extends BaseController<AddressService, AddressEntity, Address, AddressResponse> {
 
   @MutationMapping(name = "deleteAddress")
   public Boolean deleteAddress(@Argument(name = "id") Long id) {
@@ -33,53 +34,53 @@ public class AddressController extends BaseController<AddressService, AddressEnt
   }
 
   @MutationMapping(name = "saveAddress")
-  public Address saveAddress(@Argument(name = "requestBody") Address requestBody) {
+  public AddressResponse saveAddress(@Argument(name = "requestBody") Address requestBody) {
     return save(requestBody);
   }
 
   @RequestMapping(path = "/address", method = RequestMethod.POST)
-  public Address save(@RequestBody Address requestBody) {
+  public AddressResponse save(@RequestBody Address requestBody) {
     return super.save(requestBody);
   }
 
   @RequestMapping(path = "/address/getbyid/{id}", method = RequestMethod.GET)
-  public Address getById(@PathVariable("id") Long id) {
+  public AddressResponse getById(@PathVariable("id") Long id) {
     return super.getById(id);
   }
 
   @RequestMapping(path = "/address/findbyid/{id}", method = RequestMethod.GET)
-  public Address findById(@PathVariable("id") Long id) {
+  public AddressResponse findById(@PathVariable("id") Long id) {
     return super.findById(id);
   }
 
   @RequestMapping(path = "/address/findallbyid/{id}", method = RequestMethod.GET)
-  public List<Address> findAllById(@PathVariable("id") Long id) {
+  public List<AddressResponse> findAllById(@PathVariable("id") Long id) {
     return super.findAllById(id);
   }
 
   @RequestMapping(path = "/address/findbyname/{name}", method = RequestMethod.GET)
-  public Address findByName(@PathVariable("name") String name) {
+  public AddressResponse findByName(@PathVariable("name") String name) {
     return super.findByName(name);
   }
 
   @RequestMapping(path = "/address/findallbyname/{name}", method = RequestMethod.GET)
-  public List<Address> findAllByName(@PathVariable("name") String name) {
+  public List<AddressResponse> findAllByName(@PathVariable("name") String name) {
     return super.findAllByName(name);
   }
 
   @RequestMapping(path = "/address/findbylabel/{label}", method = RequestMethod.GET)
-  public Address findByLabel(@PathVariable("label") String label) {
+  public AddressResponse findByLabel(@PathVariable("label") String label) {
     return super.findByLabel(label);
   }
 
   @RequestMapping(path = "/address/findallbylabel/{label}", method = RequestMethod.GET)
-  public List<Address> findAllByLabel(@PathVariable("label") String label) {
+  public List<AddressResponse> findAllByLabel(@PathVariable("label") String label) {
     return super.findAllByLabel(label);
   }
 
   @QueryMapping(name = "findAllAddresses")
   @RequestMapping(path = "/address/findall", method = RequestMethod.GET)
-  public List<Address> findAll(@Argument(name = "limit") Integer limit) {
+  public List<AddressResponse> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 }

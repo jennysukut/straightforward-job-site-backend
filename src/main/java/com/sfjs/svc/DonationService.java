@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.dto.BusinessDonation;
 import com.sfjs.dto.FellowDonation;
-import com.sfjs.dto.NumericMetric;
-import com.sfjs.dto.Payment;
+import com.sfjs.dto.response.NumericMetricResponse;
+import com.sfjs.dto.response.PaymentResponse;
 
 import jakarta.transaction.Transactional;
 import reactor.core.publisher.Mono;
@@ -24,17 +24,17 @@ public class DonationService {
   @Autowired
   NumericMetricService numericMetricService;
 
-  public Mono<Payment> acceptBusinessDonation(BusinessDonation donation) {
+  public Mono<PaymentResponse> acceptBusinessDonation(BusinessDonation donation) {
     return checkoutService.acceptBusinessDonation(donation);
   }
 
-  public Mono<Payment> acceptFellowDonation(FellowDonation donation) {
+  public Mono<PaymentResponse> acceptFellowDonation(FellowDonation donation) {
     return checkoutService.acceptFellowDonation(donation);
   }
 
   public String getCurrentDonations() {
-    NumericMetric fellowDonations = numericMetricService.findByName("CURRENT_FELLOW_DONATION");
-    NumericMetric businessDonations = numericMetricService.findByName("CURRENT_BUSINESS_DONATION");
+    NumericMetricResponse fellowDonations = numericMetricService.findByName("CURRENT_FELLOW_DONATION");
+    NumericMetricResponse businessDonations = numericMetricService.findByName("CURRENT_BUSINESS_DONATION");
     return fellowDonations.getMetric().add(businessDonations.getMetric()).toString();
   }
 }

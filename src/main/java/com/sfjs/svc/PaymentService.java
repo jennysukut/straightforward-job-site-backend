@@ -18,6 +18,7 @@ import com.sfjs.conv.PaymentConverter;
 import com.sfjs.dto.Payment;
 import com.sfjs.dto.PaymentResult;
 import com.sfjs.dto.PaymentResultInput;
+import com.sfjs.dto.response.PaymentResponse;
 import com.sfjs.entity.NumericMetricEntity;
 import com.sfjs.entity.PaymentEntity;
 import com.sfjs.entity.PaymentStatus;
@@ -29,7 +30,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class PaymentService extends BaseService<PaymentEntity, Payment> {
+public class PaymentService extends BaseService<PaymentEntity, Payment, PaymentResponse> {
 
   static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
 
@@ -42,8 +43,7 @@ public class PaymentService extends BaseService<PaymentEntity, Payment> {
   @Autowired
   private NumericMetricPersist numericMetricPersist;
 
-  public PaymentService(BusinessConverter businessConverter,
-      FellowConverter fellowConverter) {
+  public PaymentService(BusinessConverter businessConverter, FellowConverter fellowConverter) {
     super(new PaymentConverter(businessConverter, fellowConverter));
   }
 

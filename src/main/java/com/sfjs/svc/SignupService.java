@@ -12,6 +12,8 @@ import com.sfjs.conv.BusinessConverter;
 import com.sfjs.conv.FellowConverter;
 import com.sfjs.dto.Business;
 import com.sfjs.dto.Fellow;
+import com.sfjs.dto.response.BusinessResponse;
+import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.entity.AccountEntity;
 import com.sfjs.entity.BusinessEntity;
 import com.sfjs.entity.FellowEntity;
@@ -47,27 +49,27 @@ public class SignupService {
   @Autowired
   BusinessRepository businessRepository;
 
-  public Fellow signupFellow(Fellow requestBody) {
+  public FellowResponse signupFellow(Fellow requestBody) {
     String email = requestBody.getEmail();
     AccountEntity existingAccountEntity = accountRepository.findByEmail(email);
     if (existingAccountEntity == null) {
       // This email has never been used
       FellowEntity savedFellowEntity = createNewFellowAndNewAccount(requestBody);
-      Fellow response = fellowConverter.convertToBody(savedFellowEntity);
+      FellowResponse response = fellowConverter.convertToBody(savedFellowEntity);
       return response;
     } else {
       FellowEntity existingFellowEntity = existingAccountEntity.getFellow();
       if (existingFellowEntity == null) {
         // No fellow
         FellowEntity savedFellowEntity = createNewFellow(requestBody, existingAccountEntity);
-        Fellow response = fellowConverter.convertToBody(savedFellowEntity);
+        FellowResponse response = fellowConverter.convertToBody(savedFellowEntity);
         return response;
       } else {
         String existingFellowName = existingFellowEntity.getName();
         if (existingFellowName != null && existingFellowName.contentEquals(requestBody.getName())) {
           // Same fellow
           FellowEntity savedFellowEntity = updateExistingFellow(requestBody, existingFellowEntity);
-          Fellow response = fellowConverter.convertToBody(savedFellowEntity);
+          FellowResponse response = fellowConverter.convertToBody(savedFellowEntity);
           return response;
         } else {
           // Different fellow
@@ -98,25 +100,27 @@ public class SignupService {
   }
 
   private boolean valueChanged(String newValue, String original) {
-    if (newValue == null) return false;
-    if (original == null) return true;
+    if (newValue == null)
+      return false;
+    if (original == null)
+      return true;
     return !newValue.contentEquals(original);
   }
 
   private boolean valueChanged(Boolean newValue, Boolean original) {
-    if (newValue == null) return false;
-    if (original == null) return true;
+    if (newValue == null)
+      return false;
+    if (original == null)
+      return true;
     return newValue.booleanValue() != original.booleanValue();
   }
 
   /**
    * Create a new fellow entity
    *
-   * Because the is a new entity, we don't
-   * need to worry about changing value of
-   * existing fields.
-   * If an input field is null
-   * Then it's okay to set the entity field to null
+   * Because the is a new entity, we don't need to worry about changing value of
+   * existing fields. If an input field is null Then it's okay to set the entity
+   * field to null
    *
    * @param requestBody
    * @param existingAccountEntity
@@ -141,11 +145,9 @@ public class SignupService {
   /**
    * Create a new fellow entity and account entity
    *
-   * Because the is a new entity, we don't
-   * need to worry about changing value of
-   * existing fields.
-   * If an input field is null
-   * Then it's okay to set the entity field to null
+   * Because the is a new entity, we don't need to worry about changing value of
+   * existing fields. If an input field is null Then it's okay to set the entity
+   * field to null
    *
    * @param requestBody
    * @return
@@ -166,18 +168,19 @@ public class SignupService {
     newFellowEntity.setCollaborator(requestBody.getCollaborator() != null ? requestBody.getCollaborator() : false);
     newFellowEntity.setMessage(requestBody.getMessage());
     newFellowEntity.setReferralCode(requestBody.getReferralCode());
-    newFellowEntity.setReferralPartner(requestBody.getReferralPartner() != null ? requestBody.getReferralPartner() : false);
+    newFellowEntity
+        .setReferralPartner(requestBody.getReferralPartner() != null ? requestBody.getReferralPartner() : false);
     FellowEntity savedFellowEntity = fellowRepository.save(newFellowEntity);
     return savedFellowEntity;
   }
 
-  public Business signupBusiness(Business requestBody) {
+  public BusinessResponse signupBusiness(Business requestBody) {
     String email = requestBody.getEmail();
     AccountEntity existingAccountEntity = accountRepository.findByEmail(email);
     if (existingAccountEntity == null) {
       // This email has never been used
       BusinessEntity savedBusinessEntity = createNewBusinessAndNewAccount(requestBody);
-      Business response = businessConverter.convertToBody(savedBusinessEntity);
+      BusinessResponse response = businessConverter.convertToBody(savedBusinessEntity);
       return response;
     } else {
       Optional<BusinessEntity> existingBusinessEntity = existingAccountEntity.getBusinesses().stream()
@@ -196,12 +199,12 @@ public class SignupService {
       if (!existingBusinessEntity.isPresent()) {
         // No Business with this name
         BusinessEntity savedBusinessEntity = createNewBusiness(requestBody, existingAccountEntity);
-        Business response = businessConverter.convertToBody(savedBusinessEntity);
+        BusinessResponse response = businessConverter.convertToBody(savedBusinessEntity);
         return response;
       } else {
         // There is a business with this name
         BusinessEntity savedBusinessEntity = updateExistingBusiness(requestBody, existingBusinessEntity.get());
-        Business response = businessConverter.convertToBody(savedBusinessEntity);
+        BusinessResponse response = businessConverter.convertToBody(savedBusinessEntity);
         return response;
       }
     }

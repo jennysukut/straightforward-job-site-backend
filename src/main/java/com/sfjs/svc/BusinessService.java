@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.sfjs.conv.AccountConverter;
 import com.sfjs.conv.BusinessConverter;
 import com.sfjs.dto.Business;
+import com.sfjs.dto.response.BusinessResponse;
 import com.sfjs.entity.BusinessEntity;
 import com.sfjs.persist.BasePersist;
 import com.sfjs.persist.BusinessPersist;
@@ -14,7 +15,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class BusinessService extends BaseService<BusinessEntity, Business> {
+public class BusinessService extends BaseService<BusinessEntity, Business, BusinessResponse> {
 
   @Autowired
   BusinessPersist repository;

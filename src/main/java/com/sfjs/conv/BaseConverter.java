@@ -8,9 +8,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sfjs.dto.BaseBody;
+import com.sfjs.dto.response.BaseResponse;
 import com.sfjs.entity.BaseEntity;
 
-public class BaseConverter<ENTITY extends BaseEntity, BODY extends BaseBody> {
+public class BaseConverter<ENTITY extends BaseEntity, REQUEST extends BaseBody, BODY extends BaseResponse> {
 
   Logger logger = Logger.getLogger(getClass().getName());
 
@@ -26,7 +27,7 @@ public class BaseConverter<ENTITY extends BaseEntity, BODY extends BaseBody> {
     mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
   }
 
-  public ENTITY convertToEntity(BODY in) {
+  public ENTITY convertToEntity(REQUEST in) {
     String json;
     try {
       json = mapper.writeValueAsString(in);
@@ -51,9 +52,7 @@ public class BaseConverter<ENTITY extends BaseEntity, BODY extends BaseBody> {
       return null;
     }
 
-    return Arrays.stream(enumClass.getEnumConstants())
-        .filter(e -> e.name().equalsIgnoreCase(value))
-        .findFirst()
+    return Arrays.stream(enumClass.getEnumConstants()).filter(e -> e.name().equalsIgnoreCase(value)).findFirst()
         .orElse(null);
   }
 }

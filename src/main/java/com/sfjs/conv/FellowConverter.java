@@ -7,18 +7,19 @@ import org.springframework.stereotype.Service;
 import com.sfjs.dto.Account;
 import com.sfjs.dto.Fellow;
 import com.sfjs.dto.Role;
+import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.entity.FellowEntity;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class FellowConverter extends BaseConverter<FellowEntity, Fellow> {
+public class FellowConverter extends BaseConverter<FellowEntity, Fellow, FellowResponse> {
 
   AccountConverter accountConverter;
 
   public FellowConverter(AccountConverter accountConverter) {
-    super(FellowEntity.class, Fellow.class);
+    super(FellowEntity.class, FellowResponse.class);
     this.accountConverter = accountConverter;
   }
 
@@ -46,25 +47,6 @@ public class FellowConverter extends BaseConverter<FellowEntity, Fellow> {
         dest.setReferralCode(src.getReferralCode());
       }
     }
-    return dest;
-  }
-
-  @Override
-  public Fellow convertToBody(FellowEntity src) {
-    Fellow dest = super.convertToBody(src);
-    dest.setId(src.getId());
-    dest.setName(src.getName());
-    dest.setEmail(src.getAccount().getEmail());
-    dest.setBetaTester(src.getBetaTester());
-    if (src.isCollaborator()) {
-      dest.setCollaborator(true);
-      dest.setMessage(src.getMessage());
-      if (src.isReferralPartner()) {
-        dest.setReferralPartner(true);
-        dest.setReferralCode(src.getReferralCode());
-      }
-    }
-
     return dest;
   }
 }

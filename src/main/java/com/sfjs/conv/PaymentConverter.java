@@ -5,19 +5,20 @@ import org.springframework.stereotype.Service;
 import com.sfjs.dto.Business;
 import com.sfjs.dto.Fellow;
 import com.sfjs.dto.Payment;
+import com.sfjs.dto.response.PaymentResponse;
 import com.sfjs.entity.BusinessEntity;
 import com.sfjs.entity.FellowEntity;
 import com.sfjs.entity.PaymentEntity;
 import com.sfjs.entity.PaymentStatus;
 
 @Service
-public class PaymentConverter extends BaseConverter<PaymentEntity, Payment> {
+public class PaymentConverter extends BaseConverter<PaymentEntity, Payment, PaymentResponse> {
 
   BusinessConverter businessConverter;
   FellowConverter fellowConverter;
 
   public PaymentConverter(BusinessConverter businessConverter, FellowConverter fellowConverter) {
-    super(PaymentEntity.class, Payment.class);
+    super(PaymentEntity.class, PaymentResponse.class);
     this.businessConverter = businessConverter;
     this.fellowConverter = fellowConverter;
   }
@@ -63,27 +64,18 @@ public class PaymentConverter extends BaseConverter<PaymentEntity, Payment> {
   }
 
   /**
-   * This maps a PaymentEntity object to a Payment dto
+   * This maps a PaymentEntity object to a PaymentResponse dto
    *
-   * This function is necessary because the dto is flattened; whereas, the entity
-   * is not
+   * This function is necessary because the status can be null
    *
    * @param entity - PaymentEntity object
    * @return Payment - data transfer object
    */
   @Override
-  public Payment convertToBody(PaymentEntity entity) {
+  public PaymentResponse convertToBody(PaymentEntity entity) {
     // Default conversion
-    Payment payment = super.convertToBody(entity);
-    // Fields that are not directly mapped by default conversion
-    if (entity.getBusiness() != null) {
-      payment.setBusinessName(entity.getBusiness().getName());
-      payment.setEmail(entity.getBusiness().getAccount().getEmail());
-    } else if (entity.getFellow() != null) {
-      payment.setFellowName(entity.getFellow().getName());
-      payment.setEmail(entity.getFellow().getAccount().getEmail());
-    }
-    payment.setStatus(entity.getStatus() != null ? entity.getStatus().name() : PaymentStatus.PENDING.name());
+    PaymentResponse payment = super.convertToBody(entity);
+    payment.setStatus(entity.getStatus() != null ? entity.getStatus() : PaymentStatus.PENDING);
     return payment;
   }
 }

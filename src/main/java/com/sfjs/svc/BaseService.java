@@ -9,16 +9,17 @@ import org.springframework.data.domain.Page;
 
 import com.sfjs.conv.BaseConverter;
 import com.sfjs.dto.BaseBody;
+import com.sfjs.dto.response.BaseResponse;
 import com.sfjs.entity.BaseEntity;
 import com.sfjs.persist.BasePersist;
 
-public abstract class BaseService<ENTITY extends BaseEntity, BODY extends BaseBody> {
+public abstract class BaseService<ENTITY extends BaseEntity, REQUEST extends BaseBody, BODY extends BaseResponse> {
 
   Logger logger = Logger.getLogger(getClass().getName());
 
-  private BaseConverter<ENTITY, BODY> converter;
+  private BaseConverter<ENTITY, REQUEST, BODY> converter;
 
-  public BaseService(BaseConverter<ENTITY, BODY> converter) {
+  public BaseService(BaseConverter<ENTITY, REQUEST, BODY> converter) {
     this.converter = converter;
   }
 
@@ -26,7 +27,7 @@ public abstract class BaseService<ENTITY extends BaseEntity, BODY extends BaseBo
     return this.converter.convertToBody(entity);
   }
 
-  protected ENTITY createEntity(BODY body) {
+  protected ENTITY createEntity(REQUEST body) {
     return this.converter.convertToEntity(body);
   }
 
@@ -37,7 +38,7 @@ public abstract class BaseService<ENTITY extends BaseEntity, BODY extends BaseBo
     return true;
   }
 
-  public BODY customSave(BODY body) {
+  public BODY customSave(REQUEST body) {
     ENTITY entity = createEntity(body);
     entity = getBaseRepository().customSave(entity);
     return createBody(entity);

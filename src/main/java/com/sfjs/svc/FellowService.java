@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.sfjs.conv.AccountConverter;
 import com.sfjs.conv.FellowConverter;
 import com.sfjs.dto.Fellow;
+import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.entity.FellowEntity;
 import com.sfjs.persist.BasePersist;
 import com.sfjs.persist.FellowPersist;
@@ -14,7 +15,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class FellowService extends BaseService<FellowEntity, Fellow> {
+public class FellowService extends BaseService<FellowEntity, Fellow, FellowResponse> {
 
   @Autowired
   FellowPersist repository;

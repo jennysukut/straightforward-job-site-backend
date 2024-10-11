@@ -16,6 +16,9 @@ import com.sfjs.dto.BusinessDonation;
 import com.sfjs.dto.Fellow;
 import com.sfjs.dto.FellowDonation;
 import com.sfjs.dto.Payment;
+import com.sfjs.dto.response.BusinessResponse;
+import com.sfjs.dto.response.FellowResponse;
+import com.sfjs.dto.response.PaymentResponse;
 import com.sfjs.entity.BusinessEntity;
 import com.sfjs.entity.FellowEntity;
 import com.sfjs.entity.PaymentEntity;
@@ -59,7 +62,7 @@ public class CheckoutService {
 
   Logger logger = Logger.getLogger(getClass().getName());
 
-  public Mono<Payment> acceptBusinessDonation(BusinessDonation donation) {
+  public Mono<PaymentResponse> acceptBusinessDonation(BusinessDonation donation) {
 
     logger.info("Implicit business signup");
     Business business = new Business();
@@ -67,7 +70,8 @@ public class CheckoutService {
     business.setEmail(donation.getEmail());
     business.setContactName(donation.getContactName());
     business.setReferral(donation.getReferral());
-    business = signupService.signupBusiness(business);
+    BusinessResponse businessResponse = signupService.signupBusiness(business);
+    business.setId(businessResponse.getId());
 
     Payment payment = new Payment();
     payment.setBusiness(business);
@@ -107,13 +111,14 @@ public class CheckoutService {
     });
   }
 
-  public Mono<Payment> acceptFellowDonation(FellowDonation donation) {
+  public Mono<PaymentResponse> acceptFellowDonation(FellowDonation donation) {
 
     logger.info("Implicit fellow signup");
     Fellow fellow = new Fellow();
     fellow.setName(donation.getName());
     fellow.setEmail(donation.getEmail());
-    fellow = signupService.signupFellow(fellow);
+    FellowResponse fellowResponse = signupService.signupFellow(fellow);
+    fellow.setId(fellowResponse.getId());
 
     Payment payment = new Payment();
     payment.setFellow(fellow);

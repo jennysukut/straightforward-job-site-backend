@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.dto.BaseBody;
+import com.sfjs.dto.response.BaseResponse;
 import com.sfjs.entity.BaseEntity;
 import com.sfjs.svc.BaseService;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public abstract class BaseController<SERVICE extends BaseService<ENTITY, BODY>, ENTITY extends BaseEntity, BODY extends BaseBody> {
+public abstract class BaseController<SERVICE extends BaseService<ENTITY, REQUEST, BODY>, ENTITY extends BaseEntity, REQUEST extends BaseBody, BODY extends BaseResponse> {
 
   @Autowired
   private SERVICE service;
@@ -31,7 +32,7 @@ public abstract class BaseController<SERVICE extends BaseService<ENTITY, BODY>, 
     return service.delete(id);
   }
 
-  public BODY save(@RequestBody BODY requestBody) {
+  public BODY save(@RequestBody REQUEST requestBody) {
     return service.customSave(requestBody);
   }
 

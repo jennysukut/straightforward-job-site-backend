@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.dto.BusinessDonation;
 import com.sfjs.dto.FellowDonation;
-import com.sfjs.dto.Payment;
+import com.sfjs.dto.response.PaymentResponse;
 import com.sfjs.svc.DonationService;
 
 import reactor.core.publisher.Mono;
@@ -28,13 +28,13 @@ public class Donation {
   DonationService service;
 
   @MutationMapping(name = "acceptBusinessDonation")
-  public Mono<Payment> acceptBusinessDonation(@Argument(name = "donation") BusinessDonation donation) {
+  public Mono<PaymentResponse> acceptBusinessDonation(@Argument(name = "donation") BusinessDonation donation) {
     logger.info("Donation: " + donation);
     return service.acceptBusinessDonation(donation);
   }
 
   @MutationMapping(name = "acceptFellowDonation")
-  public Mono<Payment> acceptFellowDonation(@Argument(name = "donation") FellowDonation donation) {
+  public Mono<PaymentResponse> acceptFellowDonation(@Argument(name = "donation") FellowDonation donation) {
     logger.info("Donation: " + donation);
     return service.acceptFellowDonation(donation);
   }

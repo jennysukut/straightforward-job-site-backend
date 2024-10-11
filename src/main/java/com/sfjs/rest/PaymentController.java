@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.dto.Payment;
+import com.sfjs.dto.response.PaymentResponse;
 import com.sfjs.entity.PaymentEntity;
 import com.sfjs.svc.PaymentService;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public class PaymentController extends BaseController<PaymentService, PaymentEntity, Payment> {
+public class PaymentController extends BaseController<PaymentService, PaymentEntity, Payment, PaymentResponse> {
 
   @MutationMapping(name = "deletePayment")
   public Boolean deletePayment(@Argument(name = "id") Long id) {
@@ -33,53 +34,53 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
   }
 
   @MutationMapping(name = "savePayment")
-  public Payment savePayment(@Argument(name = "requestBody") Payment requestBody) {
+  public PaymentResponse savePayment(@Argument(name = "requestBody") Payment requestBody) {
     return save(requestBody);
   }
 
   @RequestMapping(path = "/payment", method = RequestMethod.POST)
-  public Payment save(@RequestBody Payment requestBody) {
+  public PaymentResponse save(@RequestBody Payment requestBody) {
     return super.save(requestBody);
   }
 
   @RequestMapping(path = "/payment/getbyid/{id}", method = RequestMethod.GET)
-  public Payment getById(@PathVariable("id") Long id) {
+  public PaymentResponse getById(@PathVariable("id") Long id) {
     return super.getById(id);
   }
 
   @RequestMapping(path = "/payment/findbyid/{id}", method = RequestMethod.GET)
-  public Payment findById(@PathVariable("id") Long id) {
+  public PaymentResponse findById(@PathVariable("id") Long id) {
     return super.findById(id);
   }
 
   @RequestMapping(path = "/payment/findallbyid/{id}", method = RequestMethod.GET)
-  public List<Payment> findAllById(@PathVariable("id") Long id) {
+  public List<PaymentResponse> findAllById(@PathVariable("id") Long id) {
     return super.findAllById(id);
   }
 
   @RequestMapping(path = "/payment/findbyname/{name}", method = RequestMethod.GET)
-  public Payment findByName(@PathVariable("name") String name) {
+  public PaymentResponse findByName(@PathVariable("name") String name) {
     return super.findByName(name);
   }
 
   @RequestMapping(path = "/payment/findallbyname/{name}", method = RequestMethod.GET)
-  public List<Payment> findAllByName(@PathVariable("name") String name) {
+  public List<PaymentResponse> findAllByName(@PathVariable("name") String name) {
     return super.findAllByName(name);
   }
 
   @RequestMapping(path = "/payment/findbylabel/{label}", method = RequestMethod.GET)
-  public Payment findByLabel(@PathVariable("label") String label) {
+  public PaymentResponse findByLabel(@PathVariable("label") String label) {
     return super.findByLabel(label);
   }
 
   @RequestMapping(path = "/payment/findallbylabel/{label}", method = RequestMethod.GET)
-  public List<Payment> findAllByLabel(@PathVariable("label") String label) {
+  public List<PaymentResponse> findAllByLabel(@PathVariable("label") String label) {
     return super.findAllByLabel(label);
   }
 
   @QueryMapping(name = "findAllPayments")
   @RequestMapping(path = "/payment/findall", method = RequestMethod.GET)
-  public List<Payment> findAll(@Argument(name = "limit") Integer limit) {
+  public List<PaymentResponse> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 }

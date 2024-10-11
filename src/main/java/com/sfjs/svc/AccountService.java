@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
 import com.sfjs.dto.Account;
+import com.sfjs.dto.response.AccountResponse;
 import com.sfjs.entity.AccountEntity;
 import com.sfjs.persist.AccountPersist;
 import com.sfjs.persist.BasePersist;
@@ -21,7 +22,7 @@ import jakarta.transaction.Transactional;
  */
 @Service
 @Transactional
-public class AccountService extends BaseService<AccountEntity, Account> {
+public class AccountService extends BaseService<AccountEntity, Account, AccountResponse> {
 
   @Autowired
   AccountPersist repository;
@@ -32,7 +33,7 @@ public class AccountService extends BaseService<AccountEntity, Account> {
   }
 
   public AccountService() {
-    super(new BaseConverter<AccountEntity, Account>(AccountEntity.class, Account.class));
+    super(new BaseConverter<AccountEntity, Account, AccountResponse>(AccountEntity.class, AccountResponse.class));
   }
 
   public AccountEntity findByEmail(String email) {

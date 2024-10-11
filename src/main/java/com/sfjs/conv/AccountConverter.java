@@ -5,16 +5,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.dto.Account;
+import com.sfjs.dto.response.AccountResponse;
 import com.sfjs.entity.AccountEntity;
 
 @Service
-public class AccountConverter extends BaseConverter<AccountEntity, Account> {
+public class AccountConverter extends BaseConverter<AccountEntity, Account, AccountResponse> {
 
   @Autowired
   PasswordEncoder passwordEncoder;
 
   public AccountConverter() {
-    super(AccountEntity.class, Account.class);
+    super(AccountEntity.class, AccountResponse.class);
   }
 
   /**

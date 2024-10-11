@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.sfjs.dto.Business;
 import com.sfjs.dto.Fellow;
 import com.sfjs.dto.Result;
+import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.svc.FellowService;
 import com.sfjs.svc.SignupService;
 
@@ -36,14 +37,13 @@ public class Signup {
 
   @Deprecated
   @MutationMapping(name = "signUp")
-  public Result signupIndividual(@Argument(name = "name") String name,
-      @Argument(name = "email") String email,
+  public Result signupIndividual(@Argument(name = "name") String name, @Argument(name = "email") String email,
       @Argument(name = "betaTester") Boolean betaTester) {
     Fellow fellow = new Fellow();
     fellow.setName(name);
     fellow.setEmail(email);
     fellow.setBetaTester(betaTester);
-    fellow = signupService.signupFellow(fellow);
+    FellowResponse fellowResponse = signupService.signupFellow(fellow);
     Result result = new Result();
     result.setSuccess(true);
     result.setMessage("Success");
