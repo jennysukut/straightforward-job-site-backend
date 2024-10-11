@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
-import com.sfjs.dto.NumericMetricRequest;
+import com.sfjs.dto.request.NumericMetricRequest;
 import com.sfjs.dto.response.NumericMetricResponse;
 import com.sfjs.entity.NumericMetricEntity;
 import com.sfjs.repo.BaseRepository;

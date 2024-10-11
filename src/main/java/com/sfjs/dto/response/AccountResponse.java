@@ -2,7 +2,7 @@ package com.sfjs.dto.response;
 
 import java.util.Set;
 
-import com.sfjs.dto.RoleRequest;
+import com.sfjs.dto.request.RoleRequest;
 
 import lombok.Getter;
 import lombok.Setter;

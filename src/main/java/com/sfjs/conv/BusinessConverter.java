@@ -4,9 +4,9 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.sfjs.dto.AccountRequest;
-import com.sfjs.dto.BusinessRequest;
-import com.sfjs.dto.RoleRequest;
+import com.sfjs.dto.request.AccountRequest;
+import com.sfjs.dto.request.BusinessRequest;
+import com.sfjs.dto.request.RoleRequest;
 import com.sfjs.dto.response.BusinessResponse;
 import com.sfjs.entity.BusinessEntity;
 

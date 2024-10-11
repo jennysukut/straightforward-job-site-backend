@@ -11,11 +11,11 @@ import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.PaymentConverter;
-import com.sfjs.dto.BusinessRequest;
 import com.sfjs.dto.BusinessDonation;
-import com.sfjs.dto.FellowRequest;
 import com.sfjs.dto.FellowDonation;
-import com.sfjs.dto.PaymentRequest;
+import com.sfjs.dto.request.BusinessRequest;
+import com.sfjs.dto.request.FellowRequest;
+import com.sfjs.dto.request.PaymentRequest;
 import com.sfjs.dto.response.BusinessResponse;
 import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.dto.response.PaymentResponse;

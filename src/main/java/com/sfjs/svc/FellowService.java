@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.AccountConverter;
 import com.sfjs.conv.FellowConverter;
-import com.sfjs.dto.FellowRequest;
+import com.sfjs.dto.request.FellowRequest;
 import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.entity.FellowEntity;
 import com.sfjs.repo.BaseRepository;

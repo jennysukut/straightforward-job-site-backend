@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.AddressRequest;
+import com.sfjs.dto.request.AddressRequest;
 import com.sfjs.dto.response.AddressResponse;
 import com.sfjs.entity.AddressEntity;
 import com.sfjs.svc.AddressService;

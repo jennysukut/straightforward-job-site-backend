@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
-import com.sfjs.dto.AccountRequest;
+import com.sfjs.dto.request.AccountRequest;
 import com.sfjs.dto.response.AccountResponse;
 import com.sfjs.entity.AccountEntity;
 import com.sfjs.repo.AccountRepository;

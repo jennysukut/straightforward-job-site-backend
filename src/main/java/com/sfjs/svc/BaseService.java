@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.sfjs.conv.BaseConverter;
-import com.sfjs.dto.BaseRequest;
+import com.sfjs.dto.request.BaseRequest;
 import com.sfjs.dto.response.BaseResponse;
 import com.sfjs.entity.BaseEntity;
 import com.sfjs.repo.BaseRepository;

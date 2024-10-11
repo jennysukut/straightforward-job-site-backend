@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.RoleRequest;
+import com.sfjs.dto.request.RoleRequest;
 import com.sfjs.dto.response.RoleResponse;
 import com.sfjs.entity.RoleEntity;
 import com.sfjs.svc.RoleService;

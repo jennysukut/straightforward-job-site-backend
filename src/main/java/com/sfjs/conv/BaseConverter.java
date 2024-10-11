@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sfjs.dto.BaseRequest;
+import com.sfjs.dto.request.BaseRequest;
 import com.sfjs.dto.response.BaseResponse;
 import com.sfjs.entity.BaseEntity;
 

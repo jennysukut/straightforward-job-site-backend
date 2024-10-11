@@ -1,6 +1,6 @@
 package com.sfjs.dto.response;
 
-import com.sfjs.dto.AccountRequest;
+import com.sfjs.dto.request.AccountRequest;
 
 import lombok.Getter;
 import lombok.Setter;

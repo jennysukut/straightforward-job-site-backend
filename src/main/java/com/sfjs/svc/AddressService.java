@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
-import com.sfjs.dto.AddressRequest;
+import com.sfjs.dto.request.AddressRequest;
 import com.sfjs.dto.response.AddressResponse;
 import com.sfjs.entity.AddressEntity;
 import com.sfjs.repo.BaseRepository;

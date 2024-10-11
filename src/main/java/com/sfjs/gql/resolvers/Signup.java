@@ -7,9 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.BusinessRequest;
-import com.sfjs.dto.FellowRequest;
 import com.sfjs.dto.Result;
+import com.sfjs.dto.request.BusinessRequest;
+import com.sfjs.dto.request.FellowRequest;
 import com.sfjs.dto.response.FellowResponse;
 import com.sfjs.gql.svc.SignupService;
 import com.sfjs.svc.FellowService;

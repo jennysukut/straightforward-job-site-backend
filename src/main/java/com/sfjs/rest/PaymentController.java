@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.PaymentRequest;
+import com.sfjs.dto.request.PaymentRequest;
 import com.sfjs.dto.response.PaymentResponse;
 import com.sfjs.entity.PaymentEntity;
 import com.sfjs.svc.PaymentService;

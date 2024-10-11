@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.AccountRequest;
+import com.sfjs.dto.request.AccountRequest;
 import com.sfjs.dto.response.AccountResponse;
 import com.sfjs.entity.AccountEntity;
 import com.sfjs.svc.AccountService;
