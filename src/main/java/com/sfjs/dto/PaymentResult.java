@@ -13,7 +13,7 @@ public class PaymentResult {
 
   @Getter
   @Setter
-  private boolean message;
+  private String message;
 
   @Getter
   @Setter
