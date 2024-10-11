@@ -1,4 +1,4 @@
-package com.sfjs.gql;
+package com.sfjs.gql.resolvers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -11,8 +11,8 @@ import com.sfjs.dto.Business;
 import com.sfjs.dto.Fellow;
 import com.sfjs.dto.Result;
 import com.sfjs.dto.response.FellowResponse;
+import com.sfjs.gql.svc.SignupService;
 import com.sfjs.svc.FellowService;
-import com.sfjs.svc.SignupService;
 
 @RestController
 @EnableWebMvc

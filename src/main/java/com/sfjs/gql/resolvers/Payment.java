@@ -1,4 +1,4 @@
-package com.sfjs.gql;
+package com.sfjs.gql.resolvers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;

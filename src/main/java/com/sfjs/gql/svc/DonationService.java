@@ -1,4 +1,4 @@
-package com.sfjs.svc;
+package com.sfjs.gql.svc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,6 +7,8 @@ import com.sfjs.dto.BusinessDonation;
 import com.sfjs.dto.FellowDonation;
 import com.sfjs.dto.response.NumericMetricResponse;
 import com.sfjs.dto.response.PaymentResponse;
+import com.sfjs.svc.BusinessService;
+import com.sfjs.svc.NumericMetricService;
 
 import jakarta.transaction.Transactional;
 import reactor.core.publisher.Mono;

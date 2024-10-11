@@ -1,4 +1,4 @@
-package com.sfjs.svc;
+package com.sfjs.gql.svc;
 
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -25,6 +25,8 @@ import com.sfjs.entity.PaymentEntity;
 import com.sfjs.repo.BusinessRepository;
 import com.sfjs.repo.FellowRepository;
 import com.sfjs.repo.PaymentRepository;
+import com.sfjs.svc.BusinessService;
+import com.sfjs.svc.FellowService;
 
 import jakarta.transaction.Transactional;
 import reactor.core.publisher.Mono;

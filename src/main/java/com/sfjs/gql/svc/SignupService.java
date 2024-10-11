@@ -1,4 +1,4 @@
-package com.sfjs.svc;
+package com.sfjs.gql.svc;
 
 import java.util.Optional;
 import java.util.Set;

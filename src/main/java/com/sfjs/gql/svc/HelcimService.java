@@ -1,4 +1,4 @@
-package com.sfjs.svc;
+package com.sfjs.gql.svc;
 
 import java.io.IOException;
 import java.util.logging.Logger;

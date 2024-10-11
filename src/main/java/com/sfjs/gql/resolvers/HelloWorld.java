@@ -1,4 +1,4 @@
-package com.sfjs.gql;
+package com.sfjs.gql.resolvers;
 
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.sfjs.gql;
+package com.sfjs.gql.resolvers;
 
 import java.util.logging.Logger;
 
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.sfjs.dto.BusinessDonation;
 import com.sfjs.dto.FellowDonation;
 import com.sfjs.dto.response.PaymentResponse;
-import com.sfjs.svc.DonationService;
+import com.sfjs.gql.svc.DonationService;
 
 import reactor.core.publisher.Mono;
 
