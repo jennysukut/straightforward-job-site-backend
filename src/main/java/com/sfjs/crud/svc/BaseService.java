@@ -1,4 +1,4 @@
-package com.sfjs.svc;
+package com.sfjs.crud.svc;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,10 +10,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.sfjs.conv.BaseConverter;
-import com.sfjs.dto.request.BaseRequest;
-import com.sfjs.dto.response.BaseResponse;
-import com.sfjs.entity.BaseEntity;
-import com.sfjs.repo.BaseRepository;
+import com.sfjs.crud.entity.BaseEntity;
+import com.sfjs.crud.repo.BaseRepository;
+import com.sfjs.crud.request.BaseRequest;
+import com.sfjs.crud.response.BaseResponse;
 
 public abstract class BaseService<ENTITY extends BaseEntity, REQUEST extends BaseRequest, BODY extends BaseResponse> {
 

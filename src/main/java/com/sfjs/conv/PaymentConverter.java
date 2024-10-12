@@ -2,14 +2,14 @@ package com.sfjs.conv;
 
 import org.springframework.stereotype.Service;
 
-import com.sfjs.dto.request.BusinessRequest;
-import com.sfjs.dto.request.FellowRequest;
-import com.sfjs.dto.request.PaymentRequest;
-import com.sfjs.dto.response.PaymentResponse;
-import com.sfjs.entity.BusinessEntity;
-import com.sfjs.entity.FellowEntity;
-import com.sfjs.entity.PaymentEntity;
-import com.sfjs.entity.PaymentStatus;
+import com.sfjs.crud.entity.BusinessEntity;
+import com.sfjs.crud.entity.FellowEntity;
+import com.sfjs.crud.entity.PaymentEntity;
+import com.sfjs.crud.entity.PaymentStatus;
+import com.sfjs.crud.request.BusinessRequest;
+import com.sfjs.crud.request.FellowRequest;
+import com.sfjs.crud.request.PaymentRequest;
+import com.sfjs.crud.response.PaymentResponse;
 
 @Service
 public class PaymentConverter extends BaseConverter<PaymentEntity, PaymentRequest, PaymentResponse> {

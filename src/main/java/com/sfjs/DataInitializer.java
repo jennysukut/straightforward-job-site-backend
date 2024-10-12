@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import com.sfjs.entity.NumericMetricEntity;
-import com.sfjs.entity.RoleEntity;
-import com.sfjs.repo.NumericMetricRepository;
-import com.sfjs.repo.RoleRepository;
+import com.sfjs.crud.entity.NumericMetricEntity;
+import com.sfjs.crud.entity.RoleEntity;
+import com.sfjs.crud.repo.NumericMetricRepository;
+import com.sfjs.crud.repo.RoleRepository;
 
 @Component
 public class DataInitializer implements CommandLineRunner {

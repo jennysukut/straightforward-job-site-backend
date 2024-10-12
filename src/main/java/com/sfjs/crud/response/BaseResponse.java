@@ -1,4 +1,4 @@
-package com.sfjs.dto.response;
+package com.sfjs.crud.response;
 
 import java.time.LocalDateTime;
 

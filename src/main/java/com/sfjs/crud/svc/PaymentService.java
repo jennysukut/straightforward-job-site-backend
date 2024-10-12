@@ -1,4 +1,4 @@
-package com.sfjs.svc;
+package com.sfjs.crud.svc;
 
 import java.math.BigDecimal;
 import java.security.MessageDigest;
@@ -16,15 +16,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sfjs.conv.BusinessConverter;
 import com.sfjs.conv.FellowConverter;
 import com.sfjs.conv.PaymentConverter;
+import com.sfjs.crud.entity.NumericMetricEntity;
+import com.sfjs.crud.entity.PaymentEntity;
+import com.sfjs.crud.entity.PaymentStatus;
+import com.sfjs.crud.repo.BaseRepository;
+import com.sfjs.crud.repo.NumericMetricRepository;
+import com.sfjs.crud.request.PaymentRequest;
+import com.sfjs.crud.response.PaymentResponse;
 import com.sfjs.dto.PaymentResult;
 import com.sfjs.dto.PaymentResultInput;
-import com.sfjs.dto.request.PaymentRequest;
-import com.sfjs.dto.response.PaymentResponse;
-import com.sfjs.entity.NumericMetricEntity;
-import com.sfjs.entity.PaymentEntity;
-import com.sfjs.entity.PaymentStatus;
-import com.sfjs.repo.BaseRepository;
-import com.sfjs.repo.NumericMetricRepository;
 
 import jakarta.transaction.Transactional;
 

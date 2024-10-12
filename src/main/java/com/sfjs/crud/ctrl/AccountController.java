@@ -1,4 +1,4 @@
-package com.sfjs.rest;
+package com.sfjs.crud.ctrl;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.request.AccountRequest;
-import com.sfjs.dto.response.AccountResponse;
-import com.sfjs.entity.AccountEntity;
-import com.sfjs.svc.AccountService;
+import com.sfjs.crud.entity.AccountEntity;
+import com.sfjs.crud.request.AccountRequest;
+import com.sfjs.crud.response.AccountResponse;
+import com.sfjs.crud.svc.AccountService;
 
 @RestController
 @EnableWebMvc

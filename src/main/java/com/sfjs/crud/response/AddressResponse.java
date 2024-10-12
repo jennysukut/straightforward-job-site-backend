@@ -1,4 +1,4 @@
-package com.sfjs.dto.response;
+package com.sfjs.crud.response;
 
 import lombok.Getter;
 import lombok.Setter;

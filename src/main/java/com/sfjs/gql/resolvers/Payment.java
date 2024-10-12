@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.sfjs.crud.svc.PaymentService;
 import com.sfjs.dto.PaymentResult;
 import com.sfjs.dto.PaymentResultInput;
-import com.sfjs.svc.PaymentService;
 
 @RestController
 @EnableWebMvc

@@ -4,11 +4,11 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
-import com.sfjs.dto.request.AccountRequest;
-import com.sfjs.dto.request.BusinessRequest;
-import com.sfjs.dto.request.RoleRequest;
-import com.sfjs.dto.response.BusinessResponse;
-import com.sfjs.entity.BusinessEntity;
+import com.sfjs.crud.entity.BusinessEntity;
+import com.sfjs.crud.request.AccountRequest;
+import com.sfjs.crud.request.BusinessRequest;
+import com.sfjs.crud.request.RoleRequest;
+import com.sfjs.crud.response.BusinessResponse;
 
 import jakarta.transaction.Transactional;
 

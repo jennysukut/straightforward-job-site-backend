@@ -1,4 +1,4 @@
-package com.sfjs.rest;
+package com.sfjs.crud.ctrl;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

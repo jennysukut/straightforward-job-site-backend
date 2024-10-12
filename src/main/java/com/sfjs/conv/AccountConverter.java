@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.sfjs.dto.request.AccountRequest;
-import com.sfjs.dto.response.AccountResponse;
-import com.sfjs.entity.AccountEntity;
+import com.sfjs.crud.entity.AccountEntity;
+import com.sfjs.crud.request.AccountRequest;
+import com.sfjs.crud.response.AccountResponse;
 
 @Service
 public class AccountConverter extends BaseConverter<AccountEntity, AccountRequest, AccountResponse> {

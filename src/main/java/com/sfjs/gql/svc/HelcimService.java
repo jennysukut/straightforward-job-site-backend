@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sfjs.dto.request.PaymentRequest;
-import com.sfjs.entity.PaymentEntity;
+import com.sfjs.crud.entity.PaymentEntity;
+import com.sfjs.crud.request.PaymentRequest;
 
 import jakarta.annotation.PostConstruct;
 import okhttp3.Call;

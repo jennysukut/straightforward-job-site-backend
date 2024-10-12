@@ -1,4 +1,4 @@
-package com.sfjs.entity;
+package com.sfjs.crud.entity;
 
 import java.time.LocalDateTime;
 

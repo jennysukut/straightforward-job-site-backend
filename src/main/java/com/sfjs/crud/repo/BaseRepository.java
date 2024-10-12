@@ -1,4 +1,4 @@
-package com.sfjs.repo;
+package com.sfjs.crud.repo;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
 
-import com.sfjs.entity.BaseEntity;
+import com.sfjs.crud.entity.BaseEntity;
 
 @NoRepositoryBean
 public interface BaseRepository<ENTITY extends BaseEntity> extends JpaRepository<ENTITY, Long>, CrudRepository<ENTITY, Long> {

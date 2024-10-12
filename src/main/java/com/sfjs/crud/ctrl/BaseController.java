@@ -1,4 +1,4 @@
-package com.sfjs.rest;
+package com.sfjs.crud.ctrl;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.request.BaseRequest;
-import com.sfjs.dto.response.BaseResponse;
-import com.sfjs.entity.BaseEntity;
-import com.sfjs.svc.BaseService;
+import com.sfjs.crud.entity.BaseEntity;
+import com.sfjs.crud.request.BaseRequest;
+import com.sfjs.crud.response.BaseResponse;
+import com.sfjs.crud.svc.BaseService;
 
 @RestController
 @EnableWebMvc

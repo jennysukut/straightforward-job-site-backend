@@ -1,4 +1,4 @@
-package com.sfjs.rest;
+package com.sfjs.crud.ctrl;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.request.RoleRequest;
-import com.sfjs.dto.response.RoleResponse;
-import com.sfjs.entity.RoleEntity;
-import com.sfjs.svc.RoleService;
+import com.sfjs.crud.entity.RoleEntity;
+import com.sfjs.crud.request.RoleRequest;
+import com.sfjs.crud.response.RoleResponse;
+import com.sfjs.crud.svc.RoleService;
 
 @RestController
 @EnableWebMvc

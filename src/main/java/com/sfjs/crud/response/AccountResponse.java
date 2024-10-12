@@ -1,8 +1,8 @@
-package com.sfjs.dto.response;
+package com.sfjs.crud.response;
 
 import java.util.Set;
 
-import com.sfjs.dto.request.RoleRequest;
+import com.sfjs.crud.request.RoleRequest;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,14 +1,14 @@
-package com.sfjs.svc;
+package com.sfjs.crud.svc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.AccountConverter;
 import com.sfjs.conv.BusinessConverter;
-import com.sfjs.dto.request.BusinessRequest;
-import com.sfjs.dto.response.BusinessResponse;
-import com.sfjs.entity.BusinessEntity;
-import com.sfjs.repo.BaseRepository;
+import com.sfjs.crud.entity.BusinessEntity;
+import com.sfjs.crud.repo.BaseRepository;
+import com.sfjs.crud.request.BusinessRequest;
+import com.sfjs.crud.response.BusinessResponse;
 
 import jakarta.transaction.Transactional;
 

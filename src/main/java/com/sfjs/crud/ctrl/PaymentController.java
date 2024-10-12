@@ -1,4 +1,4 @@
-package com.sfjs.rest;
+package com.sfjs.crud.ctrl;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.request.PaymentRequest;
-import com.sfjs.dto.response.PaymentResponse;
-import com.sfjs.entity.PaymentEntity;
-import com.sfjs.svc.PaymentService;
+import com.sfjs.crud.entity.PaymentEntity;
+import com.sfjs.crud.request.PaymentRequest;
+import com.sfjs.crud.response.PaymentResponse;
+import com.sfjs.crud.svc.PaymentService;
 
 @RestController
 @EnableWebMvc

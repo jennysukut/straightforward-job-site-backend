@@ -1,6 +1,6 @@
-package com.sfjs.dto.response;
+package com.sfjs.crud.response;
 
-import com.sfjs.entity.PaymentStatus;
+import com.sfjs.crud.entity.PaymentStatus;
 
 import lombok.Getter;
 import lombok.Setter;

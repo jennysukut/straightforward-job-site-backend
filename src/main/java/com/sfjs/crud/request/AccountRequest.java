@@ -1,4 +1,4 @@
-package com.sfjs.dto.request;
+package com.sfjs.crud.request;
 
 import java.util.Set;
 

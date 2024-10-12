@@ -10,18 +10,18 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BusinessConverter;
 import com.sfjs.conv.FellowConverter;
-import com.sfjs.dto.request.BusinessRequest;
-import com.sfjs.dto.request.FellowRequest;
-import com.sfjs.dto.response.BusinessResponse;
-import com.sfjs.dto.response.FellowResponse;
-import com.sfjs.entity.AccountEntity;
-import com.sfjs.entity.BusinessEntity;
-import com.sfjs.entity.FellowEntity;
-import com.sfjs.entity.RoleEntity;
-import com.sfjs.repo.AccountRepository;
-import com.sfjs.repo.BusinessRepository;
-import com.sfjs.repo.FellowRepository;
-import com.sfjs.repo.RoleRepository;
+import com.sfjs.crud.entity.AccountEntity;
+import com.sfjs.crud.entity.BusinessEntity;
+import com.sfjs.crud.entity.FellowEntity;
+import com.sfjs.crud.entity.RoleEntity;
+import com.sfjs.crud.repo.AccountRepository;
+import com.sfjs.crud.repo.BusinessRepository;
+import com.sfjs.crud.repo.FellowRepository;
+import com.sfjs.crud.repo.RoleRepository;
+import com.sfjs.crud.request.BusinessRequest;
+import com.sfjs.crud.request.FellowRequest;
+import com.sfjs.crud.response.BusinessResponse;
+import com.sfjs.crud.response.FellowResponse;
 
 import jakarta.transaction.Transactional;
 

@@ -1,13 +1,13 @@
-package com.sfjs.svc;
+package com.sfjs.crud.svc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
-import com.sfjs.dto.request.RoleRequest;
-import com.sfjs.dto.response.RoleResponse;
-import com.sfjs.entity.RoleEntity;
-import com.sfjs.repo.BaseRepository;
+import com.sfjs.crud.entity.RoleEntity;
+import com.sfjs.crud.repo.BaseRepository;
+import com.sfjs.crud.request.RoleRequest;
+import com.sfjs.crud.response.RoleResponse;
 
 import jakarta.transaction.Transactional;
 
