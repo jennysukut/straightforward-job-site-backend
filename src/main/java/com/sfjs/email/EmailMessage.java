@@ -1,4 +1,4 @@
-package com.sfjs.gql.schema;
+package com.sfjs.email;
 
 import lombok.Getter;
 import lombok.Setter;

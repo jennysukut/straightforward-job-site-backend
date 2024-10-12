@@ -1,4 +1,4 @@
-package com.sfjs.crud.ctrl;
+package com.sfjs.email;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sfjs.gql.schema.EmailMessage;
 
 @RestController
 @EnableWebMvc
