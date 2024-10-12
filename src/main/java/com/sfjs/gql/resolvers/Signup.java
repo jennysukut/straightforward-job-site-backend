@@ -11,7 +11,7 @@ import com.sfjs.crud.request.BusinessRequest;
 import com.sfjs.crud.request.FellowRequest;
 import com.sfjs.crud.response.FellowResponse;
 import com.sfjs.crud.svc.FellowService;
-import com.sfjs.dto.Result;
+import com.sfjs.gql.schema.Result;
 import com.sfjs.gql.svc.SignupService;
 
 @RestController

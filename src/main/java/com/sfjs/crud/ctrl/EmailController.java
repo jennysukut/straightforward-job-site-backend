@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sfjs.dto.EmailMessage;
+import com.sfjs.gql.schema.EmailMessage;
 
 @RestController
 @EnableWebMvc

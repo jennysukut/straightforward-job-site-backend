@@ -25,8 +25,8 @@ import com.sfjs.crud.response.FellowResponse;
 import com.sfjs.crud.response.PaymentResponse;
 import com.sfjs.crud.svc.BusinessService;
 import com.sfjs.crud.svc.FellowService;
-import com.sfjs.dto.BusinessDonation;
-import com.sfjs.dto.FellowDonation;
+import com.sfjs.gql.schema.BusinessDonation;
+import com.sfjs.gql.schema.FellowDonation;
 
 import jakarta.transaction.Transactional;
 import reactor.core.publisher.Mono;

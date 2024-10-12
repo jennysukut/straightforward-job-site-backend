@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.response.PaymentResponse;
-import com.sfjs.dto.BusinessDonation;
-import com.sfjs.dto.FellowDonation;
+import com.sfjs.gql.schema.BusinessDonation;
+import com.sfjs.gql.schema.FellowDonation;
 import com.sfjs.gql.svc.DonationService;
 
 import reactor.core.publisher.Mono;

@@ -23,8 +23,8 @@ import com.sfjs.crud.repo.BaseRepository;
 import com.sfjs.crud.repo.NumericMetricRepository;
 import com.sfjs.crud.request.PaymentRequest;
 import com.sfjs.crud.response.PaymentResponse;
-import com.sfjs.dto.PaymentResult;
-import com.sfjs.dto.PaymentResultInput;
+import com.sfjs.gql.schema.PaymentResult;
+import com.sfjs.gql.schema.PaymentResultInput;
 
 import jakarta.transaction.Transactional;
 

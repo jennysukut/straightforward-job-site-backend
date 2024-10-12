@@ -1,4 +1,4 @@
-package com.sfjs.dto;
+package com.sfjs.gql.schema;
 
 import lombok.Getter;
 import lombok.Setter;
