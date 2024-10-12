@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sfjs.crud.svc.PaymentService;
 import com.sfjs.gql.schema.PaymentResult;
 import com.sfjs.gql.schema.PaymentResultInput;
+import com.sfjs.gql.svc.CheckoutService;
 
 @RestController
 @EnableWebMvc
@@ -18,7 +18,7 @@ import com.sfjs.gql.schema.PaymentResultInput;
 public class Payment {
 
   @Autowired
-  PaymentService service;
+  CheckoutService service;
 
   @MutationMapping(name = "completePayment")
   public PaymentResult completePayment(@Argument(name = "input") PaymentResultInput input)
