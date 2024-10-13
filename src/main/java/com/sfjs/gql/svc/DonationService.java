@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.crud.response.NumericMetricResponse;
 import com.sfjs.crud.response.PaymentResponse;
-import com.sfjs.crud.svc.BusinessService;
 import com.sfjs.crud.svc.NumericMetricService;
 import com.sfjs.gql.schema.BusinessDonation;
 import com.sfjs.gql.schema.FellowDonation;
@@ -16,9 +15,6 @@ import reactor.core.publisher.Mono;
 @Service
 @Transactional
 public class DonationService {
-
-  @Autowired
-  BusinessService businessService;
 
   @Autowired
   CheckoutService checkoutService;

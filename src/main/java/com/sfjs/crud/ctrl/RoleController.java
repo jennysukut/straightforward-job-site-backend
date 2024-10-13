@@ -7,21 +7,19 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.entity.RoleEntity;
-import com.sfjs.crud.request.RoleRequest;
 import com.sfjs.crud.response.RoleResponse;
 import com.sfjs.crud.svc.RoleService;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public class RoleController extends BaseController<RoleService, RoleEntity, RoleRequest, RoleResponse> {
+public class RoleController extends BaseController<RoleService, RoleEntity, RoleResponse> {
 
   @MutationMapping(name = "deleteRole")
   public Boolean deleteRole(@Argument(name = "id") Long id) {
@@ -31,16 +29,6 @@ public class RoleController extends BaseController<RoleService, RoleEntity, Role
   @RequestMapping(path = "/role/{id}", method = RequestMethod.DELETE)
   public Boolean delete(@PathVariable(name = "id") Long id) {
     return super.delete(id);
-  }
-
-  @MutationMapping(name = "saveRole")
-  public RoleResponse saveRole(@Argument(name = "requestBody") RoleRequest requestBody) {
-    return save(requestBody);
-  }
-
-  @RequestMapping(path = "/role", method = RequestMethod.POST)
-  public RoleResponse save(@RequestBody RoleRequest requestBody) {
-    return super.save(requestBody);
   }
 
   @RequestMapping(path = "/role/getbyid/{id}", method = RequestMethod.GET)

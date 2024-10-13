@@ -7,21 +7,19 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.entity.BusinessEntity;
-import com.sfjs.crud.request.BusinessRequest;
 import com.sfjs.crud.response.BusinessResponse;
 import com.sfjs.crud.svc.BusinessService;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public class BusinessController extends BaseController<BusinessService, BusinessEntity, BusinessRequest, BusinessResponse> {
+public class BusinessController extends BaseController<BusinessService, BusinessEntity, BusinessResponse> {
 
   @MutationMapping(name = "deleteBusiness")
   public Boolean deleteBusiness(@Argument(name = "id") Long id) {
@@ -31,16 +29,6 @@ public class BusinessController extends BaseController<BusinessService, Business
   @RequestMapping(path = "/business/{id}", method = RequestMethod.DELETE)
   public Boolean delete(@PathVariable(name = "id") Long id) {
     return super.delete(id);
-  }
-
-  @MutationMapping(name = "saveBusiness")
-  public BusinessResponse saveBusiness(@Argument(name = "requestBody") BusinessRequest requestBody) {
-    return save(requestBody);
-  }
-
-  @RequestMapping(path = "/business", method = RequestMethod.POST)
-  public BusinessResponse save(@RequestBody BusinessRequest requestBody) {
-    return super.save(requestBody);
   }
 
   @RequestMapping(path = "/business/getbyid/{id}", method = RequestMethod.GET)

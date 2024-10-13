@@ -1,52 +1,20 @@
 package com.sfjs.conv;
 
-import java.util.Set;
-
 import org.springframework.stereotype.Service;
 
 import com.sfjs.crud.entity.FellowEntity;
-import com.sfjs.crud.request.AccountRequest;
-import com.sfjs.crud.request.FellowRequest;
-import com.sfjs.crud.request.RoleRequest;
 import com.sfjs.crud.response.FellowResponse;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class FellowConverter extends BaseConverter<FellowEntity, FellowRequest, FellowResponse> {
+public class FellowConverter extends BaseConverter<FellowEntity, FellowResponse> {
 
   AccountConverter accountConverter;
 
   public FellowConverter(AccountConverter accountConverter) {
-    super(FellowEntity.class, FellowResponse.class);
+    super(FellowResponse.class);
     this.accountConverter = accountConverter;
-  }
-
-  @Override
-  public FellowEntity convertToEntity(FellowRequest src) {
-    FellowEntity dest = new FellowEntity();
-
-    dest.setName(src.getName());
-    AccountRequest account = new AccountRequest();
-    account.setEmail(src.getEmail());
-    // TODO consider getting rid of role entities
-    RoleRequest role = new RoleRequest();
-    role.setName("FELLOW");
-    account.setRoles(Set.of(role));
-    // This is where the password gets encrypted
-    System.out.println("convert to entity: " + account);
-    dest.setAccount(accountConverter.convertToEntity(account));
-
-    dest.setBetaTester(src.getBetaTester());
-    if (src.getCollaborator() != null && src.getCollaborator().booleanValue()) {
-      dest.setCollaborator(true);
-      dest.setMessage(src.getMessage());
-      if (src.getReferralPartner() != null && src.getReferralPartner().booleanValue()) {
-        dest.setReferralPartner(true);
-        dest.setReferralCode(src.getReferralCode());
-      }
-    }
-    return dest;
   }
 }

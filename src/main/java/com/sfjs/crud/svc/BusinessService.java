@@ -7,14 +7,13 @@ import com.sfjs.conv.AccountConverter;
 import com.sfjs.conv.BusinessConverter;
 import com.sfjs.crud.entity.BusinessEntity;
 import com.sfjs.crud.repo.BaseRepository;
-import com.sfjs.crud.request.BusinessRequest;
 import com.sfjs.crud.response.BusinessResponse;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class BusinessService extends BaseService<BusinessEntity, BusinessRequest, BusinessResponse> {
+public class BusinessService extends BaseService<BusinessEntity, BusinessResponse> {
 
   @Autowired
   BaseRepository<BusinessEntity> repository;

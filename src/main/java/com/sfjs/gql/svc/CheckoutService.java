@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sfjs.conv.PaymentConverter;
 import com.sfjs.crud.entity.BusinessEntity;
 import com.sfjs.crud.entity.FellowEntity;
 import com.sfjs.crud.entity.NumericMetricEntity;
@@ -25,16 +24,14 @@ import com.sfjs.crud.repo.BusinessRepository;
 import com.sfjs.crud.repo.FellowRepository;
 import com.sfjs.crud.repo.NumericMetricRepository;
 import com.sfjs.crud.repo.PaymentRepository;
-import com.sfjs.crud.request.BusinessRequest;
-import com.sfjs.crud.request.FellowRequest;
-import com.sfjs.crud.request.PaymentRequest;
-import com.sfjs.crud.response.BusinessResponse;
-import com.sfjs.crud.response.FellowResponse;
 import com.sfjs.crud.response.PaymentResponse;
 import com.sfjs.crud.svc.BusinessService;
 import com.sfjs.crud.svc.FellowService;
 import com.sfjs.gql.schema.BusinessDonation;
+import com.sfjs.gql.schema.BusinessInput;
 import com.sfjs.gql.schema.FellowDonation;
+import com.sfjs.gql.schema.FellowInput;
+import com.sfjs.gql.schema.PaymentInput;
 import com.sfjs.gql.schema.PaymentResult;
 import com.sfjs.gql.schema.PaymentResultInput;
 
@@ -63,9 +60,6 @@ public class CheckoutService {
   SignupService signupService;
 
   @Autowired
-  PaymentConverter paymentConverter;
-
-  @Autowired
   FellowRepository fellowRepository;
 
   @Autowired
@@ -82,15 +76,15 @@ public class CheckoutService {
   public Mono<PaymentResponse> acceptBusinessDonation(BusinessDonation donation) {
 
     logger.info("Implicit business signup");
-    BusinessRequest business = new BusinessRequest();
+    BusinessInput business = new BusinessInput();
     business.setBusiness(donation.getBusinessName());
     business.setEmail(donation.getEmail());
     business.setContactName(donation.getContactName());
     business.setReferral(donation.getReferral());
-    BusinessResponse businessResponse = signupService.signupBusiness(business);
-    business.setId(businessResponse.getId());
+    Long businessId = signupService.signupBusiness(business);
+    business.setId(businessId);
 
-    PaymentRequest payment = new PaymentRequest();
+    PaymentInput payment = new PaymentInput();
     payment.setBusiness(business);
     payment.setAmount(donation.getAmount());
     payment.setCurrency("USD");
@@ -116,11 +110,24 @@ public class CheckoutService {
         payment.setSecretToken(encryptedToken);
         // save the entity and return it
         logger.info("Save payment: " + payment);
-        PaymentEntity paymentEntity = paymentConverter.convertToEntity(payment);
-        Optional<BusinessEntity> businessEntity = businessRepository.findById(payment.getBusiness().getId());
+        // TODO this is where we need to create/convert to entity
+        PaymentEntity paymentEntity = new PaymentEntity(); // paymentConverter.convertToEntity(payment);
+
+        paymentEntity.setAmount(payment.getAmount());
+        paymentEntity.setCurrency(payment.getCurrency());
+        paymentEntity.setPaymentType(payment.getPaymentType());
+
+        paymentEntity.setSALT(payment.getSALT());
+        paymentEntity.setSecretToken(payment.getSecretToken());
+        paymentEntity.setStatus(PaymentStatus.PENDING);
+
+        Optional<BusinessEntity> businessEntity = businessRepository.findById(businessId);
         paymentEntity.setBusiness(businessEntity.get());
         PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
-        return paymentConverter.convertToBody(savedPaymentEntity);
+        PaymentResponse paymentResponse = new PaymentResponse();
+        paymentResponse.setId(savedPaymentEntity.getId());
+        paymentResponse.setStatus(savedPaymentEntity.getStatus());
+        return paymentResponse;
       }).map(anotherPayment -> {
         anotherPayment.setCheckoutToken(response.getCheckoutToken());
         return anotherPayment;
@@ -131,13 +138,13 @@ public class CheckoutService {
   public Mono<PaymentResponse> acceptFellowDonation(FellowDonation donation) {
 
     logger.info("Implicit fellow signup");
-    FellowRequest fellow = new FellowRequest();
+    FellowInput fellow = new FellowInput();
     fellow.setName(donation.getName());
     fellow.setEmail(donation.getEmail());
-    FellowResponse fellowResponse = signupService.signupFellow(fellow);
-    fellow.setId(fellowResponse.getId());
+    Long fellowId = signupService.signupFellow(fellow);
+    fellow.setId(fellowId);
 
-    PaymentRequest payment = new PaymentRequest();
+    PaymentInput payment = new PaymentInput();
     payment.setFellow(fellow);
     payment.setAmount(donation.getAmount());
     payment.setCurrency("USD");
@@ -163,11 +170,24 @@ public class CheckoutService {
         payment.setSecretToken(encryptedToken);
         // save the entity and return it
         logger.info("Save payment: " + payment);
-        PaymentEntity paymentEntity = paymentConverter.convertToEntity(payment);
-        Optional<FellowEntity> fellowEntity = fellowRepository.findById(payment.getFellow().getId());
+        // TODO this is where we need to create/convert to entity
+        PaymentEntity paymentEntity = new PaymentEntity(); // paymentConverter.convertToEntity(payment);
+
+        paymentEntity.setAmount(payment.getAmount());
+        paymentEntity.setCurrency(payment.getCurrency());
+        paymentEntity.setPaymentType(payment.getPaymentType());
+
+        paymentEntity.setSALT(payment.getSALT());
+        paymentEntity.setSecretToken(payment.getSecretToken());
+        paymentEntity.setStatus(PaymentStatus.PENDING);
+
+        Optional<FellowEntity> fellowEntity = fellowRepository.findById(fellowId);
         paymentEntity.setFellow(fellowEntity.get());
         PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
-        return paymentConverter.convertToBody(savedPaymentEntity);
+        PaymentResponse paymentResponse = new PaymentResponse();
+        paymentResponse.setId(savedPaymentEntity.getId());
+        paymentResponse.setStatus(savedPaymentEntity.getStatus());
+        return paymentResponse;
       }).map(anotherPayment -> {
         anotherPayment.setCheckoutToken(response.getCheckoutToken());
         return anotherPayment;
@@ -212,7 +232,6 @@ public class CheckoutService {
       metric.setMetric(metric.getMetric().add(new BigDecimal(paymentEntity.getAmount())));
       numericMetricRepository.save(metric);
     }
-    result.setPayment(paymentConverter.convertToBody(paymentEntity));
     return result;
   }
 

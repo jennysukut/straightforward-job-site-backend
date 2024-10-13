@@ -5,35 +5,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.crud.entity.AccountEntity;
-import com.sfjs.crud.request.AccountRequest;
 import com.sfjs.crud.response.AccountResponse;
 
 @Service
-public class AccountConverter extends BaseConverter<AccountEntity, AccountRequest, AccountResponse> {
+public class AccountConverter extends BaseConverter<AccountEntity, AccountResponse> {
 
   @Autowired
   PasswordEncoder passwordEncoder;
 
   public AccountConverter() {
-    super(AccountEntity.class, AccountResponse.class);
-  }
-
-  /**
-   * This maps an Account dto to an AccountEntity
-   *
-   * This function is necessary to encrypt the password
-   *
-   * @param body - Account data transfer object
-   * @return AccountEntity
-   */
-  @Override
-  public AccountEntity convertToEntity(AccountRequest body) {
-    AccountEntity entity = super.convertToEntity(body);
-    if (body.getPassword() != null) {
-      String rawPassword = body.getPassword();
-      String encryptedPassword = passwordEncoder.encode(rawPassword);
-      entity.setPassword(encryptedPassword);
-    }
-    return entity;
+    super(AccountResponse.class);
   }
 }

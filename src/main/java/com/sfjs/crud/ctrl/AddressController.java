@@ -7,21 +7,19 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.entity.AddressEntity;
-import com.sfjs.crud.request.AddressRequest;
 import com.sfjs.crud.response.AddressResponse;
 import com.sfjs.crud.svc.AddressService;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public class AddressController extends BaseController<AddressService, AddressEntity, AddressRequest, AddressResponse> {
+public class AddressController extends BaseController<AddressService, AddressEntity, AddressResponse> {
 
   @MutationMapping(name = "deleteAddress")
   public Boolean deleteAddress(@Argument(name = "id") Long id) {
@@ -31,16 +29,6 @@ public class AddressController extends BaseController<AddressService, AddressEnt
   @RequestMapping(path = "/address/{id}", method = RequestMethod.DELETE)
   public Boolean delete(@PathVariable(name = "id") Long id) {
     return super.delete(id);
-  }
-
-  @MutationMapping(name = "saveAddress")
-  public AddressResponse saveAddress(@Argument(name = "requestBody") AddressRequest requestBody) {
-    return save(requestBody);
-  }
-
-  @RequestMapping(path = "/address", method = RequestMethod.POST)
-  public AddressResponse save(@RequestBody AddressRequest requestBody) {
-    return super.save(requestBody);
   }
 
   @RequestMapping(path = "/address/getbyid/{id}", method = RequestMethod.GET)

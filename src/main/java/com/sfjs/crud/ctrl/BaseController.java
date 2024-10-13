@@ -9,19 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.entity.BaseEntity;
-import com.sfjs.crud.request.BaseRequest;
 import com.sfjs.crud.response.BaseResponse;
 import com.sfjs.crud.svc.BaseService;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public abstract class BaseController<SERVICE extends BaseService<ENTITY, REQUEST, BODY>, ENTITY extends BaseEntity, REQUEST extends BaseRequest, BODY extends BaseResponse> {
+public abstract class BaseController<SERVICE extends BaseService<ENTITY, BODY>, ENTITY extends BaseEntity, BODY extends BaseResponse> {
 
   @Autowired
   private SERVICE service;
@@ -30,10 +28,6 @@ public abstract class BaseController<SERVICE extends BaseService<ENTITY, REQUEST
 
   public Boolean delete(@PathVariable(name = "id") Long id) {
     return service.delete(id);
-  }
-
-  public BODY save(@RequestBody REQUEST requestBody) {
-    return service.save(requestBody);
   }
 
   public BODY getById(@PathVariable("id") Long id) {

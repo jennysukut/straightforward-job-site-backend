@@ -2,8 +2,6 @@ package com.sfjs.crud.response;
 
 import java.util.Set;
 
-import com.sfjs.crud.request.RoleRequest;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,5 +21,5 @@ public class AccountResponse extends BaseResponse {
 
   @Getter
   @Setter
-  private Set<RoleRequest> roles;
+  private Set<RoleResponse> roles;
 }

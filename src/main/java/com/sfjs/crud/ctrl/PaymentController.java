@@ -7,21 +7,19 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.entity.PaymentEntity;
-import com.sfjs.crud.request.PaymentRequest;
 import com.sfjs.crud.response.PaymentResponse;
 import com.sfjs.crud.svc.PaymentService;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public class PaymentController extends BaseController<PaymentService, PaymentEntity, PaymentRequest, PaymentResponse> {
+public class PaymentController extends BaseController<PaymentService, PaymentEntity, PaymentResponse> {
 
   @MutationMapping(name = "deletePayment")
   public Boolean deletePayment(@Argument(name = "id") Long id) {
@@ -31,16 +29,6 @@ public class PaymentController extends BaseController<PaymentService, PaymentEnt
   @RequestMapping(path = "/payment/{id}", method = RequestMethod.DELETE)
   public Boolean delete(@PathVariable(name = "id") Long id) {
     return super.delete(id);
-  }
-
-  @MutationMapping(name = "savePayment")
-  public PaymentResponse savePayment(@Argument(name = "requestBody") PaymentRequest requestBody) {
-    return save(requestBody);
-  }
-
-  @RequestMapping(path = "/payment", method = RequestMethod.POST)
-  public PaymentResponse save(@RequestBody PaymentRequest requestBody) {
-    return super.save(requestBody);
   }
 
   @RequestMapping(path = "/payment/getbyid/{id}", method = RequestMethod.GET)

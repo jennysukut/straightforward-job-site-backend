@@ -7,7 +7,6 @@ import com.sfjs.conv.BaseConverter;
 import com.sfjs.crud.entity.AccountEntity;
 import com.sfjs.crud.repo.AccountRepository;
 import com.sfjs.crud.repo.BaseRepository;
-import com.sfjs.crud.request.AccountRequest;
 import com.sfjs.crud.response.AccountResponse;
 
 import jakarta.transaction.Transactional;
@@ -22,7 +21,7 @@ import jakarta.transaction.Transactional;
  */
 @Service
 @Transactional
-public class AccountService extends BaseService<AccountEntity, AccountRequest, AccountResponse> {
+public class AccountService extends BaseService<AccountEntity, AccountResponse> {
 
   @Autowired
   AccountRepository repository;
@@ -33,7 +32,7 @@ public class AccountService extends BaseService<AccountEntity, AccountRequest, A
   }
 
   public AccountService() {
-    super(new BaseConverter<AccountEntity, AccountRequest, AccountResponse>(AccountEntity.class, AccountResponse.class));
+    super(new BaseConverter<AccountEntity, AccountResponse>(AccountResponse.class));
   }
 
   public AccountEntity findByEmail(String email) {

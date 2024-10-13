@@ -7,14 +7,13 @@ import com.sfjs.conv.AccountConverter;
 import com.sfjs.conv.FellowConverter;
 import com.sfjs.crud.entity.FellowEntity;
 import com.sfjs.crud.repo.BaseRepository;
-import com.sfjs.crud.request.FellowRequest;
 import com.sfjs.crud.response.FellowResponse;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class FellowService extends BaseService<FellowEntity, FellowRequest, FellowResponse> {
+public class FellowService extends BaseService<FellowEntity, FellowResponse> {
 
   @Autowired
   BaseRepository<FellowEntity> repository;

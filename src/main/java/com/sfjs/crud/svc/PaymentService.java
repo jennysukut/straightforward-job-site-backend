@@ -8,14 +8,13 @@ import com.sfjs.conv.FellowConverter;
 import com.sfjs.conv.PaymentConverter;
 import com.sfjs.crud.entity.PaymentEntity;
 import com.sfjs.crud.repo.BaseRepository;
-import com.sfjs.crud.request.PaymentRequest;
 import com.sfjs.crud.response.PaymentResponse;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class PaymentService extends BaseService<PaymentEntity, PaymentRequest, PaymentResponse> {
+public class PaymentService extends BaseService<PaymentEntity, PaymentResponse> {
 
   @Autowired
   BaseRepository<PaymentEntity> repository;

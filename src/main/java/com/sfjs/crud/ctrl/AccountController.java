@@ -7,21 +7,19 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.entity.AccountEntity;
-import com.sfjs.crud.request.AccountRequest;
 import com.sfjs.crud.response.AccountResponse;
 import com.sfjs.crud.svc.AccountService;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public class AccountController extends BaseController<AccountService, AccountEntity, AccountRequest, AccountResponse> {
+public class AccountController extends BaseController<AccountService, AccountEntity, AccountResponse> {
 
   @MutationMapping(name = "deleteAccount")
   public Boolean deleteAccount(@Argument(name = "id") Long id) {
@@ -31,16 +29,6 @@ public class AccountController extends BaseController<AccountService, AccountEnt
   @RequestMapping(path = "/account/{id}", method = RequestMethod.DELETE)
   public Boolean delete(@PathVariable(name = "id") Long id) {
     return super.delete(id);
-  }
-
-  @MutationMapping(name = "saveAccount")
-  public AccountResponse saveAccount(@Argument(name = "requestBody") AccountRequest requestBody) {
-    return save(requestBody);
-  }
-
-  @RequestMapping(path = "/account", method = RequestMethod.POST)
-  public AccountResponse save(@RequestBody AccountRequest requestBody) {
-    return super.save(requestBody);
   }
 
   @RequestMapping(path = "/account/getbyid/{id}", method = RequestMethod.GET)

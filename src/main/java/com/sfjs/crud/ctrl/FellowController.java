@@ -7,21 +7,19 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.entity.FellowEntity;
-import com.sfjs.crud.request.FellowRequest;
 import com.sfjs.crud.response.FellowResponse;
 import com.sfjs.crud.svc.FellowService;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public class FellowController extends BaseController<FellowService, FellowEntity, FellowRequest, FellowResponse> {
+public class FellowController extends BaseController<FellowService, FellowEntity, FellowResponse> {
 
   @MutationMapping(name = "deleteFellow")
   public Boolean deleteFellow(@Argument(name = "id") Long id) {
@@ -31,16 +29,6 @@ public class FellowController extends BaseController<FellowService, FellowEntity
   @RequestMapping(path = "/fellow/{id}", method = RequestMethod.DELETE)
   public Boolean delete(@PathVariable(name = "id") Long id) {
     return super.delete(id);
-  }
-
-  @MutationMapping(name = "saveFellow")
-  public FellowResponse saveFellow(@Argument(name = "requestBody") FellowRequest requestBody) {
-    return save(requestBody);
-  }
-
-  @RequestMapping(path = "/fellow", method = RequestMethod.POST)
-  public FellowResponse save(@RequestBody FellowRequest requestBody) {
-    return super.save(requestBody);
   }
 
   @RequestMapping(path = "/fellow/getbyid/{id}", method = RequestMethod.GET)

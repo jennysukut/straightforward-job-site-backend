@@ -8,8 +8,6 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.sfjs.conv.BusinessConverter;
-import com.sfjs.conv.FellowConverter;
 import com.sfjs.crud.entity.AccountEntity;
 import com.sfjs.crud.entity.BusinessEntity;
 import com.sfjs.crud.entity.FellowEntity;
@@ -18,10 +16,8 @@ import com.sfjs.crud.repo.AccountRepository;
 import com.sfjs.crud.repo.BusinessRepository;
 import com.sfjs.crud.repo.FellowRepository;
 import com.sfjs.crud.repo.RoleRepository;
-import com.sfjs.crud.request.BusinessRequest;
-import com.sfjs.crud.request.FellowRequest;
-import com.sfjs.crud.response.BusinessResponse;
-import com.sfjs.crud.response.FellowResponse;
+import com.sfjs.gql.schema.BusinessInput;
+import com.sfjs.gql.schema.FellowInput;
 
 import jakarta.transaction.Transactional;
 
@@ -30,9 +26,6 @@ import jakarta.transaction.Transactional;
 public class SignupService {
 
   Logger logger = Logger.getLogger(getClass().getName());
-
-  @Autowired
-  FellowConverter fellowConverter;
 
   @Autowired
   AccountRepository accountRepository;
@@ -44,33 +37,27 @@ public class SignupService {
   FellowRepository fellowRepository;
 
   @Autowired
-  BusinessConverter businessConverter;
-
-  @Autowired
   BusinessRepository businessRepository;
 
-  public FellowResponse signupFellow(FellowRequest requestBody) {
+  public Long signupFellow(FellowInput requestBody) {
     String email = requestBody.getEmail();
     AccountEntity existingAccountEntity = accountRepository.findByEmail(email);
     if (existingAccountEntity == null) {
       // This email has never been used
       FellowEntity savedFellowEntity = createNewFellowAndNewAccount(requestBody);
-      FellowResponse response = fellowConverter.convertToBody(savedFellowEntity);
-      return response;
+      return savedFellowEntity.getId();
     } else {
       FellowEntity existingFellowEntity = existingAccountEntity.getFellow();
       if (existingFellowEntity == null) {
         // No fellow
         FellowEntity savedFellowEntity = createNewFellow(requestBody, existingAccountEntity);
-        FellowResponse response = fellowConverter.convertToBody(savedFellowEntity);
-        return response;
+        return savedFellowEntity.getId();
       } else {
         String existingFellowName = existingFellowEntity.getName();
         if (existingFellowName != null && existingFellowName.contentEquals(requestBody.getName())) {
           // Same fellow
           FellowEntity savedFellowEntity = updateExistingFellow(requestBody, existingFellowEntity);
-          FellowResponse response = fellowConverter.convertToBody(savedFellowEntity);
-          return response;
+          return savedFellowEntity.getId();
         } else {
           // Different fellow
           throw new IllegalArgumentException("Email is unavailable");
@@ -79,7 +66,7 @@ public class SignupService {
     }
   }
 
-  private FellowEntity updateExistingFellow(FellowRequest requestBody, FellowEntity existingFellowEntity) {
+  private FellowEntity updateExistingFellow(FellowInput requestBody, FellowEntity existingFellowEntity) {
     if (valueChanged(requestBody.getBetaTester(), existingFellowEntity.getBetaTester())) {
       existingFellowEntity.setBetaTester(requestBody.getBetaTester());
     }
@@ -126,7 +113,7 @@ public class SignupService {
    * @param existingAccountEntity
    * @return
    */
-  private FellowEntity createNewFellow(FellowRequest requestBody, AccountEntity existingAccountEntity) {
+  private FellowEntity createNewFellow(FellowInput requestBody, AccountEntity existingAccountEntity) {
     // Create a new FellowEntity
     // Associate new fellow with existing account
     FellowEntity newFellowEntity = new FellowEntity();
@@ -152,7 +139,7 @@ public class SignupService {
    * @param requestBody
    * @return
    */
-  private FellowEntity createNewFellowAndNewAccount(FellowRequest requestBody) {
+  private FellowEntity createNewFellowAndNewAccount(FellowInput requestBody) {
     // Create a new FellowEntity
     // Create a new AccountEntity
     RoleEntity fellowRoleEntity = roleRepository.findByName("FELLOW");
@@ -174,14 +161,13 @@ public class SignupService {
     return savedFellowEntity;
   }
 
-  public BusinessResponse signupBusiness(BusinessRequest requestBody) {
+  public Long signupBusiness(BusinessInput requestBody) {
     String email = requestBody.getEmail();
     AccountEntity existingAccountEntity = accountRepository.findByEmail(email);
     if (existingAccountEntity == null) {
       // This email has never been used
       BusinessEntity savedBusinessEntity = createNewBusinessAndNewAccount(requestBody);
-      BusinessResponse response = businessConverter.convertToBody(savedBusinessEntity);
-      return response;
+      return savedBusinessEntity.getId();
     } else {
       Optional<BusinessEntity> existingBusinessEntity = existingAccountEntity.getBusinesses().stream()
           .filter(new Predicate<BusinessEntity>() {
@@ -199,18 +185,16 @@ public class SignupService {
       if (!existingBusinessEntity.isPresent()) {
         // No Business with this name
         BusinessEntity savedBusinessEntity = createNewBusiness(requestBody, existingAccountEntity);
-        BusinessResponse response = businessConverter.convertToBody(savedBusinessEntity);
-        return response;
+        return savedBusinessEntity.getId();
       } else {
         // There is a business with this name
         BusinessEntity savedBusinessEntity = updateExistingBusiness(requestBody, existingBusinessEntity.get());
-        BusinessResponse response = businessConverter.convertToBody(savedBusinessEntity);
-        return response;
+        return savedBusinessEntity.getId();
       }
     }
   }
 
-  private BusinessEntity updateExistingBusiness(BusinessRequest requestBody, BusinessEntity existingBusinessEntity) {
+  private BusinessEntity updateExistingBusiness(BusinessInput requestBody, BusinessEntity existingBusinessEntity) {
     if (valueChanged(requestBody.getBetaTester(), existingBusinessEntity.getBetaTester())) {
       existingBusinessEntity.setBetaTester(requestBody.getBetaTester());
     }
@@ -227,7 +211,7 @@ public class SignupService {
     return savedBusinessEntity;
   }
 
-  private BusinessEntity createNewBusiness(BusinessRequest requestBody, AccountEntity existingAccountEntity) {
+  private BusinessEntity createNewBusiness(BusinessInput requestBody, AccountEntity existingAccountEntity) {
     // Create a new BusinessEntity
     // Associate new business with existing account
     BusinessEntity newBusinessEntity = new BusinessEntity();
@@ -241,7 +225,7 @@ public class SignupService {
     return savedBusinessEntity;
   }
 
-  private BusinessEntity createNewBusinessAndNewAccount(BusinessRequest requestBody) {
+  private BusinessEntity createNewBusinessAndNewAccount(BusinessInput requestBody) {
     // Create a new BusinessEntity
     // Create a new AccountEntity
     RoleEntity businessRoleEntity = roleRepository.findByName("BUSINESS");

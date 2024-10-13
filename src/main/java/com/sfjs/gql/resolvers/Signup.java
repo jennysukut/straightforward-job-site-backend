@@ -7,10 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.crud.request.BusinessRequest;
-import com.sfjs.crud.request.FellowRequest;
-import com.sfjs.crud.response.FellowResponse;
-import com.sfjs.crud.svc.FellowService;
+import com.sfjs.gql.schema.BusinessInput;
+import com.sfjs.gql.schema.FellowInput;
 import com.sfjs.gql.schema.Result;
 import com.sfjs.gql.svc.SignupService;
 
@@ -20,30 +18,27 @@ import com.sfjs.gql.svc.SignupService;
 public class Signup {
 
   @Autowired
-  private FellowService fellowService;
-
-  @Autowired
   private SignupService signupService;
 
   @MutationMapping(name = "signupBusiness")
-  public Long signupBusiness(@Argument(name = "requestBody") BusinessRequest requestBody) {
-    return signupService.signupBusiness(requestBody).getId();
+  public Long signupBusiness(@Argument(name = "requestBody") BusinessInput requestBody) {
+    return signupService.signupBusiness(requestBody);
   }
 
   @MutationMapping(name = "signupFellow")
-  public Long signupFellow(@Argument(name = "requestBody") FellowRequest requestBody) {
-    return signupService.signupFellow(requestBody).getId();
+  public Long signupFellow(@Argument(name = "requestBody") FellowInput requestBody) {
+    return signupService.signupFellow(requestBody);
   }
 
   @Deprecated
   @MutationMapping(name = "signUp")
   public Result signupIndividual(@Argument(name = "name") String name, @Argument(name = "email") String email,
       @Argument(name = "betaTester") Boolean betaTester) {
-    FellowRequest fellow = new FellowRequest();
+    FellowInput fellow = new FellowInput();
     fellow.setName(name);
     fellow.setEmail(email);
     fellow.setBetaTester(betaTester);
-    FellowResponse fellowResponse = signupService.signupFellow(fellow);
+    signupService.signupFellow(fellow);
     Result result = new Result();
     result.setSuccess(true);
     result.setMessage("Success");

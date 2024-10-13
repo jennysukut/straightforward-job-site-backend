@@ -12,16 +12,15 @@ import org.springframework.data.domain.Pageable;
 import com.sfjs.conv.BaseConverter;
 import com.sfjs.crud.entity.BaseEntity;
 import com.sfjs.crud.repo.BaseRepository;
-import com.sfjs.crud.request.BaseRequest;
 import com.sfjs.crud.response.BaseResponse;
 
-public abstract class BaseService<ENTITY extends BaseEntity, REQUEST extends BaseRequest, BODY extends BaseResponse> {
+public abstract class BaseService<ENTITY extends BaseEntity, BODY extends BaseResponse> {
 
   Logger logger = Logger.getLogger(getClass().getName());
 
-  private BaseConverter<ENTITY, REQUEST, BODY> converter;
+  private BaseConverter<ENTITY, BODY> converter;
 
-  public BaseService(BaseConverter<ENTITY, REQUEST, BODY> converter) {
+  public BaseService(BaseConverter<ENTITY, BODY> converter) {
     this.converter = converter;
   }
 
@@ -29,21 +28,11 @@ public abstract class BaseService<ENTITY extends BaseEntity, REQUEST extends Bas
     return this.converter.convertToBody(entity);
   }
 
-  protected ENTITY createEntity(REQUEST body) {
-    return this.converter.convertToEntity(body);
-  }
-
   public abstract BaseRepository<ENTITY> getBaseRepository();
 
   public Boolean delete(Long id) {
     getBaseRepository().deleteById(id);
     return true;
-  }
-
-  public BODY save(REQUEST body) {
-    ENTITY entity = createEntity(body);
-    entity = getBaseRepository().save(entity);
-    return createBody(entity);
   }
 
   public BODY getById(Long id) {
