@@ -1,5 +1,6 @@
 type Query {
   currentDonations: String
+  metrics: Metrics
 }
 
 type Mutation {
@@ -9,6 +10,32 @@ type Mutation {
   signupBusiness(requestBody: BusinessInput) : ID
   acceptBusinessDonation(donation: BusinessDonationInput) : Payment
   completePayment(input: PaymentResultInput): PaymentResult
+}
+
+scalar Long
+
+type Metrics {
+  fellowMetrics: FellowMetrics
+  businessMetrics: BusinessMetrics
+  donationMetrics: DonationMetrics
+}
+
+type FellowMetrics {
+  signups: Long
+  collaborators: Long
+  betaTesters: Long
+  referralPartners: Long
+}
+
+type BusinessMetrics {
+  signups: Long
+  betaTesters: Long
+}
+
+type DonationMetrics {
+  totalDonations: String
+  fellowDonations: String
+  businessDonations: String
 }
 
 input FellowInput {
