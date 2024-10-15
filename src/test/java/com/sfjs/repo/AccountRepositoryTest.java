@@ -1,6 +1,7 @@
 package com.sfjs.repo;
 
-import com.sfjs.entity.AccountEntity;
+import com.sfjs.crud.entity.AccountEntity;
+import com.sfjs.crud.repo.AccountRepository;
 
 public class AccountRepositoryTest extends BaseRepositoryTest<AccountRepository, AccountEntity> {
 

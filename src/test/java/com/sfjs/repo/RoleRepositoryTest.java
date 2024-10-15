@@ -1,6 +1,7 @@
 package com.sfjs.repo;
 
-import com.sfjs.entity.RoleEntity;
+import com.sfjs.crud.entity.RoleEntity;
+import com.sfjs.crud.repo.RoleRepository;
 
 public class RoleRepositoryTest extends BaseRepositoryTest<RoleRepository, RoleEntity> {
 

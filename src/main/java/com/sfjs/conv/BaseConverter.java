@@ -7,33 +7,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sfjs.dto.BaseBody;
-import com.sfjs.entity.BaseEntity;
+import com.sfjs.crud.entity.BaseEntity;
+import com.sfjs.crud.response.BaseResponse;
 
-public class BaseConverter<ENTITY extends BaseEntity, BODY extends BaseBody> {
+public class BaseConverter<ENTITY extends BaseEntity, BODY extends BaseResponse> {
 
   Logger logger = Logger.getLogger(getClass().getName());
 
   static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
 
-  private Class<ENTITY> entityClass;
   private Class<BODY> bodyClass;
 
-  public BaseConverter(Class<ENTITY> entityClass, Class<BODY> bodyClass) {
-    this.entityClass = entityClass;
+  public BaseConverter(Class<BODY> bodyClass) {
     this.bodyClass = bodyClass;
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-  }
-
-  public ENTITY convertToEntity(BODY in) {
-    String json;
-    try {
-      json = mapper.writeValueAsString(in);
-      return mapper.readValue(json, entityClass);
-    } catch (JsonProcessingException jpe) {
-      throw new IllegalArgumentException(jpe);
-    }
   }
 
   public BODY convertToBody(ENTITY in) {
@@ -51,9 +39,7 @@ public class BaseConverter<ENTITY extends BaseEntity, BODY extends BaseBody> {
       return null;
     }
 
-    return Arrays.stream(enumClass.getEnumConstants())
-        .filter(e -> e.name().equalsIgnoreCase(value))
-        .findFirst()
+    return Arrays.stream(enumClass.getEnumConstants()).filter(e -> e.name().equalsIgnoreCase(value)).findFirst()
         .orElse(null);
   }
 }
