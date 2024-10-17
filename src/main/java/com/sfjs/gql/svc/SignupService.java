@@ -1,23 +1,29 @@
 package com.sfjs.gql.svc;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.crud.entity.AccountEntity;
 import com.sfjs.crud.entity.BusinessEntity;
 import com.sfjs.crud.entity.FellowEntity;
+import com.sfjs.crud.entity.ResetPasswordTokenEntity;
 import com.sfjs.crud.entity.RoleEntity;
 import com.sfjs.crud.repo.AccountRepository;
 import com.sfjs.crud.repo.BusinessRepository;
 import com.sfjs.crud.repo.FellowRepository;
+import com.sfjs.crud.repo.ResetPasswordTokenRepository;
 import com.sfjs.crud.repo.RoleRepository;
 import com.sfjs.gql.schema.BusinessInput;
 import com.sfjs.gql.schema.FellowInput;
+import com.sfjs.gql.schema.Result;
+import com.sfjs.security.TokenGenerator;
 
 import jakarta.transaction.Transactional;
 
@@ -38,6 +44,12 @@ public class SignupService {
 
   @Autowired
   BusinessRepository businessRepository;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private ResetPasswordTokenRepository resetPasswordTokenRepository;
 
   public Long signupFellow(FellowInput requestBody) {
     String email = requestBody.getEmail();
@@ -242,5 +254,76 @@ public class SignupService {
     newBusinessEntity.setEarlySignup(requestBody.getEarlySignup() != null ? requestBody.getEarlySignup() : false);
     BusinessEntity savedBusinessEntity = businessRepository.save(newBusinessEntity);
     return savedBusinessEntity;
+  }
+
+  public Result resetPassword(String email, String password, String token) {
+    Result result = new Result();
+    AccountEntity accountEntity = accountRepository.findByEmail(email);
+    if (accountEntity == null) {
+      result.setSuccess(false);
+      result.setMessage("Account not found");
+      return result;
+    }
+    Optional<ResetPasswordTokenEntity> filteredTokenEntityList = accountEntity.getTokens()
+        .stream().filter(new Predicate<ResetPasswordTokenEntity>() {
+
+          @Override
+          public boolean test(ResetPasswordTokenEntity t) {
+            logger.info("Expires at: " + t.getExpiresAt());
+            boolean isExpired = t.getExpiresAt().isBefore(LocalDateTime.now());
+            logger.info("Is used: " + t.isUsed());
+            boolean matches = passwordEncoder.matches(token, t.getToken());
+            logger.info("Matches: " + matches);
+            return matches && !t.isUsed() && !isExpired;
+          }
+        }).findAny();
+    if (filteredTokenEntityList.isEmpty()) {
+      result.setSuccess(false);
+      result.setMessage("Token not found");
+      return result;
+    }
+    ResetPasswordTokenEntity tokenEntity = filteredTokenEntityList.get();
+    accountEntity.setPassword(passwordEncoder.encode(password));
+    accountRepository.save(accountEntity);
+    tokenEntity.setUsed(true);
+    resetPasswordTokenRepository.save(tokenEntity);
+    result.setSuccess(true);
+    return result;
+  }
+
+  public Result login(String email, String password) {
+    Result result = new Result();
+    AccountEntity accountEntity = accountRepository.findByEmail(email);
+    if (accountEntity == null) {
+      result.setSuccess(false);
+      result.setMessage("Account not found");
+      return result;
+    }
+    boolean matches = passwordEncoder.matches(password,
+        accountEntity.getPassword());
+    result.setSuccess(matches);
+    return result;
+  }
+
+  public Result generateResetPasswordToken(String email) {
+    Result result = new Result();
+    AccountEntity accountEntity = accountRepository.findByEmail(email);
+    if (accountEntity == null) {
+      result.setSuccess(false);
+      result.setMessage("Account not found");
+      return result;
+    }
+    ResetPasswordTokenEntity entity = new ResetPasswordTokenEntity();
+    entity.setAccount(accountEntity);
+    String token = TokenGenerator.generateToken(16);
+    String encryptedToken = passwordEncoder.encode(token);
+    entity.setToken(encryptedToken);
+    LocalDateTime expiresAt = LocalDateTime.now().plusDays(2);
+    logger.info("Expires at: " + expiresAt);
+    entity.setExpiresAt(expiresAt);
+    entity = resetPasswordTokenRepository.save(entity);
+    result.setSuccess(true);
+    result.setMessage(token);
+    return result;
   }
 }

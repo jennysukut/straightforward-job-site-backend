@@ -44,4 +44,23 @@ public class Signup {
     result.setMessage("Success");
     return result;
   }
+
+  @MutationMapping(name = "resetPassword")
+  public Result resetPassword(@Argument(name = "email") String email,
+      @Argument(name = "password") String password,
+      @Argument(name = "token") String token) {
+    return signupService.resetPassword(email, password, token);
+  }
+
+  @MutationMapping(name = "login")
+  public Result login(@Argument(name = "email") String email,
+      @Argument(name = "password") String password) {
+    return signupService.login(email, password);
+  }
+
+  @MutationMapping(name = "generateResetPasswordToken")
+  public Result generateResetPasswordToken(
+      @Argument(name = "email") String email) {
+    return signupService.generateResetPasswordToken(email);
+  }
 }

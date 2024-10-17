@@ -10,6 +10,9 @@ type Mutation {
   signupBusiness(requestBody: BusinessInput) : ID
   acceptBusinessDonation(donation: BusinessDonationInput) : Payment
   completePayment(input: PaymentResultInput): PaymentResult
+  generateResetPasswordToken(email: String): Result
+  resetPassword(email: String, password: String, token: String): Result
+  login(email: String, password: String): Result
 }
 
 scalar Long
