@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Service
-public class AuthenticationFilter extends OncePerRequestFilter {
+public class ApiKeyFilter extends OncePerRequestFilter {
 
   @Autowired
   private AuthenticationService authenticationService;
