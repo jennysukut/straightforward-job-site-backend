@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class AuthenticationService extends OncePerRequestFilter {
+public class ApiKeyFilter extends OncePerRequestFilter {
 
   private static final String AUTH_TOKEN_HEADER_NAME = "X-API-KEY";
 
