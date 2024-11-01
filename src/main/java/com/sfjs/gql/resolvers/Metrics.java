@@ -1,5 +1,8 @@
 package com.sfjs.gql.resolvers;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -7,15 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.dto.NumericMetric;
 import com.sfjs.entity.BusinessEntity;
 import com.sfjs.entity.FellowEntity;
+import com.sfjs.entity.PaymentEntity;
+import com.sfjs.entity.PaymentStatus;
 import com.sfjs.gql.schema.BusinessMetrics;
 import com.sfjs.gql.schema.DonationMetrics;
 import com.sfjs.gql.schema.FellowMetrics;
 import com.sfjs.gql.schema.MetricsResult;
 import com.sfjs.repo.BusinessRepository;
 import com.sfjs.repo.FellowRepository;
+import com.sfjs.repo.PaymentRepository;
 import com.sfjs.svc.NumericMetricService;
 
 @RestController
@@ -31,6 +36,9 @@ public class Metrics {
 
   @Autowired
   NumericMetricService numericMetricService;
+
+  @Autowired
+  PaymentRepository paymentRepository;
 
   @QueryMapping(name = "metrics")
   public MetricsResult metrics() {
@@ -50,12 +58,25 @@ public class Metrics {
       result.setBusinessMetrics(businessMetrics);
     }
     {
+      List<PaymentEntity> payments = paymentRepository.findAll();
+      Integer fellowDonations = 0;
+      Integer businessDonations = 0;
+      BigDecimal totalDonationsAmount = BigDecimal.ZERO;
+      for (PaymentEntity payment: payments) {
+        if (payment.getStatus() == PaymentStatus.APPROVED) {
+          totalDonationsAmount = totalDonationsAmount.add(new BigDecimal(payment.getAmount()));
+          if (payment.getFellow() != null) {
+            fellowDonations++;
+          } else if (payment.getBusiness() != null) {
+            businessDonations++;
+          }
+        }
+      }
       DonationMetrics donationMetrics = new DonationMetrics();
-      NumericMetric fellowDonations = numericMetricService.findByName("CURRENT_FELLOW_DONATION");
-      donationMetrics.setFellowDonations(fellowDonations.getMetric().toString());
-      NumericMetric businessDonations = numericMetricService.findByName("CURRENT_BUSINESS_DONATION");
-      donationMetrics.setBusinessDonations(businessDonations.getMetric().toString());
-      donationMetrics.setTotalDonations(fellowDonations.getMetric().add(businessDonations.getMetric()).toString());
+      donationMetrics.setBusinessDonations(businessDonations);
+      donationMetrics.setFellowDonations(fellowDonations);
+      donationMetrics.setTotalDonations(totalDonationsAmount);
+      donationMetrics.setTotalDonationsCount(businessDonations + fellowDonations);
       result.setDonationMetrics(donationMetrics);
     }
     return result;

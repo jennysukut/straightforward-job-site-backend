@@ -33,9 +33,10 @@ type BusinessMetrics {
 }
 
 type DonationMetrics {
+  totalDonationsCount: Int
+  fellowDonations: Int
+  businessDonations: Int
   totalDonations: String
-  fellowDonations: String
-  businessDonations: String
 }
 
 input FellowInput {
