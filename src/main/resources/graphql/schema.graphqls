@@ -1,6 +1,7 @@
 type Query {
   currentDonations: String
   metrics: Metrics
+  fellows(pageNumber: Int, pageSize: Int) : [String]
 }
 
 type Mutation {
