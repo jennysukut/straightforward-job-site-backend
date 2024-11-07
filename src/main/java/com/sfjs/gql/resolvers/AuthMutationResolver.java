@@ -3,18 +3,12 @@ package com.sfjs.gql.resolvers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.gql.schema.Result;
-import com.sfjs.security.JwtTokenUtil;
-
-import jakarta.servlet.http.HttpServletResponse;
+import com.sfjs.security.AuthorizationService;
 
 @RestController
 @EnableWebMvc
@@ -22,33 +16,21 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AuthMutationResolver {
 
   @Autowired
-  private JwtTokenUtil jwtTokenUtil;
+  private AuthorizationService authorizationService;
 
-  @Autowired
-  private AuthenticationManager authenticationManager;
-
-  @Autowired
-  private HttpServletResponse response;
-  
   @MutationMapping(name = "login")
   public Result login(@Argument(name = "email") String email, @Argument(name = "password") String password) {
-    Result result = new Result();
+    return authorizationService.login(email, password);
+  }
 
-    // Create the authentication object
-    Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(email, password));
+  @MutationMapping(name = "resetPassword")
+  public Result resetPassword(@Argument(name = "email") String email, @Argument(name = "password") String password,
+      @Argument(name = "token") String token) {
+    return authorizationService.resetPassword(email, password, token);
+  }
 
-    if (authentication.isAuthenticated()) {
-      // Add the authentication object to the security context
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-      result.setSuccess(true);
-      // Generate a JWT token for future requests
-      String token = jwtTokenUtil.generateToken(email, authentication.getAuthorities());
-      response.setHeader("Authorization", "Bearer " + token);
-    } else {
-      result.setSuccess(false);
-    }
-
-    return result;
+  @MutationMapping(name = "generateResetPasswordToken")
+  public Result generateResetPasswordToken(@Argument(name = "email") String email) {
+    return authorizationService.generateResetPasswordToken(email);
   }
 }
