@@ -13,7 +13,7 @@ import com.sfjs.security.AuthorizationService;
 @RestController
 @EnableWebMvc
 @Transactional
-public class AuthMutationResolver {
+public class Authorization {
 
   @Autowired
   private AuthorizationService authorizationService;
