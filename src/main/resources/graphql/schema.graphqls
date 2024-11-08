@@ -4,7 +4,6 @@ type Query {
 }
 
 type Mutation {
-  signUp(name: String, email: String, betaTester: Boolean) : Result
   signupFellow(requestBody: FellowInput) : ID
   acceptFellowDonation(donation: FellowDonationInput) : Payment
   signupBusiness(requestBody: BusinessInput) : ID
@@ -46,6 +45,7 @@ type DonationMetrics {
 input FellowInput {
   name: String
   email: String
+  password: String
   betaTester: Boolean
   collaborator: Boolean
   message: String
@@ -67,6 +67,7 @@ type Result {
 input BusinessInput {
   business: String
   email: String
+  password: String
   earlySignup: Boolean
   betaTester: Boolean
 }

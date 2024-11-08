@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.crud.entity.AccountEntity;
@@ -38,6 +39,9 @@ public class SignupService {
 
   @Autowired
   BusinessRepository businessRepository;
+
+  @Autowired
+  PasswordEncoder passwordEncoder;
 
   public Long signupFellow(FellowInput requestBody) {
     String email = requestBody.getEmail();
@@ -145,6 +149,7 @@ public class SignupService {
     RoleEntity fellowRoleEntity = roleRepository.findByName("FELLOW");
     AccountEntity newAccountEntity = new AccountEntity();
     newAccountEntity.setEmail(requestBody.getEmail());
+    newAccountEntity.setPassword(passwordEncoder.encode(requestBody.getPassword()));
     newAccountEntity.setEnabled(true);
     newAccountEntity.setRoles(Set.of(fellowRoleEntity));
     AccountEntity savedAccountEntity = accountRepository.save(newAccountEntity);
@@ -231,6 +236,7 @@ public class SignupService {
     RoleEntity businessRoleEntity = roleRepository.findByName("BUSINESS");
     AccountEntity newAccountEntity = new AccountEntity();
     newAccountEntity.setEmail(requestBody.getEmail());
+    newAccountEntity.setPassword(passwordEncoder.encode(requestBody.getPassword()));
     newAccountEntity.setEnabled(true);
     newAccountEntity.setRoles(Set.of(businessRoleEntity));
     AccountEntity savedAccountEntity = accountRepository.save(newAccountEntity);

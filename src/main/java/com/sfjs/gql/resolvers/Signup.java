@@ -9,7 +9,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.gql.schema.BusinessInput;
 import com.sfjs.gql.schema.FellowInput;
-import com.sfjs.gql.schema.Result;
 import com.sfjs.gql.schema.Profile;
 import com.sfjs.gql.svc.SignupService;
 
@@ -29,21 +28,6 @@ public class Signup {
   @MutationMapping(name = "signupFellow")
   public Long signupFellow(@Argument(name = "requestBody") FellowInput requestBody) {
     return signupService.signupFellow(requestBody);
-  }
-
-  @Deprecated
-  @MutationMapping(name = "signUp")
-  public Result signupIndividual(@Argument(name = "name") String name, @Argument(name = "email") String email,
-      @Argument(name = "betaTester") Boolean betaTester) {
-    FellowInput fellow = new FellowInput();
-    fellow.setName(name);
-    fellow.setEmail(email);
-    fellow.setBetaTester(betaTester);
-    signupService.signupFellow(fellow);
-    Result result = new Result();
-    result.setSuccess(true);
-    result.setMessage("Success");
-    return result;
   }
 
   @MutationMapping(name = "saveProfile")
