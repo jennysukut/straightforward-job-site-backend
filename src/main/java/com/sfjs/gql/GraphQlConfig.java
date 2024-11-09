@@ -11,6 +11,6 @@ public class GraphQlConfig {
 
   @Bean
   public RuntimeWiringConfigurer runtimeWiringConfigurer() {
-    return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.GraphQLLong);
+    return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.GraphQLLong).scalar(ExtendedScalars.Url);
   }
 }

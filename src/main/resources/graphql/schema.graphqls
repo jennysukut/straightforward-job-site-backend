@@ -10,9 +10,11 @@ type Mutation {
   signupBusiness(requestBody: BusinessInput) : ID
   acceptBusinessDonation(donation: BusinessDonationInput) : Payment
   completePayment(input: PaymentResultInput): PaymentResult
+  saveProfile(requestBody: ProfileInput): Profile
 }
 
 scalar Long
+scalar Url
 
 type Metrics {
   fellowMetrics: FellowMetrics
@@ -112,4 +114,134 @@ type PaymentResult {
   message: String
   # Add any other fields you need for the result
   payment: Payment
+}
+
+input ProfileInput {
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+  smallBio: String
+  location: String
+  skills: [String]
+  jobTitles: [String]
+  experiences: [ExperienceInput]
+  education: [EducationInput]
+  awardsAndHonors: [AwardOrHonorInput]
+  experienceLevels: [ExperienceLevelInput]
+  accomplishments: [AccomplishmentInput]
+# Links:: String
+  personalWebsite: Url
+  portfolioWebsite: Url
+  socialMediaLinks: [Url]
+  otherLink: Url
+# personalDetails:: String
+  passionateAbout: String
+  lookingFor: String
+  quirksAndHobbies: String
+  documents: String
+  favoriteBookOrQuote: String
+  moreAboutYou: String
+# subscriptionDetails: SubscriptionDetails
+    # Current Subscription Amount: String
+    # Date of Subscription Renewal?: String
+# Application List: String
+    # Daily Application Counter: String
+# Messaging Information?: String
+
+}
+
+input ExperienceInput {
+  title: String
+  company: String
+  yearOrYears: String
+  details: String
+}
+
+input EducationInput {
+  degreeOrCertificate: String
+  schoolName: String
+  fieldOfStudy: String
+}
+
+input AwardOrHonorInput {
+  awardOrHonor: String
+  givenBy: String
+  criteria: String
+}
+
+input ExperienceLevelInput {
+  experienceLevel: String
+  skill: String
+  numberOfYears: String
+}
+
+input AccomplishmentInput {
+  accomplishment: String
+  details: String
+}
+
+type Profile {
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+  smallBio: String
+  location: String
+  skills: [String]
+  jobTitles: [String]
+  experiences: [Experience]
+  education: [Education]
+  awardsAndHonors: [AwardOrHonor]
+  experienceLevels: [ExperienceLevel]
+  accomplishments: [Accomplishment]
+# Links:: String
+  personalWebsite: Url
+  portfolioWebsite: Url
+  socialMediaLinks: [Url]
+  otherLink: Url
+# personalDetails:: String
+  passionateAbout: String
+  lookingFor: String
+  quirksAndHobbies: String
+  documents: String
+  favoriteBookOrQuote: String
+  moreAboutYou: String
+# subscriptionDetails: SubscriptionDetails
+    # Current Subscription Amount: String
+    # Date of Subscription Renewal?: String
+# Application List: String
+    # Daily Application Counter: String
+# Messaging Information?: String
+
+}
+
+type Experience {
+  title: String
+  company: String
+  yearOrYears: String
+  details: String
+}
+
+type Education {
+  degreeOrCertificate: String
+  schoolName: String
+  fieldOfStudy: String
+}
+
+type AwardOrHonor {
+  awardOrHonor: String
+  givenBy: String
+  criteria: String
+}
+
+type ExperienceLevel {
+  experienceLevel: String
+  skill: String
+  numberOfYears: String
+}
+
+type Accomplishment {
+  accomplishment: String
+  details: String
 }
