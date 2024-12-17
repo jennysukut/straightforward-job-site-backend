@@ -50,4 +50,10 @@ public class AccountEntity extends BaseEntity {
   @JsonIgnore
   @OneToOne(mappedBy = "account", optional = true)
   private FellowEntity fellow;
+
+  @Getter
+  @Setter
+  @JsonIgnore
+  @OneToMany(mappedBy = "account")
+  private List<ResetPasswordTokenEntity> tokens;
 }

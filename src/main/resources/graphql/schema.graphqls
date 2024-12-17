@@ -1,18 +1,23 @@
 type Query {
   currentDonations: String
   metrics: Metrics
+  fellowProfile: Profile
 }
 
 type Mutation {
-  signUp(name: String, email: String, betaTester: Boolean) : Result
   signupFellow(requestBody: FellowInput) : ID
   acceptFellowDonation(donation: FellowDonationInput) : Payment
   signupBusiness(requestBody: BusinessInput) : ID
   acceptBusinessDonation(donation: BusinessDonationInput) : Payment
   completePayment(input: PaymentResultInput): PaymentResult
+  saveProfile(requestBody: ProfileInput): Profile
+  generateResetPasswordToken(email: String): Result
+  resetPassword(email: String, password: String, token: String): Result
+  login(email: String, password: String): Result
 }
 
 scalar Long
+scalar Url
 
 type Metrics {
   fellowMetrics: FellowMetrics
@@ -41,6 +46,7 @@ type DonationMetrics {
 input FellowInput {
   name: String
   email: String
+  password: String
   betaTester: Boolean
   collaborator: Boolean
   message: String
@@ -62,6 +68,7 @@ type Result {
 input BusinessInput {
   business: String
   email: String
+  password: String
   earlySignup: Boolean
   betaTester: Boolean
 }
@@ -112,4 +119,222 @@ type PaymentResult {
   message: String
   # Add any other fields you need for the result
   payment: Payment
+}
+
+input ProfileInput {
+  __typename: String
+  objectId: ID
+  name: String
+  email: String
+  avatar: String
+  buttonShadow: String
+  colorScheme: String
+  profileIsBeingEdited: Boolean
+  shadow: String
+  smallBio: String
+  country: String
+  location: String
+  locationOptions: [String]
+  skills: [String]
+  jobTitles: [String]
+  languages: [String]
+  experience: [ExperienceInput]
+  education: [EducationInput]
+  awards: [AwardInput]
+  experienceLevels: [ExperienceLevelInput]
+  accomplishments: [AccomplishmentInput]
+  links: [LinkInput]
+#  personalWebsite: Url
+#  portfolioWebsite: Url
+#  socialMediaLinks: [Url]
+#  otherLink: Url
+# personalDetails:: String
+  passions: String
+  lookingFor: String
+  hobbies: [HobbyInput]
+  documents: String
+  bookOrQuote: [BookOrQuoteInput]
+  aboutMe: String
+  petDetails: String
+# subscriptionDetails: SubscriptionDetails
+    # Current Subscription Amount: String
+    # Date of Subscription Renewal?: String
+# Application List: String
+    # Daily Application Counter: String
+# Messaging Information?: String
+  addMoreInfo: Boolean
+}
+
+input LinkInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  link: Url
+  linkType: String
+  __typename: String
+}
+
+input BookOrQuoteInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  author: String
+  bookOrQuote: String
+  __typename: String
+}
+
+input HobbyInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  hobbyTitle: String
+  howLong: String
+  __typename: String
+}
+
+input ExperienceInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  title: String
+  companyName: String
+  yearDetails: String
+  details: String
+  __typename: String
+}
+
+input EducationInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  degree: String
+  school: String
+  fieldOfStudy: String
+  __typename: String
+}
+
+input AwardInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  awardTitle: String
+  givenBy: String
+  awardDetails: String
+  __typename: String
+}
+
+input ExperienceLevelInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  experienceLevel: String
+  expLevelSkill: String
+  skillYears: String
+  __typename: String
+}
+
+input AccomplishmentInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  accTitle: String
+  accDetails: String
+  __typename: String
+}
+
+type Profile {
+  objectId: ID
+  smallBio: String
+  country: String
+  location: String
+  locationOptions: [String]
+  skills: [String]
+  jobTitles: [String]
+  languages: [String]
+  experience: [Experience]
+  education: [Education]
+  awards: [Award]
+  experienceLevels: [ExperienceLevel]
+  accomplishments: [Accomplishment]
+  links: [Link]
+#  personalWebsite: Url
+#  portfolioWebsite: Url
+#  socialMediaLinks: [Url]
+#  otherLink: Url
+# personalDetails:: String
+  passions: String
+  lookingFor: String
+  hobbies: [Hobby]
+  documents: String
+  bookOrQuote: [BookOrQuote]
+  aboutMe: String
+  petDetails: String
+# subscriptionDetails: SubscriptionDetails
+    # Current Subscription Amount: String
+    # Date of Subscription Renewal?: String
+# Application List: String
+    # Daily Application Counter: String
+# Messaging Information?: String
+
+}
+
+type Link {
+  objectId: ID
+  link: Url
+  linkType: String
+}
+
+type BookOrQuote {
+  objectId: ID
+  author: String
+  bookOrQuote: String
+}
+
+type Hobby {
+  objectId: ID
+  hobbyTitle: String
+  howLong: String
+}
+
+type Experience {
+  objectId: ID
+  title: String
+  companyName: String
+  yearDetails: String
+  details: String
+}
+
+type Education {
+  objectId: ID
+  degree: String
+  school: String
+  fieldOfStudy: String
+}
+
+type Award {
+  objectId: ID
+  awardTitle: String
+  givenBy: String
+  awardDetails: String
+}
+
+type ExperienceLevel {
+  objectId: ID
+  experienceLevel: String
+  expLevelSkill: String
+  skillYears: String
+}
+
+type Accomplishment {
+  objectId: ID
+  accTitle: String
+  accDetails: String
 }

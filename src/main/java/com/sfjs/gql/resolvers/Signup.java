@@ -3,14 +3,18 @@ package com.sfjs.gql.resolvers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.sfjs.data.ExtendedProfileData;
 import com.sfjs.gql.schema.BusinessInput;
 import com.sfjs.gql.schema.FellowInput;
-import com.sfjs.gql.schema.Result;
 import com.sfjs.gql.svc.SignupService;
+
+import graphql.schema.DataFetchingEnvironment;
 
 @RestController
 @EnableWebMvc
@@ -30,18 +34,17 @@ public class Signup {
     return signupService.signupFellow(requestBody);
   }
 
-  @Deprecated
-  @MutationMapping(name = "signUp")
-  public Result signupIndividual(@Argument(name = "name") String name, @Argument(name = "email") String email,
-      @Argument(name = "betaTester") Boolean betaTester) {
-    FellowInput fellow = new FellowInput();
-    fellow.setName(name);
-    fellow.setEmail(email);
-    fellow.setBetaTester(betaTester);
-    signupService.signupFellow(fellow);
-    Result result = new Result();
-    result.setSuccess(true);
-    result.setMessage("Success");
-    return result;
+  @MutationMapping(name = "saveProfile")
+  @PreAuthorize("hasRole('ROLE_FELLOW')")
+  public ExtendedProfileData saveProfile(@Argument(name = "requestBody") ExtendedProfileData requestBody,
+      DataFetchingEnvironment environment) throws Exception {
+    return signupService.saveProfile(requestBody, environment);
   }
+
+  @QueryMapping(name = "fellowProfile")
+  @PreAuthorize("hasRole('ROLE_FELLOW')")
+  public ExtendedProfileData fellowProfile() {
+    return signupService.getFellowProfile();
+  }
+
 }

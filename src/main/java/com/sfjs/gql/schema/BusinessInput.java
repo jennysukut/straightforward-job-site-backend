@@ -19,6 +19,10 @@ public class BusinessInput {
 
   @Getter
   @Setter
+  String password;
+
+  @Getter
+  @Setter
   Boolean earlySignup;
 
   @Getter
