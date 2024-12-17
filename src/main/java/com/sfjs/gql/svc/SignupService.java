@@ -275,7 +275,7 @@ public class SignupService {
         return savedBusinessEntity.getId();
       } else {
         String existingBusinessName = existingBusinessEntity.getName();
-        if (existingBusinessName != null && existingBusinessName.contentEquals(requestBody.getBusiness())) {
+        if (existingBusinessName != null && existingBusinessName.contentEquals(requestBody.getBusinessName())) {
           // Same business
           BusinessEntity savedBusinessEntity = updateExistingBusiness(requestBody, existingBusinessEntity);
           return savedBusinessEntity.getId();
@@ -308,7 +308,7 @@ public class SignupService {
     // Create a new BusinessEntity
     // Associate new business with existing account
     BusinessEntity newBusinessEntity = new BusinessEntity();
-    newBusinessEntity.setName(requestBody.getBusiness());
+    newBusinessEntity.setName(requestBody.getBusinessName());
     newBusinessEntity.setAccount(existingAccountEntity);
 //    existingAccountEntity.setBusiness(newBusinessEntity);
     newBusinessEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
@@ -331,7 +331,7 @@ public class SignupService {
     newAccountEntity.setRoles(Set.of(businessRoleEntity));
     AccountEntity savedAccountEntity = accountRepository.save(newAccountEntity);
     BusinessEntity newBusinessEntity = new BusinessEntity();
-    newBusinessEntity.setName(requestBody.getBusiness());
+    newBusinessEntity.setName(requestBody.getBusinessName());
     newBusinessEntity.setAccount(savedAccountEntity);
     newBusinessEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
     newBusinessEntity.setContactName(requestBody.getContactName());
