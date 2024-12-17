@@ -10,10 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.sfjs.crud.response.NumericMetricResponse;
 import com.sfjs.crud.response.PaymentResponse;
+import com.sfjs.crud.svc.NumericMetricService;
 import com.sfjs.gql.schema.BusinessDonation;
 import com.sfjs.gql.schema.FellowDonation;
-import com.sfjs.gql.svc.DonationService;
+import com.sfjs.gql.svc.CheckoutService;
 
 import reactor.core.publisher.Mono;
 
@@ -25,22 +27,27 @@ public class Donation {
   Logger logger = Logger.getLogger(getClass().getName());
 
   @Autowired
-  DonationService service;
+  private CheckoutService checkoutService;
+
+  @Autowired
+  private NumericMetricService numericMetricService;
 
   @MutationMapping(name = "acceptBusinessDonation")
   public Mono<PaymentResponse> acceptBusinessDonation(@Argument(name = "donation") BusinessDonation donation) {
     logger.info("Donation: " + donation);
-    return service.acceptBusinessDonation(donation);
+    return checkoutService.acceptBusinessDonation(donation);
   }
 
   @MutationMapping(name = "acceptFellowDonation")
   public Mono<PaymentResponse> acceptFellowDonation(@Argument(name = "donation") FellowDonation donation) {
     logger.info("Donation: " + donation);
-    return service.acceptFellowDonation(donation);
+    return checkoutService.acceptFellowDonation(donation);
   }
 
   @QueryMapping(name = "currentDonations")
   public String currentDonations() {
-    return service.getCurrentDonations();
+    NumericMetricResponse fellowDonations = numericMetricService.findByName("CURRENT_FELLOW_DONATION");
+    NumericMetricResponse businessDonations = numericMetricService.findByName("CURRENT_BUSINESS_DONATION");
+    return fellowDonations.getMetric().add(businessDonations.getMetric()).toString();
   }
 }

@@ -11,6 +11,9 @@ type Mutation {
   acceptBusinessDonation(donation: BusinessDonationInput) : Payment
   completePayment(input: PaymentResultInput): PaymentResult
   saveProfile(requestBody: ProfileInput): Profile
+  generateResetPasswordToken(email: String): Result
+  resetPassword(email: String, password: String, token: String): Result
+  login(email: String, password: String): Result
 }
 
 scalar Long
