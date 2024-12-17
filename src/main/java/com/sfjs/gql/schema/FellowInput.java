@@ -19,6 +19,10 @@ public class FellowInput {
 
   @Getter
   @Setter
+  String password;
+
+  @Getter
+  @Setter
   Boolean betaTester;
 
   @Getter
