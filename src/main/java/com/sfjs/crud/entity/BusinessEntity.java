@@ -11,6 +11,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,4 +46,9 @@ public class BusinessEntity extends BaseEntity {
   @JsonIgnore
   @OneToMany(mappedBy = "business")
   private List<PaymentEntity> payments = new ArrayList<>();
+
+  @Getter
+  @Setter
+  @OneToOne(mappedBy = "business", optional = true)
+  private BusinessProfileEntity businessProfile;
 }
