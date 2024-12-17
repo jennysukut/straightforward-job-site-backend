@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.sfjs.gql.schema.BusinessInput;
 import com.sfjs.gql.schema.FellowInput;
 import com.sfjs.gql.schema.Result;
+import com.sfjs.gql.schema.Profile;
 import com.sfjs.gql.svc.SignupService;
 
 @RestController
@@ -45,4 +46,8 @@ public class Signup {
     return result;
   }
 
+  @MutationMapping(name = "saveProfile")
+  public Profile saveProfile(@Argument(name = "requestBody") Profile requestBody) {
+    return requestBody;
+  }
 }
