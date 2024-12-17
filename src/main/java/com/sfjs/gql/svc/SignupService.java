@@ -2,7 +2,6 @@ package com.sfjs.gql.svc;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -261,27 +260,29 @@ public class SignupService {
       BusinessEntity savedBusinessEntity = createNewBusinessAndNewAccount(requestBody);
       return savedBusinessEntity.getId();
     } else {
-      Optional<BusinessEntity> existingBusinessEntity = existingAccountEntity.getBusinesses().stream()
-          .filter(new Predicate<BusinessEntity>() {
-
-            @Override
-            public boolean test(BusinessEntity t) {
-              String tName = t.getName();
-              if (tName == null) {
-                logger.info("business entity with null name: " + t);
-                return false;
-              }
-              return t.getName().contentEquals(requestBody.getBusiness());
-            }
-          }).findFirst();
-      if (!existingBusinessEntity.isPresent()) {
-        // No Business with this name
+      // This account already exists, so make sure it's the same person
+      try {
+        authorizationService.login(requestBody.getEmail(), requestBody.getPassword());
+      } catch (Exception ex) {
+        logger.log(Level.INFO, "login", ex);
+//        throw new IllegalArgumentException("Email is unavailable");
+        throw ex;
+      }
+      BusinessEntity existingBusinessEntity = existingAccountEntity.getBusiness();
+      if (existingBusinessEntity == null) {
+        // No business
         BusinessEntity savedBusinessEntity = createNewBusiness(requestBody, existingAccountEntity);
         return savedBusinessEntity.getId();
       } else {
-        // There is a business with this name
-        BusinessEntity savedBusinessEntity = updateExistingBusiness(requestBody, existingBusinessEntity.get());
-        return savedBusinessEntity.getId();
+        String existingBusinessName = existingBusinessEntity.getName();
+        if (existingBusinessName != null && existingBusinessName.contentEquals(requestBody.getBusiness())) {
+          // Same business
+          BusinessEntity savedBusinessEntity = updateExistingBusiness(requestBody, existingBusinessEntity);
+          return savedBusinessEntity.getId();
+        } else {
+          // Different business
+          throw new IllegalArgumentException("Email is unavailable");
+        }
       }
     }
   }
