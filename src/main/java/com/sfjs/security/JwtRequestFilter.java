@@ -2,15 +2,20 @@ package com.sfjs.security;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.sfjs.crud.entity.AccountEntity;
+import com.sfjs.crud.repo.AccountRepository;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,6 +27,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
   @Autowired
   private JwtTokenUtil jwtTokenUtil;
+
+  @Autowired
+  private AccountRepository accountRepository;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -52,12 +60,16 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     // If the token is valid...
     if (isValid) {
       // get the email and authorities
-      String email = jwtTokenUtil.getSubjectFromToken(jwtToken);  
-      Collection<? extends GrantedAuthority> authorities = jwtTokenUtil.getAuthorities(jwtToken);
-      // Create the authentication object
-      UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, null, authorities);
-      token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-      SecurityContextHolder.getContext().setAuthentication(token);
+      String email = jwtTokenUtil.getSubjectFromToken(jwtToken);
+      AccountEntity accountEntity = accountRepository.findByEmail(email);
+      if (accountEntity != null) {
+        Collection<? extends GrantedAuthority> authorities = accountEntity.getRoles().stream()
+            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())).collect(Collectors.toList());
+        // Create the authentication object
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, null, authorities);
+        token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(token);
+      }
     }
 
     // Move on to next filter

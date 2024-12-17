@@ -33,6 +33,7 @@ public class SecurityConfig {
             .requestMatchers("/business/**").permitAll()
             .requestMatchers("/fellow/**").permitAll()
             .requestMatchers("/payment/**").permitAll()
+            .requestMatchers("/profile/**").permitAll()
             .anyRequest().authenticated()
             )
         .httpBasic(Customizer.withDefaults())

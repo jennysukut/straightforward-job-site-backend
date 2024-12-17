@@ -49,4 +49,9 @@ public class FellowEntity extends BaseEntity {
   @JsonIgnore
   @OneToMany(mappedBy = "fellow")
   private List<PaymentEntity> payments = new ArrayList<>();
+
+  @Getter
+  @Setter
+  @OneToOne(mappedBy = "fellow", optional = true)
+  private ExtendedProfileEntity profile;
 }

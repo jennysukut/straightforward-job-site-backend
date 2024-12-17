@@ -1,6 +1,7 @@
 type Query {
   currentDonations: String
   metrics: Metrics
+  fellowProfile: Profile
 }
 
 type Mutation {
@@ -121,96 +122,161 @@ type PaymentResult {
 }
 
 input ProfileInput {
-  firstName: String
-  lastName: String
+  __typename: String
+  objectId: ID
+  name: String
   email: String
-  password: String
+  avatar: String
+  buttonShadow: String
+  colorScheme: String
+  profileIsBeingEdited: Boolean
+  shadow: String
   smallBio: String
+  country: String
   location: String
+  locationOptions: [String]
   skills: [String]
   jobTitles: [String]
-  experiences: [ExperienceInput]
+  languages: [String]
+  experience: [ExperienceInput]
   education: [EducationInput]
-  awardsAndHonors: [AwardOrHonorInput]
+  awards: [AwardInput]
   experienceLevels: [ExperienceLevelInput]
   accomplishments: [AccomplishmentInput]
-# Links:: String
-  personalWebsite: Url
-  portfolioWebsite: Url
-  socialMediaLinks: [Url]
-  otherLink: Url
+  links: [LinkInput]
+#  personalWebsite: Url
+#  portfolioWebsite: Url
+#  socialMediaLinks: [Url]
+#  otherLink: Url
 # personalDetails:: String
-  passionateAbout: String
+  passions: String
   lookingFor: String
-  quirksAndHobbies: String
+  hobbies: [HobbyInput]
   documents: String
-  favoriteBookOrQuote: String
-  moreAboutYou: String
+  bookOrQuote: [BookOrQuoteInput]
+  aboutMe: String
+  petDetails: String
 # subscriptionDetails: SubscriptionDetails
     # Current Subscription Amount: String
     # Date of Subscription Renewal?: String
 # Application List: String
     # Daily Application Counter: String
 # Messaging Information?: String
+  addMoreInfo: Boolean
+}
 
+input LinkInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  link: Url
+  linkType: String
+  __typename: String
+}
+
+input BookOrQuoteInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  author: String
+  bookOrQuote: String
+  __typename: String
+}
+
+input HobbyInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  hobbyTitle: String
+  howLong: String
+  __typename: String
 }
 
 input ExperienceInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
   title: String
-  company: String
-  yearOrYears: String
+  companyName: String
+  yearDetails: String
   details: String
+  __typename: String
 }
 
 input EducationInput {
-  degreeOrCertificate: String
-  schoolName: String
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  degree: String
+  school: String
   fieldOfStudy: String
+  __typename: String
 }
 
-input AwardOrHonorInput {
-  awardOrHonor: String
+input AwardInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  awardTitle: String
   givenBy: String
-  criteria: String
+  awardDetails: String
+  __typename: String
 }
 
 input ExperienceLevelInput {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
   experienceLevel: String
-  skill: String
-  numberOfYears: String
+  expLevelSkill: String
+  skillYears: String
+  __typename: String
 }
 
 input AccomplishmentInput {
-  accomplishment: String
-  details: String
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  accTitle: String
+  accDetails: String
+  __typename: String
 }
 
 type Profile {
-  firstName: String
-  lastName: String
-  email: String
-  password: String
+  objectId: ID
   smallBio: String
+  country: String
   location: String
+  locationOptions: [String]
   skills: [String]
   jobTitles: [String]
-  experiences: [Experience]
+  languages: [String]
+  experience: [Experience]
   education: [Education]
-  awardsAndHonors: [AwardOrHonor]
+  awards: [Award]
   experienceLevels: [ExperienceLevel]
   accomplishments: [Accomplishment]
-# Links:: String
-  personalWebsite: Url
-  portfolioWebsite: Url
-  socialMediaLinks: [Url]
-  otherLink: Url
+  links: [Link]
+#  personalWebsite: Url
+#  portfolioWebsite: Url
+#  socialMediaLinks: [Url]
+#  otherLink: Url
 # personalDetails:: String
-  passionateAbout: String
+  passions: String
   lookingFor: String
-  quirksAndHobbies: String
+  hobbies: [Hobby]
   documents: String
-  favoriteBookOrQuote: String
-  moreAboutYou: String
+  bookOrQuote: [BookOrQuote]
+  aboutMe: String
+  petDetails: String
 # subscriptionDetails: SubscriptionDetails
     # Current Subscription Amount: String
     # Date of Subscription Renewal?: String
@@ -220,32 +286,55 @@ type Profile {
 
 }
 
+type Link {
+  objectId: ID
+  link: Url
+  linkType: String
+}
+
+type BookOrQuote {
+  objectId: ID
+  author: String
+  bookOrQuote: String
+}
+
+type Hobby {
+  objectId: ID
+  hobbyTitle: String
+  howLong: String
+}
+
 type Experience {
+  objectId: ID
   title: String
-  company: String
-  yearOrYears: String
+  companyName: String
+  yearDetails: String
   details: String
 }
 
 type Education {
-  degreeOrCertificate: String
-  schoolName: String
+  objectId: ID
+  degree: String
+  school: String
   fieldOfStudy: String
 }
 
-type AwardOrHonor {
-  awardOrHonor: String
+type Award {
+  objectId: ID
+  awardTitle: String
   givenBy: String
-  criteria: String
+  awardDetails: String
 }
 
 type ExperienceLevel {
+  objectId: ID
   experienceLevel: String
-  skill: String
-  numberOfYears: String
+  expLevelSkill: String
+  skillYears: String
 }
 
 type Accomplishment {
-  accomplishment: String
-  details: String
+  objectId: ID
+  accTitle: String
+  accDetails: String
 }

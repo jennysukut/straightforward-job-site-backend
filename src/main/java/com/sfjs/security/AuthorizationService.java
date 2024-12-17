@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -85,8 +86,14 @@ public class AuthorizationService {
     Result result = new Result();
 
     // Create the authentication object
-    Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(email, password));
+    Authentication authentication = authenticationManager
+        .authenticate(new UsernamePasswordAuthenticationToken(email, password));
+    logger.info("Authentication object: " + authentication.getClass().getName());
+    Object principal = authentication.getPrincipal();
+    if (principal instanceof UserDetails) {
+      UserDetails userDetails = (UserDetails) principal;
+      logger.info("Authentication principal username: " + userDetails.getUsername());
+    }
 
     if (authentication.isAuthenticated()) {
       // Add the authentication object to the security context
@@ -98,7 +105,6 @@ public class AuthorizationService {
     } else {
       result.setSuccess(false);
     }
-
     return result;
   }
 
@@ -122,5 +128,18 @@ public class AuthorizationService {
     result.setSuccess(true);
     result.setMessage(token);
     return result;
+  }
+
+  public AccountEntity getAccount() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    logger.info("getAccount: " + authentication);
+    Object principal = authentication.getPrincipal();
+    logger.info("getAccount: principal: " + principal);
+    if (principal instanceof String) {
+      String email = principal.toString();
+      logger.info("getAccount: email: " + email);
+      return accountRepository.findByEmail(email);
+    }
+    return null;
   }
 }
