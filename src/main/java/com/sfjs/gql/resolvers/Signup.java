@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.sfjs.data.BusinessProfileData;
 import com.sfjs.data.ExtendedProfileData;
 import com.sfjs.gql.schema.BusinessInput;
 import com.sfjs.gql.schema.FellowInput;
@@ -45,6 +46,13 @@ public class Signup {
   @PreAuthorize("hasRole('ROLE_FELLOW')")
   public ExtendedProfileData fellowProfile() {
     return signupService.getFellowProfile();
+  }
+
+  @MutationMapping(name = "saveBusinessProfile")
+  @PreAuthorize("hasRole('ROLE_BUSINESS')")
+  public BusinessProfileData saveBusinessProfile(@Argument(name = "requestBody") BusinessProfileData requestBody,
+      DataFetchingEnvironment environment) throws Exception {
+    return signupService.saveBusinessProfile(requestBody, environment);
   }
 
 }

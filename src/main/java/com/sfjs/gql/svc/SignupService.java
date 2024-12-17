@@ -19,6 +19,7 @@ import com.sfjs.crud.entity.AwardEntity;
 import com.sfjs.crud.entity.BaseEntity;
 import com.sfjs.crud.entity.BookOrQuoteEntity;
 import com.sfjs.crud.entity.BusinessEntity;
+import com.sfjs.crud.entity.BusinessProfileEntity;
 import com.sfjs.crud.entity.EducationEntity;
 import com.sfjs.crud.entity.ExperienceEntity;
 import com.sfjs.crud.entity.ExperienceLevelEntity;
@@ -32,6 +33,7 @@ import com.sfjs.crud.repo.AccountRepository;
 import com.sfjs.crud.repo.AwardRepository;
 import com.sfjs.crud.repo.BaseRepository;
 import com.sfjs.crud.repo.BookOrQuoteRepository;
+import com.sfjs.crud.repo.BusinessProfileRepository;
 import com.sfjs.crud.repo.BusinessRepository;
 import com.sfjs.crud.repo.EducationRepository;
 import com.sfjs.crud.repo.ExperienceLevelRepository;
@@ -45,6 +47,7 @@ import com.sfjs.data.AccomplishmentData;
 import com.sfjs.data.AwardData;
 import com.sfjs.data.BaseProfileData;
 import com.sfjs.data.BookOrQuoteData;
+import com.sfjs.data.BusinessProfileData;
 import com.sfjs.data.EducationData;
 import com.sfjs.data.ExperienceData;
 import com.sfjs.data.ExperienceLevelData;
@@ -91,6 +94,9 @@ public class SignupService {
 
   @Autowired
   private ProfileRepository profileRepository;
+
+  @Autowired
+  private BusinessProfileRepository businessProfileRepository;
 
   @Autowired
   private AwardRepository awardRepository;
@@ -528,6 +534,40 @@ public class SignupService {
     out.setAboutMe(in.getAboutMe());
     out.setLocationOptions(in.getLocationOptions());
     out.setLanguages(in.getLanguages());
+  }
+
+  public BusinessProfileData saveBusinessProfile(BusinessProfileData requestBody, DataFetchingEnvironment environment) throws Exception {
+    AccountEntity accountEntity = authorizationService.getAccount();
+    BusinessEntity businessEntity = accountEntity.getBusiness();
+    BusinessProfileEntity profileEntity = businessEntity.getBusinessProfile();
+
+    if (profileEntity == null) {
+      profileEntity = new BusinessProfileEntity();
+      profileEntity.setBusiness(businessEntity);
+    }
+
+    convertBusinessProfile(requestBody, profileEntity);
+    profileEntity = businessProfileRepository.save(profileEntity);
+    BusinessProfileData businessProfileData = new BusinessProfileData();
+    String json = mapper.writeValueAsString(profileEntity);
+    logger.info("Business profile entity: " + json);
+    convertBusinessProfile(profileEntity, businessProfileData);
+    json = mapper.writeValueAsString(businessProfileData);
+    logger.info("Business profile data: " + json);
+    return businessProfileData;
+  }
+
+  private void convertBusinessProfile(BusinessProfileData in, BusinessProfileData out) {
+    out.setObjectId(in.getObjectId());
+    out.setSmallBio(in.getSmallBio());
+    out.setCountry(in.getCountry());
+    out.setLocation(in.getLocation());
+    out.setWebsite(in.getWebsite());
+    out.setBusinessField(in.getBusinessField());
+    out.setMissionVision(in.getMissionVision());
+    out.setMoreAboutBusiness(in.getMoreAboutBusiness());
+    out.setBillingDetails(in.getBillingDetails());
+    out.setAmountDue(in.getAmountDue());
   }
 
 }

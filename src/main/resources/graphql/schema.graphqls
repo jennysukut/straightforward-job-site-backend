@@ -14,6 +14,7 @@ type Mutation {
   generateResetPasswordToken(email: String): Result
   resetPassword(email: String, password: String, token: String): Result
   login(email: String, password: String): Result
+  saveBusinessProfile(requestBody: BusinessProfileInput): BusinessProfile
 }
 
 scalar Long
@@ -337,4 +338,28 @@ type Accomplishment {
   objectId: ID
   accTitle: String
   accDetails: String
+}
+
+input BusinessProfileInput {
+  smallBio String
+  country String
+  location String
+  website Url
+  businessField String
+  missionVision String
+  moreAboutBusiness String
+  billingDetails String
+  amountDue String
+}
+
+type BusinessProfile {
+  smallBio String
+  country String
+  location String
+  website Url
+  businessField String
+  missionVision String
+  moreAboutBusiness String
+  billingDetails String
+  amountDue String
 }
