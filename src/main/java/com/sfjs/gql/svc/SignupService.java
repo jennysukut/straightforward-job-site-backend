@@ -321,6 +321,7 @@ public class SignupService {
     newBusinessEntity.setContactName(requestBody.getContactName());
     newBusinessEntity.setEarlySignup(requestBody.getEarlySignup() != null ? requestBody.getEarlySignup() : false);
     BusinessEntity savedBusinessEntity = businessRepository.save(newBusinessEntity);
+    authorizationService.login(requestBody.getEmail(), requestBody.getPassword());
     return savedBusinessEntity;
   }
 
