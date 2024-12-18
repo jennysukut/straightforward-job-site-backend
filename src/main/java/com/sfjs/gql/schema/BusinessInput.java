@@ -11,7 +11,7 @@ public class BusinessInput {
 
   @Getter
   @Setter
-  String business;
+  String businessName;
 
   @Getter
   @Setter

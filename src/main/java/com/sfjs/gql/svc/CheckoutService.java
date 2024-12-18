@@ -77,7 +77,7 @@ public class CheckoutService {
 
     logger.info("Implicit business signup");
     BusinessInput business = new BusinessInput();
-    business.setBusiness(donation.getBusinessName());
+    business.setBusinessName(donation.getBusinessName());
     business.setEmail(donation.getEmail());
     business.setContactName(donation.getContactName());
     business.setReferral(donation.getReferral());

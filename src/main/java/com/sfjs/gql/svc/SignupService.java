@@ -2,7 +2,6 @@ package com.sfjs.gql.svc;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -20,6 +19,7 @@ import com.sfjs.crud.entity.AwardEntity;
 import com.sfjs.crud.entity.BaseEntity;
 import com.sfjs.crud.entity.BookOrQuoteEntity;
 import com.sfjs.crud.entity.BusinessEntity;
+import com.sfjs.crud.entity.BusinessProfileEntity;
 import com.sfjs.crud.entity.EducationEntity;
 import com.sfjs.crud.entity.ExperienceEntity;
 import com.sfjs.crud.entity.ExperienceLevelEntity;
@@ -33,6 +33,7 @@ import com.sfjs.crud.repo.AccountRepository;
 import com.sfjs.crud.repo.AwardRepository;
 import com.sfjs.crud.repo.BaseRepository;
 import com.sfjs.crud.repo.BookOrQuoteRepository;
+import com.sfjs.crud.repo.BusinessProfileRepository;
 import com.sfjs.crud.repo.BusinessRepository;
 import com.sfjs.crud.repo.EducationRepository;
 import com.sfjs.crud.repo.ExperienceLevelRepository;
@@ -46,6 +47,7 @@ import com.sfjs.data.AccomplishmentData;
 import com.sfjs.data.AwardData;
 import com.sfjs.data.BaseProfileData;
 import com.sfjs.data.BookOrQuoteData;
+import com.sfjs.data.BusinessProfileData;
 import com.sfjs.data.EducationData;
 import com.sfjs.data.ExperienceData;
 import com.sfjs.data.ExperienceLevelData;
@@ -92,6 +94,9 @@ public class SignupService {
 
   @Autowired
   private ProfileRepository profileRepository;
+
+  @Autowired
+  private BusinessProfileRepository businessProfileRepository;
 
   @Autowired
   private AwardRepository awardRepository;
@@ -261,27 +266,29 @@ public class SignupService {
       BusinessEntity savedBusinessEntity = createNewBusinessAndNewAccount(requestBody);
       return savedBusinessEntity.getId();
     } else {
-      Optional<BusinessEntity> existingBusinessEntity = existingAccountEntity.getBusinesses().stream()
-          .filter(new Predicate<BusinessEntity>() {
-
-            @Override
-            public boolean test(BusinessEntity t) {
-              String tName = t.getName();
-              if (tName == null) {
-                logger.info("business entity with null name: " + t);
-                return false;
-              }
-              return t.getName().contentEquals(requestBody.getBusiness());
-            }
-          }).findFirst();
-      if (!existingBusinessEntity.isPresent()) {
-        // No Business with this name
+      // This account already exists, so make sure it's the same person
+      try {
+        authorizationService.login(requestBody.getEmail(), requestBody.getPassword());
+      } catch (Exception ex) {
+        logger.log(Level.INFO, "login", ex);
+//        throw new IllegalArgumentException("Email is unavailable");
+        throw ex;
+      }
+      BusinessEntity existingBusinessEntity = existingAccountEntity.getBusiness();
+      if (existingBusinessEntity == null) {
+        // No business
         BusinessEntity savedBusinessEntity = createNewBusiness(requestBody, existingAccountEntity);
         return savedBusinessEntity.getId();
       } else {
-        // There is a business with this name
-        BusinessEntity savedBusinessEntity = updateExistingBusiness(requestBody, existingBusinessEntity.get());
-        return savedBusinessEntity.getId();
+        String existingBusinessName = existingBusinessEntity.getName();
+        if (existingBusinessName != null && existingBusinessName.contentEquals(requestBody.getBusinessName())) {
+          // Same business
+          BusinessEntity savedBusinessEntity = updateExistingBusiness(requestBody, existingBusinessEntity);
+          return savedBusinessEntity.getId();
+        } else {
+          // Different business
+          throw new IllegalArgumentException("Email is unavailable");
+        }
       }
     }
   }
@@ -307,7 +314,7 @@ public class SignupService {
     // Create a new BusinessEntity
     // Associate new business with existing account
     BusinessEntity newBusinessEntity = new BusinessEntity();
-    newBusinessEntity.setName(requestBody.getBusiness());
+    newBusinessEntity.setName(requestBody.getBusinessName());
     newBusinessEntity.setAccount(existingAccountEntity);
 //    existingAccountEntity.setBusiness(newBusinessEntity);
     newBusinessEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
@@ -330,12 +337,13 @@ public class SignupService {
     newAccountEntity.setRoles(Set.of(businessRoleEntity));
     AccountEntity savedAccountEntity = accountRepository.save(newAccountEntity);
     BusinessEntity newBusinessEntity = new BusinessEntity();
-    newBusinessEntity.setName(requestBody.getBusiness());
+    newBusinessEntity.setName(requestBody.getBusinessName());
     newBusinessEntity.setAccount(savedAccountEntity);
     newBusinessEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
     newBusinessEntity.setContactName(requestBody.getContactName());
     newBusinessEntity.setEarlySignup(requestBody.getEarlySignup() != null ? requestBody.getEarlySignup() : false);
     BusinessEntity savedBusinessEntity = businessRepository.save(newBusinessEntity);
+    authorizationService.login(requestBody.getEmail(), requestBody.getPassword());
     return savedBusinessEntity;
   }
 
@@ -527,6 +535,40 @@ public class SignupService {
     out.setAboutMe(in.getAboutMe());
     out.setLocationOptions(in.getLocationOptions());
     out.setLanguages(in.getLanguages());
+  }
+
+  public BusinessProfileData saveBusinessProfile(BusinessProfileData requestBody, DataFetchingEnvironment environment) throws Exception {
+    AccountEntity accountEntity = authorizationService.getAccount();
+    BusinessEntity businessEntity = accountEntity.getBusiness();
+    BusinessProfileEntity profileEntity = businessEntity.getBusinessProfile();
+
+    if (profileEntity == null) {
+      profileEntity = new BusinessProfileEntity();
+      profileEntity.setBusiness(businessEntity);
+    }
+
+    convertBusinessProfile(requestBody, profileEntity);
+    profileEntity = businessProfileRepository.save(profileEntity);
+    BusinessProfileData businessProfileData = new BusinessProfileData();
+    String json = mapper.writeValueAsString(profileEntity);
+    logger.info("Business profile entity: " + json);
+    convertBusinessProfile(profileEntity, businessProfileData);
+    json = mapper.writeValueAsString(businessProfileData);
+    logger.info("Business profile data: " + json);
+    return businessProfileData;
+  }
+
+  private void convertBusinessProfile(BusinessProfileData in, BusinessProfileData out) {
+    out.setObjectId(in.getObjectId());
+    out.setSmallBio(in.getSmallBio());
+    out.setCountry(in.getCountry());
+    out.setLocation(in.getLocation());
+    out.setWebsite(in.getWebsite());
+    out.setBusinessField(in.getBusinessField());
+    out.setMissionVision(in.getMissionVision());
+    out.setMoreAboutBusiness(in.getMoreAboutBusiness());
+    out.setBillingDetails(in.getBillingDetails());
+    out.setAmountDue(in.getAmountDue());
   }
 
 }

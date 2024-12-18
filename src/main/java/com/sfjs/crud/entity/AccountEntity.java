@@ -42,8 +42,8 @@ public class AccountEntity extends BaseEntity {
   @Getter
   @Setter
   @JsonIgnore
-  @OneToMany(mappedBy = "account")
-  private List<BusinessEntity> businesses;
+  @OneToOne(mappedBy = "account")
+  private BusinessEntity business;
 
   @Getter
   @Setter
