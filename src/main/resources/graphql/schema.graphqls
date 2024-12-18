@@ -341,25 +341,25 @@ type Accomplishment {
 }
 
 input BusinessProfileInput {
-  smallBio String
-  country String
-  location String
-  website Url
-  businessField String
-  missionVision String
-  moreAboutBusiness String
-  billingDetails String
-  amountDue String
+  smallBio: String
+  country: String
+  location: String
+  website: Url
+  businessField: String
+  missionVision: String
+  moreAboutBusiness: String
+  billingDetails: String
+  amountDue: String
 }
 
 type BusinessProfile {
-  smallBio String
-  country String
-  location String
-  website Url
-  businessField String
-  missionVision String
-  moreAboutBusiness String
-  billingDetails String
-  amountDue String
+  smallBio: String
+  country: String
+  location: String
+  website: Url
+  businessField: String
+  missionVision: String
+  moreAboutBusiness: String
+  billingDetails: String
+  amountDue: String
 }
