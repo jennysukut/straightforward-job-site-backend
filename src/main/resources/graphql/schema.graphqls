@@ -49,46 +49,46 @@ input JobListingInput {
   jobId : String
   jobTitle : String
   businessName : String
-  applicationLimit : String,
-  numberOfApps : String,
-  positionType : String,
-  positionSummary : String,
-  nonNegParams : [String],
-  locationOption : String,
-  payDetails : PayDetailsInput,
-  hybridDetails : HybridDetailsInput,
-  experienceLevel : [String],
-  preferredSkills : [String],
-  moreAboutPosition : String,
-  responsibilities : [ResponsibilityInput],
-  perks : [String],
-  interviewProcess : [InterviewProcessInput],
-  location : String,
-  country : String,
+  applicationLimit : String
+  numberOfApps : String
+  positionType : String
+  positionSummary : String
+  nonNegParams : [String]
+  locationOption : String
+  payDetails : PayDetailsInput
+  hybridDetails : HybridDetailsInput
+  experienceLevel : [String]
+  preferredSkills : [String]
+  moreAboutPosition : String
+  responsibilities : [ResponsibilityInput]
+  perks : [String]
+  interviewProcess : [InterviewProcessInput]
+  location : String
+  country : String
   jobIsBeingEdited : Boolean
   roundNumber : String
 }
 
 input PayDetailsInput {
-  payScaleMin: Float,
-  payScaleMax: Float,
-  payOption: String,
+  payScaleMin: Float
+  payScaleMax: Float
+  payOption: String
 }
 
 input HybridDetailsInput {
-  daysInOffice: String,
+  daysInOffice: String
   daysRemote: String
 }
 
 input ResponsibilityInput {
-  id: ID,
+  id: ID
   responsibility: String
 }
 
 input InterviewProcessInput {
-  stage: String,
-  step: String,
-  details: String,
+  stage: String
+  step: String
+  details: String
   id: ID
 }
 
@@ -96,46 +96,46 @@ type JobListing {
   jobId : String
   jobTitle : String
   businessName : String
-  applicationLimit : String,
-  numberOfApps : String,
-  positionType : String,
-  positionSummary : String,
-  nonNegParams : [String],
-  locationOption : String,
-  payDetails : PayDetails,
-  hybridDetails : HybridDetails,
-  experienceLevel : [String],
-  preferredSkills : [String],
-  moreAboutPosition : String,
-  responsibilities : [Responsibility],
-  perks : [String],
-  interviewProcess : [InterviewProcess],
-  location : String,
-  country : String,
+  applicationLimit : String
+  numberOfApps : String
+  positionType : String
+  positionSummary : String
+  nonNegParams : [String]
+  locationOption : String
+  payDetails : PayDetails
+  hybridDetails : HybridDetails
+  experienceLevel : [String]
+  preferredSkills : [String]
+  moreAboutPosition : String
+  responsibilities : [Responsibility]
+  perks : [String]
+  interviewProcess : [InterviewProcess]
+  location : String
+  country : String
   jobIsBeingEdited : Boolean
   roundNumber : String
 }
 
 type PayDetails {
-  payScaleMin: Float,
-  payScaleMax: Float,
-  payOption: String,
+  payScaleMin: Float
+  payScaleMax: Float
+  payOption: String
 }
 
 type HybridDetails {
-  daysInOffice: String,
+  daysInOffice: String
   daysRemote: String
 }
 
 type Responsibility {
-  id: ID,
+  id: ID
   responsibility: String
 }
 
 type InterviewProcess {
-  stage: String,
-  step: String,
-  details: String,
+  stage: String
+  step: String
+  details: String
   id: ID
 }
 
