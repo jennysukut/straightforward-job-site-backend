@@ -2,15 +2,24 @@ package com.sfjs.gql.svc;
 
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sfjs.crud.entity.AccountEntity;
+import com.sfjs.crud.entity.BaseEntity;
 import com.sfjs.crud.entity.BusinessEntity;
 import com.sfjs.crud.entity.JobListingEntity;
+import com.sfjs.crud.entity.InterviewProcessEntity;
+import com.sfjs.crud.repo.BaseRepository;
+import com.sfjs.crud.repo.InterviewProcessRepository;
 import com.sfjs.crud.repo.JobListingRepository;
 import com.sfjs.data.JobListingData;
+import com.sfjs.data.JobListingElementData;
 import com.sfjs.security.AuthorizationService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -28,6 +37,16 @@ public class JobListingService {
   @Autowired
   private JobListingRepository jobListingRepository;
 
+  @Autowired
+  private InterviewProcessRepository interviewProcessRepository;
+
+  static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
+
+  static {
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+  }
+
   public JobListingData saveJobListing(JobListingData requestBody, DataFetchingEnvironment environment) throws Exception {
     if (requestBody.getJobNumber() != null) {
       Optional<JobListingEntity> opt = jobListingRepository.findById(requestBody.getJobNumber());
@@ -36,10 +55,10 @@ public class JobListingService {
         JobListingEntity entity = opt.get();
         assignFields(requestBody, entity);
         entity = jobListingRepository.save(entity);
-        JobListingData data = new JobListingData();
-        assignFields(entity, data);
-        data.setJobNumber(entity.getId());
-        return data;
+//        BaseJobListingData data = new BaseJobListingData();
+//        assignFields(entity, data);
+        requestBody.setJobNumber(entity.getId());
+        return requestBody;
       } else {
         // Existing entity not found
         throw new IllegalArgumentException("Job listing is not found: " + requestBody.getJobNumber());
@@ -52,14 +71,15 @@ public class JobListingService {
     entity.setBusiness(businessEntity);
     assignFields(requestBody, entity);
     entity = jobListingRepository.save(entity);
-    JobListingData data = new JobListingData();
-    assignFields(entity, data);
-    data.setJobNumber(entity.getId());
-    data.setBusinessName(businessEntity.getName());
-    return data;
+//    BaseJobListingData data = new BaseJobListingData();
+//    assignFields(entity, data);
+    requestBody.setJobNumber(entity.getId());
+    requestBody.setBusinessName(businessEntity.getName());
+    return requestBody;
   }
 
-  private void assignFields(JobListingData in, JobListingData out) {
+  private void assignFields(JobListingData in, JobListingEntity out) {
+    // base fields
     out.setApplicationLimit(in.getApplicationLimit());
     out.setCountry(in.getCountry());
     out.setIdealCandidate(in.getIdealCandidate());
@@ -72,5 +92,41 @@ public class JobListingService {
     out.setPositionSummary(in.getPositionSummary());
     out.setPositionType(in.getPositionType());
     out.setPreferredSkills(in.getPreferredSkills());
+    // extended fields
+    // flatten pay details
+    out.setPayOption(in.getPayDetails().getPayOption());
+    out.setPayScaleMax(in.getPayDetails().getPayScaleMax());
+    out.setPayScaleMin(in.getPayDetails().getPayScaleMin());
+    // flatten hybrid details
+    out.setDaysInOffice(in.getHybridDetails().getDaysInOffice());
+    out.setDaysRemote(in.getHybridDetails().getDaysRemote());
+    // interview process
+    if (in.getInterviewProcess() != null) {
+      out.setInterviewProcess(in.getInterviewProcess().stream().map(data -> {
+        InterviewProcessEntity e = this.convertJobListingElementData(data, InterviewProcessEntity.class, interviewProcessRepository);
+        e.setJobListing(out);
+        interviewProcessRepository.save(e);
+        return e;
+      }).collect(Collectors.toList()));
+    }
   }
+
+  private <E extends BaseEntity, D extends JobListingElementData>
+  E convertJobListingElementData(D data, Class<E> entityType,
+    BaseRepository<E> repository) {
+  try {
+    String json = mapper.writeValueAsString(data);
+    E e = mapper.readValue(json, entityType);
+    e.setId(data.getObjectId());
+    if (e.getId() != null) {
+      Optional<E> opt = repository.findById(e.getId());
+      if (opt.isPresent()) {
+        return opt.get();
+      }
+    }
+    return repository.save(e);
+  } catch (Exception ex) {
+    return (E)null;
+  }
+}
 }

@@ -60,7 +60,7 @@ input JobListingInput {
   experienceLevel : [String]
   preferredSkills : [String]
   moreAboutPosition : String
-  responsibilities : [ResponsibilityInput]
+  responsibilities : [String]
   perks : [String]
   interviewProcess : [InterviewProcessInput]
   location : String
@@ -78,11 +78,6 @@ input PayDetailsInput {
 input HybridDetailsInput {
   daysInOffice: String
   daysRemote: String
-}
-
-input ResponsibilityInput {
-  id: ID
-  responsibility: String
 }
 
 input InterviewProcessInput {
@@ -107,7 +102,7 @@ type JobListing {
   experienceLevel : [String]
   preferredSkills : [String]
   moreAboutPosition : String
-  responsibilities : [Responsibility]
+  responsibilities : [String]
   perks : [String]
   interviewProcess : [InterviewProcess]
   location : String
@@ -125,11 +120,6 @@ type PayDetails {
 type HybridDetails {
   daysInOffice: String
   daysRemote: String
-}
-
-type Responsibility {
-  id: ID
-  responsibility: String
 }
 
 type InterviewProcess {
