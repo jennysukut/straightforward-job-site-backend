@@ -54,4 +54,10 @@ public class FellowEntity extends BaseEntity {
   @Setter
   @OneToOne(mappedBy = "fellow", optional = true)
   private ExtendedProfileEntity profile;
+
+  @Getter
+  @Setter
+  @JsonIgnore
+  @OneToMany(mappedBy = "fellow")
+  private List<JobApplicationEntity> jobApplications = new ArrayList<>();
 }

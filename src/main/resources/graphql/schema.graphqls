@@ -16,6 +16,7 @@ type Mutation {
   resetPassword(email: String, password: String, token: String): Result
   login(email: String, password: String): Result
   saveBusinessProfile(requestBody: BusinessProfileInput): BusinessProfile
+  saveJobApplication(requestBody: JobApplicationInput): JobApplication
 }
 
 scalar Long
@@ -447,4 +448,32 @@ type BusinessProfile {
   moreAboutBusiness: String
   billingDetails: String
   amountDue: String
+}
+
+input JobApplicationInput {
+  message: String
+  jobListingId: ID
+}
+
+type JobApplication {
+  message: String
+  applicant: ID
+  jobListingId: ID
+  business: String
+  businessId: ID
+  dateOfApp: String
+  appStatus: String
+  businessNote: [String]
+  fellowNote: [String]
+  appointments: [InterviewAppointment]
+}
+
+type InterviewAppointment {
+  # The frontend has its own id that the backend ignores
+  id: ID
+  # The backend has its id that only the backend knows about
+  objectId: ID
+  interviewStep: String
+  interviewDateAndTime: String
+  note: String
 }
