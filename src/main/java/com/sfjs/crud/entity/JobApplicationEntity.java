@@ -21,6 +21,14 @@ import lombok.Setter;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class JobApplicationEntity extends BaseJobApplicationData {
 
+  // businessNote: [String]
+  // fellowNote: [String]
+  @Getter
+  @Setter
+  @JsonIgnore
+  @OneToMany(mappedBy = "application")
+  private List<JobApplicationNoteEntity> notes;
+
   @Getter
   @Setter
   @OneToOne(optional = true)

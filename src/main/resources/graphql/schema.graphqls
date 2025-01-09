@@ -17,6 +17,7 @@ type Mutation {
   login(email: String, password: String): Result
   saveBusinessProfile(requestBody: BusinessProfileInput): BusinessProfile
   saveJobApplication(requestBody: JobApplicationInput): JobApplication
+  saveJobApplicationNote(jobApplicationId: ID, requestBody: JobApplicationNoteInput): ID
 }
 
 scalar Long
@@ -476,4 +477,10 @@ type InterviewAppointment {
   interviewStep: String
   interviewDateAndTime: String
   note: String
+}
+
+input JobApplicationNoteInput {
+  text: String
+  businessNote: Boolean
+  fellowNote: Boolean
 }

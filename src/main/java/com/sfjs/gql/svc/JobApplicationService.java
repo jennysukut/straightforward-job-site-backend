@@ -14,10 +14,13 @@ import com.sfjs.crud.entity.AccountEntity;
 import com.sfjs.crud.entity.BusinessEntity;
 import com.sfjs.crud.entity.FellowEntity;
 import com.sfjs.crud.entity.JobApplicationEntity;
+import com.sfjs.crud.entity.JobApplicationNoteEntity;
 import com.sfjs.crud.entity.JobListingEntity;
+import com.sfjs.crud.repo.JobApplicationNoteRepository;
 import com.sfjs.crud.repo.JobApplicationRepository;
 import com.sfjs.crud.repo.JobListingRepository;
 import com.sfjs.data.JobApplicationData;
+import com.sfjs.data.JobApplicationNoteData;
 import com.sfjs.security.AuthorizationService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -37,6 +40,9 @@ public class JobApplicationService {
 
   @Autowired
   private JobApplicationRepository jobApplicationRepository;
+
+  @Autowired
+  private JobApplicationNoteRepository jobApplicationNoteRepository;
 
   static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
 
@@ -75,6 +81,24 @@ public class JobApplicationService {
     } else {
       // Existing entity not found
       throw new IllegalArgumentException("Job listing is not found: " + requestBody.getJobListingId());
+    }
+  }
+
+  public Long saveJobApplicationNote(Long jobApplicationId, JobApplicationNoteData requestBody, DataFetchingEnvironment environment) {
+    logger.info("saveJobApplicationNote: " + requestBody.getText());
+    Optional<JobApplicationEntity> opt = jobApplicationRepository.findById(jobApplicationId);
+    if (opt.isPresent()) {
+      JobApplicationEntity jobApplication = opt.get();
+      JobApplicationNoteEntity entity = new JobApplicationNoteEntity();
+      entity.setApplication(jobApplication);
+      entity.setBusinessNote(requestBody.isBusinessNote());
+      entity.setFellowNote(requestBody.isFellowNote());
+      entity.setText(requestBody.getText());
+      entity = jobApplicationNoteRepository.save(entity);
+      return entity.getId();
+    } else {
+      // Existing entity not found
+      throw new IllegalArgumentException("Job application is not found: " + jobApplicationId);
     }
   }
 }

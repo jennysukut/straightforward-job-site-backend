@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sfjs.data.JobApplicationData;
+import com.sfjs.data.JobApplicationNoteData;
 import com.sfjs.gql.svc.JobApplicationService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -25,4 +26,12 @@ public class JobApplication {
     return jobApplicationService.saveJobApplication(requestBody, environment);
   }
 
+  @MutationMapping(name = "saveJobApplicationNote")
+  public Long saveJobApplicationNote(
+      @Argument(name = "jobApplicationId") Long jobApplicationId,
+      @Argument(name = "requestBody") JobApplicationNoteData requestBody,
+      DataFetchingEnvironment environment) throws Exception {
+    System.out.println("saveJobApplicationNote");
+    return jobApplicationService.saveJobApplicationNote(jobApplicationId, requestBody, environment);
+  }
 }
