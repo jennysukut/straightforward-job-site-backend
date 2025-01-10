@@ -34,6 +34,7 @@ public class SecurityConfig {
             .requestMatchers("/fellow/**").permitAll()
             .requestMatchers("/payment/**").permitAll()
             .requestMatchers("/profile/**").permitAll()
+            .requestMatchers("/diagrams/**").permitAll()
             .anyRequest().authenticated()
             )
         .httpBasic(Customizer.withDefaults())

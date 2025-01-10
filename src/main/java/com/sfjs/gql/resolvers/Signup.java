@@ -18,7 +18,6 @@ import com.sfjs.gql.svc.SignupService;
 import graphql.schema.DataFetchingEnvironment;
 
 @RestController
-@EnableWebMvc
 @Transactional
 public class Signup {
 

@@ -17,7 +17,6 @@ import com.sfjs.crud.response.BusinessResponse;
 import com.sfjs.crud.svc.BusinessService;
 
 @RestController
-@EnableWebMvc
 @Transactional
 public class BusinessController extends BaseController<BusinessService, BusinessEntity, BusinessResponse> {
 

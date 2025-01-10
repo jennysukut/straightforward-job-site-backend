@@ -17,7 +17,6 @@ import com.sfjs.crud.response.RoleResponse;
 import com.sfjs.crud.svc.RoleService;
 
 @RestController
-@EnableWebMvc
 @Transactional
 public class RoleController extends BaseController<RoleService, RoleEntity, RoleResponse> {
 
