@@ -2,7 +2,7 @@ type Query {
   currentDonations: String
   metrics: Metrics
   fellowProfile: Profile
-  listAllJobs: [JobListings!]!
+  listAllJobs: [JobListing!]!
 }
 
 type Mutation {
