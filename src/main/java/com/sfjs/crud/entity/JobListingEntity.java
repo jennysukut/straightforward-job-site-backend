@@ -1,8 +1,10 @@
 package com.sfjs.crud.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.sfjs.data.BaseJobListingData;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
@@ -45,4 +47,10 @@ public class JobListingEntity extends BaseJobListingData {
   @JsonIgnore
   @JoinColumn(name = "business_id", unique = true)
   private BusinessEntity business;
+
+  @Getter
+  @Setter
+  @JsonIgnore
+  @OneToMany(mappedBy = "jobListing")
+  private List<JobApplicationEntity> jobApplications = new ArrayList<>();
 }
