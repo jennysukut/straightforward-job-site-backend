@@ -17,6 +17,7 @@ import com.sfjs.crud.response.FellowResponse;
 import com.sfjs.crud.svc.FellowService;
 
 @RestController
+@EnableWebMvc
 @Transactional
 public class FellowController extends BaseController<FellowService, FellowEntity, FellowResponse> {
 

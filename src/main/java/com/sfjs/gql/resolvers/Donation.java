@@ -20,6 +20,7 @@ import com.sfjs.gql.svc.CheckoutService;
 import reactor.core.publisher.Mono;
 
 @RestController
+@EnableWebMvc
 @Transactional
 public class Donation {
 

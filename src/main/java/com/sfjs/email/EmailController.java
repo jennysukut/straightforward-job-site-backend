@@ -16,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
+@EnableWebMvc
 @Transactional
 public class EmailController {
 

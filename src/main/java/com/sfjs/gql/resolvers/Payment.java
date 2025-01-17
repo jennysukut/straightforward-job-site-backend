@@ -13,6 +13,7 @@ import com.sfjs.gql.schema.PaymentResultInput;
 import com.sfjs.gql.svc.CheckoutService;
 
 @RestController
+@EnableWebMvc
 @Transactional
 public class Payment {
 

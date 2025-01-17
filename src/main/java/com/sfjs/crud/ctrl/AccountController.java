@@ -17,6 +17,7 @@ import com.sfjs.crud.response.AccountResponse;
 import com.sfjs.crud.svc.AccountService;
 
 @RestController
+@EnableWebMvc
 @Transactional
 public class AccountController extends BaseController<AccountService, AccountEntity, AccountResponse> {
 

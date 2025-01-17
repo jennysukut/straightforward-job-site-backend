@@ -17,6 +17,7 @@ import com.sfjs.crud.response.PaymentResponse;
 import com.sfjs.crud.svc.PaymentService;
 
 @RestController
+@EnableWebMvc
 @Transactional
 public class PaymentController extends BaseController<PaymentService, PaymentEntity, PaymentResponse> {
 

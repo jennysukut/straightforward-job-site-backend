@@ -11,6 +11,7 @@ import com.sfjs.gql.schema.Result;
 import com.sfjs.security.AuthorizationService;
 
 @RestController
+@EnableWebMvc
 @Transactional
 public class Authorization {
 

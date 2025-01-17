@@ -17,6 +17,7 @@ import com.sfjs.crud.response.BaseResponse;
 import com.sfjs.crud.svc.BaseService;
 
 @RestController
+@EnableWebMvc
 @Transactional
 public abstract class BaseController<SERVICE extends BaseService<ENTITY, BODY>, ENTITY extends BaseEntity, BODY extends BaseResponse> {
 

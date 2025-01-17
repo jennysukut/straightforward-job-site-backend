@@ -19,6 +19,7 @@ import com.sfjs.gql.schema.FellowMetrics;
 import com.sfjs.gql.schema.MetricsResult;
 
 @RestController
+@EnableWebMvc
 @Transactional
 public class Metrics {
 

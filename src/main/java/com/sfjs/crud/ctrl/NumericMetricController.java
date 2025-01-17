@@ -17,6 +17,7 @@ import com.sfjs.crud.response.NumericMetricResponse;
 import com.sfjs.crud.svc.NumericMetricService;
 
 @RestController
+@EnableWebMvc
 @Transactional
 public class NumericMetricController
     extends BaseController<NumericMetricService, NumericMetricEntity, NumericMetricResponse> {

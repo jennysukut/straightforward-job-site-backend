@@ -17,6 +17,7 @@ import com.sfjs.crud.response.AddressResponse;
 import com.sfjs.crud.svc.AddressService;
 
 @RestController
+@EnableWebMvc
 @Transactional
 public class AddressController extends BaseController<AddressService, AddressEntity, AddressResponse> {
 
