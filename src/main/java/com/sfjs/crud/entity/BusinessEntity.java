@@ -51,4 +51,10 @@ public class BusinessEntity extends BaseEntity {
   @Setter
   @OneToOne(mappedBy = "business", optional = true)
   private BusinessProfileEntity businessProfile;
+
+  @Getter
+  @Setter
+  @JsonIgnore
+  @OneToMany(mappedBy = "business")
+  private List<JobListingEntity> jobListings = new ArrayList<>();
 }
