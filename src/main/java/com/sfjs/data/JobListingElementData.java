@@ -12,7 +12,7 @@ import lombok.Setter;
 
 /**
  * Contains fields that can be shared between
- * entity and non-entity interview process element classes
+ * entity and non-entity job listing element classes
  *
  * @author carl
  *

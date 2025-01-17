@@ -2,6 +2,7 @@ type Query {
   currentDonations: String
   metrics: Metrics
   fellowProfile: Profile
+  listAllJobs: [JobListing!]!
 }
 
 type Mutation {
@@ -111,6 +112,7 @@ type JobListing {
   country : String
   jobIsBeingEdited : Boolean
   roundNumber : String
+  applications : [String!]
 }
 
 type PayDetails {

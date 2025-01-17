@@ -17,7 +17,7 @@ import lombok.Setter;
 
 /**
  * Contains the entity-specific declarations of fields
- * not sharable between entity and non-entity profile classes
+ * not sharable between entity and non-entity job listing classes
  *
  * @author carl
  *
