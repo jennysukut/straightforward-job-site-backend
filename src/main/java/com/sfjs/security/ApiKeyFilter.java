@@ -25,7 +25,7 @@ public class ApiKeyFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
     String apiKey = request.getHeader(AUTH_TOKEN_HEADER_NAME);
 
-    if (apiKey == null || !apiKey.equals(API_KEY)) {
+    if (API_KEY != null && API_KEY.length() > 0 && (apiKey == null || !apiKey.equals(API_KEY))) {
       throw new BadCredentialsException("Invalid API Key");
     }
 
