@@ -1,5 +1,7 @@
 package com.sfjs.gql.svc;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -45,6 +47,14 @@ public class JobListingService {
   static {
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+  }
+
+  public List<JobListingData> listAllJobs(){
+    logger.info("listAllJobs called...");
+
+    List<JobListingData> allJobs = new ArrayList<JobListingData>();
+
+    return allJobs;
   }
 
   public JobListingData saveJobListing(JobListingData requestBody, DataFetchingEnvironment environment) throws Exception {

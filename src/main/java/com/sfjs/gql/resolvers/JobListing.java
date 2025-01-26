@@ -28,7 +28,7 @@ public class JobListing {
   @QueryMapping(name = "listAllJobs")
   public List<JobListingData> listAllJobs(){
 
-    List<JobListingData> allJobs = new ArrayList<JobListingData>();
+    List<JobListingData> allJobs = jobListingService.listAllJobs();
 
     logger.info("listAllJobs query executed...");
 
