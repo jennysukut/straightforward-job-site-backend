@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import com.sfjs.crud.entity.*;
 import com.sfjs.data.*;
-import com.sfjs.gql.resolvers.JobListing;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,14 +53,14 @@ public class JobListingService {
     List<JobListingData> allJobs = new ArrayList<JobListingData>();
 
     for ( JobListingEntity entity : allJobEntities ){
-      JobListingData jobData = covertJobEntityToJobData(entity);
+      JobListingData jobData = convertJobEntityToJobData(entity);
       allJobs.add(jobData);
     }
 
     return allJobs;
   }
 
-  private JobListingData covertJobEntityToJobData(JobListingEntity entity){
+  private JobListingData convertJobEntityToJobData(JobListingEntity entity){
     JobListingData jobData = new JobListingData();
 
     jobData.setObjectId(entity.getId());
@@ -91,7 +90,7 @@ public class JobListingService {
     jobData.setCountry(entity.getCountry());
     jobData.setRoundNumber(entity.getRoundNumber());
 
-    List<String> applicationIds= getApplicationIds(entity);
+    List applicationIds= getApplicationIds(entity);
     jobData.setApplications(applicationIds);
 
     return jobData;
@@ -131,11 +130,11 @@ public class JobListingService {
   }
 
   private List<String> getApplicationIds(JobListingEntity entity){
-    List<String> applicationIds= new ArrayList<String>();
+    List applicationIds= new ArrayList<>();
     List<JobApplicationEntity> applicationsList = entity.getJobApplications();
 
     for( JobApplicationEntity jobApplicationEntity : applicationsList){
-      String id = Long.toString(jobApplicationEntity.getId());
+      Long id = jobApplicationEntity.getId();
       applicationIds.add(id);
     }
     return applicationIds;
