@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.crud.entity.FellowEntity;
+import com.sfjs.jpa.entity.FellowEntity;
 import com.sfjs.crud.response.FellowResponse;
 import com.sfjs.crud.svc.FellowService;
 

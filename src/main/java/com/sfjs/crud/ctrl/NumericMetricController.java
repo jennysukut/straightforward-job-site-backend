@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.crud.entity.NumericMetricEntity;
+import com.sfjs.jpa.entity.NumericMetricEntity;
 import com.sfjs.crud.response.NumericMetricResponse;
 import com.sfjs.crud.svc.NumericMetricService;
 

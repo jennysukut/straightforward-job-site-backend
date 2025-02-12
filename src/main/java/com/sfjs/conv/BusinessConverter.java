@@ -2,7 +2,7 @@ package com.sfjs.conv;
 
 import org.springframework.stereotype.Service;
 
-import com.sfjs.crud.entity.BusinessEntity;
+import com.sfjs.jpa.entity.BusinessEntity;
 import com.sfjs.crud.response.BusinessResponse;
 
 import jakarta.transaction.Transactional;

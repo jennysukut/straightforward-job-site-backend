@@ -1,7 +1,7 @@
 package com.sfjs.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sfjs.crud.entity.JobListingEntity;
+import com.sfjs.jpa.entity.JobListingEntity;
 
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;

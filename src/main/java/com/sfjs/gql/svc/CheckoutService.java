@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sfjs.crud.entity.BusinessEntity;
-import com.sfjs.crud.entity.FellowEntity;
-import com.sfjs.crud.entity.NumericMetricEntity;
-import com.sfjs.crud.entity.PaymentEntity;
-import com.sfjs.crud.entity.PaymentStatus;
+import com.sfjs.jpa.entity.BusinessEntity;
+import com.sfjs.jpa.entity.FellowEntity;
+import com.sfjs.jpa.entity.NumericMetricEntity;
+import com.sfjs.jpa.entity.PaymentEntity;
+import com.sfjs.jpa.entity.PaymentStatus;
 import com.sfjs.crud.repo.BusinessRepository;
 import com.sfjs.crud.repo.FellowRepository;
 import com.sfjs.crud.repo.NumericMetricRepository;

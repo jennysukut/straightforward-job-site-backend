@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.sfjs.crud.entity.AccountEntity;
+import com.sfjs.jpa.entity.AccountEntity;
 import com.sfjs.crud.repo.AccountRepository;
 
 import jakarta.servlet.FilterChain;

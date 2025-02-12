@@ -1,4 +1,4 @@
-package com.sfjs.crud.entity;
+package com.sfjs.jpa.entity;
 
 public enum PaymentStatus {
   APPROVED, PENDING

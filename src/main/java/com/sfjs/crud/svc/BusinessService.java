@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.AccountConverter;
 import com.sfjs.conv.BusinessConverter;
-import com.sfjs.crud.entity.BusinessEntity;
+import com.sfjs.jpa.entity.BusinessEntity;
 import com.sfjs.crud.repo.BaseRepository;
 import com.sfjs.crud.response.BusinessResponse;
 

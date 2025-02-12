@@ -14,8 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.sfjs.crud.entity.AccountEntity;
-import com.sfjs.crud.entity.ResetPasswordTokenEntity;
+import com.sfjs.jpa.entity.AccountEntity;
+import com.sfjs.jpa.entity.ResetPasswordTokenEntity;
 import com.sfjs.crud.repo.AccountRepository;
 import com.sfjs.crud.repo.ResetPasswordTokenRepository;
 import com.sfjs.gql.schema.Result;

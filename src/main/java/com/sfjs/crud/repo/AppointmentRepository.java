@@ -3,7 +3,7 @@ package com.sfjs.crud.repo;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sfjs.crud.entity.InterviewAppointmentEntity;
+import com.sfjs.jpa.entity.InterviewAppointmentEntity;
 
 @Repository
 @Transactional

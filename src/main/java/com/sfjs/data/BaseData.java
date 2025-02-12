@@ -1,6 +1,6 @@
 package com.sfjs.data;
 
-import com.sfjs.crud.entity.BaseEntity;
+import com.sfjs.jpa.entity.BaseEntity;
 
 import lombok.Getter;
 import lombok.Setter;

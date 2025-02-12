@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sfjs.crud.entity.BaseEntity;
+import com.sfjs.jpa.entity.BaseEntity;
 import com.sfjs.crud.response.BaseResponse;
 
 public class BaseConverter<ENTITY extends BaseEntity, BODY extends BaseResponse> {

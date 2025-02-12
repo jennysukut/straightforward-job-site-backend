@@ -1,7 +1,7 @@
 package com.sfjs.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sfjs.crud.entity.ExtendedProfileEntity;
+import com.sfjs.jpa.entity.ExtendedProfileEntity;
 
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;

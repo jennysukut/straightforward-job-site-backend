@@ -1,6 +1,6 @@
 package com.sfjs.crud.response;
 
-import com.sfjs.crud.entity.PaymentStatus;
+import com.sfjs.jpa.entity.PaymentStatus;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,8 +1,8 @@
-package com.sfjs.crud.entity;
+package com.sfjs.jpa.entity;
 
 import org.hibernate.annotations.SQLRestriction;
 
-import com.sfjs.data.AwardData;
+import com.sfjs.data.EducationData;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
@@ -16,9 +16,9 @@ import jakarta.persistence.InheritanceType;
  * @author carl
  *
  */
-@Entity(name = "award")
+@Entity(name = "education")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @SQLRestriction(value = "deleted_at IS NULL")
-public class AwardEntity extends AwardData {
+public class EducationEntity extends EducationData {
 
 }

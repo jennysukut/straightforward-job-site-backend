@@ -1,4 +1,4 @@
-package com.sfjs.crud.entity;
+package com.sfjs.jpa.entity;
 
 import org.hibernate.annotations.SQLRestriction;
 

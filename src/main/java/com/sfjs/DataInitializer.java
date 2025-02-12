@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import com.sfjs.crud.entity.NumericMetricEntity;
-import com.sfjs.crud.entity.RoleEntity;
+import com.sfjs.jpa.entity.NumericMetricEntity;
+import com.sfjs.jpa.entity.RoleEntity;
 import com.sfjs.crud.repo.NumericMetricRepository;
 import com.sfjs.crud.repo.RoleRepository;
 

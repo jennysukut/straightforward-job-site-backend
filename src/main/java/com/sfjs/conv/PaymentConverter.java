@@ -2,8 +2,8 @@ package com.sfjs.conv;
 
 import org.springframework.stereotype.Service;
 
-import com.sfjs.crud.entity.PaymentEntity;
-import com.sfjs.crud.entity.PaymentStatus;
+import com.sfjs.jpa.entity.PaymentEntity;
+import com.sfjs.jpa.entity.PaymentStatus;
 import com.sfjs.crud.response.PaymentResponse;
 
 @Service

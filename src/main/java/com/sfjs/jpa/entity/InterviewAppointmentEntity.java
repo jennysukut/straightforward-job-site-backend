@@ -1,7 +1,9 @@
-package com.sfjs.crud.entity;
+package com.sfjs.jpa.entity;
+
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sfjs.data.BusinessProfileData;
+import com.sfjs.data.InterviewAppointmentData;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
@@ -18,14 +20,16 @@ import lombok.Setter;
  * @author carl
  *
  */
-@Entity(name = "business_profile")
+@Entity(name = "interview_appointment")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class BusinessProfileEntity extends BusinessProfileData {
+public class InterviewAppointmentEntity extends InterviewAppointmentData {
+
+  @Getter @Setter private LocalDateTime interviewDateAndTime;
 
   @Getter
   @Setter
   @OneToOne(optional = true)
   @JsonIgnore
-  @JoinColumn(name = "business_id", unique = true)
-  private BusinessEntity business;
+  @JoinColumn(name = "application_id", unique = true)
+  private JobApplicationEntity application;
 }

@@ -2,7 +2,7 @@ package com.sfjs.conv;
 
 import org.springframework.stereotype.Service;
 
-import com.sfjs.crud.entity.FellowEntity;
+import com.sfjs.jpa.entity.FellowEntity;
 import com.sfjs.crud.response.FellowResponse;
 
 import jakarta.transaction.Transactional;

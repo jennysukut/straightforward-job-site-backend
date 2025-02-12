@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.crud.entity.AddressEntity;
+import com.sfjs.jpa.entity.AddressEntity;
 import com.sfjs.crud.response.AddressResponse;
 import com.sfjs.crud.svc.AddressService;
 

@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.crud.entity.BusinessEntity;
-import com.sfjs.crud.entity.FellowEntity;
+import com.sfjs.jpa.entity.BusinessEntity;
+import com.sfjs.jpa.entity.FellowEntity;
 import com.sfjs.crud.repo.BusinessRepository;
 import com.sfjs.crud.repo.FellowRepository;
 import com.sfjs.crud.response.NumericMetricResponse;
