@@ -9,8 +9,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.jpa.entity.BusinessEntity;
 import com.sfjs.jpa.entity.FellowEntity;
-import com.sfjs.crud.repo.BusinessRepository;
-import com.sfjs.crud.repo.FellowRepository;
+import com.sfjs.jpa.repo.BusinessRepository;
+import com.sfjs.jpa.repo.FellowRepository;
 import com.sfjs.crud.response.NumericMetricResponse;
 import com.sfjs.crud.svc.NumericMetricService;
 import com.sfjs.gql.schema.BusinessMetrics;

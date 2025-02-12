@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
 import com.sfjs.jpa.entity.AddressEntity;
-import com.sfjs.crud.repo.BaseRepository;
+import com.sfjs.jpa.repo.BaseRepository;
 import com.sfjs.crud.response.AddressResponse;
 
 import jakarta.transaction.Transactional;

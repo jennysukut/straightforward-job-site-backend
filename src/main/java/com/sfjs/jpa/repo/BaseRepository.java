@@ -1,4 +1,4 @@
-package com.sfjs.crud.repo;
+package com.sfjs.jpa.repo;
 
 import java.util.List;
 

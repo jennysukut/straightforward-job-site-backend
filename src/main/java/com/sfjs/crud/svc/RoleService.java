@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
 import com.sfjs.jpa.entity.RoleEntity;
-import com.sfjs.crud.repo.BaseRepository;
+import com.sfjs.jpa.repo.BaseRepository;
 import com.sfjs.crud.response.RoleResponse;
 
 import jakarta.transaction.Transactional;

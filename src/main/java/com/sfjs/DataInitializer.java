@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.sfjs.jpa.entity.NumericMetricEntity;
 import com.sfjs.jpa.entity.RoleEntity;
-import com.sfjs.crud.repo.NumericMetricRepository;
-import com.sfjs.crud.repo.RoleRepository;
+import com.sfjs.jpa.repo.NumericMetricRepository;
+import com.sfjs.jpa.repo.RoleRepository;
 
 @Component
 public class DataInitializer implements CommandLineRunner {

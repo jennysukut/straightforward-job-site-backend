@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.sfjs.conv.BaseConverter;
 import com.sfjs.jpa.entity.BaseEntity;
-import com.sfjs.crud.repo.BaseRepository;
+import com.sfjs.jpa.repo.BaseRepository;
 import com.sfjs.crud.response.BaseResponse;
 
 public abstract class BaseService<ENTITY extends BaseEntity, BODY extends BaseResponse> {

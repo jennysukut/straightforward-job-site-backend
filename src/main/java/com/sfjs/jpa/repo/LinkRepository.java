@@ -1,11 +1,12 @@
-package com.sfjs.crud.repo;
+package com.sfjs.jpa.repo;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sfjs.jpa.entity.PaymentEntity;
+import com.sfjs.jpa.entity.LinkEntity;
 
 @Repository
 @Transactional
-public interface PaymentRepository extends BaseRepository<PaymentEntity> {
+public interface LinkRepository extends BaseRepository<LinkEntity> {
+
 }

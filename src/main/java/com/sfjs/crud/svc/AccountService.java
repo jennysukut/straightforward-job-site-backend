@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
 import com.sfjs.jpa.entity.AccountEntity;
-import com.sfjs.crud.repo.AccountRepository;
-import com.sfjs.crud.repo.BaseRepository;
+import com.sfjs.jpa.repo.AccountRepository;
+import com.sfjs.jpa.repo.BaseRepository;
 import com.sfjs.crud.response.AccountResponse;
 
 import jakarta.transaction.Transactional;

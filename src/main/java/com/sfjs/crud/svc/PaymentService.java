@@ -7,7 +7,7 @@ import com.sfjs.conv.BusinessConverter;
 import com.sfjs.conv.FellowConverter;
 import com.sfjs.conv.PaymentConverter;
 import com.sfjs.jpa.entity.PaymentEntity;
-import com.sfjs.crud.repo.BaseRepository;
+import com.sfjs.jpa.repo.BaseRepository;
 import com.sfjs.crud.response.PaymentResponse;
 
 import jakarta.transaction.Transactional;

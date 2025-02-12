@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.jpa.entity.AccountEntity;
-import com.sfjs.crud.repo.AccountRepository;
+import com.sfjs.jpa.repo.AccountRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

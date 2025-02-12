@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.sfjs.jpa.entity.AccountEntity;
-import com.sfjs.crud.repo.AccountRepository;
+import com.sfjs.jpa.repo.AccountRepository;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
