@@ -6,18 +6,25 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import com.sfjs.crud.entity.*;
-import com.sfjs.data.*;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.sfjs.crud.entity.AccountEntity;
+import com.sfjs.crud.entity.BaseEntity;
+import com.sfjs.crud.entity.BusinessEntity;
+import com.sfjs.crud.entity.InterviewProcessEntity;
+import com.sfjs.crud.entity.JobListingEntity;
 import com.sfjs.crud.repo.BaseRepository;
 import com.sfjs.crud.repo.InterviewProcessRepository;
 import com.sfjs.crud.repo.JobListingRepository;
+import com.sfjs.data.HybridDetailsData;
+import com.sfjs.data.InterviewProcessData;
+import com.sfjs.data.JobListingData;
+import com.sfjs.data.JobListingElementData;
+import com.sfjs.data.PayDetailsData;
 import com.sfjs.security.AuthorizationService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -27,7 +34,6 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class JobListingService {
 
-  private static final org.slf4j.Logger log = LoggerFactory.getLogger(JobListingService.class);
   Logger logger = Logger.getLogger(getClass().getName());
 
   @Autowired
@@ -90,8 +96,9 @@ public class JobListingService {
     jobData.setCountry(entity.getCountry());
     jobData.setRoundNumber(entity.getRoundNumber());
 
-    List applicationIds= getApplicationIds(entity);
-    jobData.setApplications(applicationIds);
+    jobData.setApplications(entity.getJobApplications() != null
+      ? entity.getJobApplications().stream().map(application -> application.getId()).toList()
+      : List.of());
 
     return jobData;
   }
@@ -127,17 +134,6 @@ public class JobListingService {
       interviewProcessDataList.add(interviewProcessData);
     }
     return interviewProcessDataList;
-  }
-
-  private List<String> getApplicationIds(JobListingEntity entity){
-    List applicationIds= new ArrayList<>();
-    List<JobApplicationEntity> applicationsList = entity.getJobApplications();
-
-    for( JobApplicationEntity jobApplicationEntity : applicationsList){
-      Long id = jobApplicationEntity.getId();
-      applicationIds.add(id);
-    }
-    return applicationIds;
   }
 
   public JobListingData saveJobListing(JobListingData requestBody, DataFetchingEnvironment environment) throws Exception {

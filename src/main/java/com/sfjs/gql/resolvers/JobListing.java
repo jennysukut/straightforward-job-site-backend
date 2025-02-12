@@ -1,5 +1,8 @@
 package com.sfjs.gql.resolvers;
 
+import java.util.List;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -11,10 +14,6 @@ import com.sfjs.data.JobListingData;
 import com.sfjs.gql.svc.JobListingService;
 
 import graphql.schema.DataFetchingEnvironment;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
 
 @Controller
 @Transactional
