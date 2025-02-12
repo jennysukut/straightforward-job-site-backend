@@ -24,4 +24,6 @@ public class JobListingData extends BaseJobListingData {
 //  @Getter @Setter private String daysInOffice; // : String
 //  @Getter @Setter private String daysRemote; // : String
   @Getter @Setter List<InterviewProcessData> interviewProcess; //?: Array<any>;
+
+  @Getter @Setter List<Long> applications; //?: Array<any>
 }

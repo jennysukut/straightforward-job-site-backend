@@ -1,5 +1,7 @@
 package com.sfjs.gql.svc;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -13,13 +15,16 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sfjs.crud.entity.AccountEntity;
 import com.sfjs.crud.entity.BaseEntity;
 import com.sfjs.crud.entity.BusinessEntity;
-import com.sfjs.crud.entity.JobListingEntity;
 import com.sfjs.crud.entity.InterviewProcessEntity;
+import com.sfjs.crud.entity.JobListingEntity;
 import com.sfjs.crud.repo.BaseRepository;
 import com.sfjs.crud.repo.InterviewProcessRepository;
 import com.sfjs.crud.repo.JobListingRepository;
+import com.sfjs.data.HybridDetailsData;
+import com.sfjs.data.InterviewProcessData;
 import com.sfjs.data.JobListingData;
 import com.sfjs.data.JobListingElementData;
+import com.sfjs.data.PayDetailsData;
 import com.sfjs.security.AuthorizationService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -45,6 +50,90 @@ public class JobListingService {
   static {
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+  }
+
+  public List<JobListingData> listAllJobs(){
+    logger.info("listAllJobs called...");
+
+    List<JobListingEntity> allJobEntities = jobListingRepository.findAll();
+    List<JobListingData> allJobs = new ArrayList<JobListingData>();
+
+    for ( JobListingEntity entity : allJobEntities ){
+      JobListingData jobData = convertJobEntityToJobData(entity);
+      allJobs.add(jobData);
+    }
+
+    return allJobs;
+  }
+
+  private JobListingData convertJobEntityToJobData(JobListingEntity entity){
+    JobListingData jobData = new JobListingData();
+
+    jobData.setObjectId(entity.getId());
+    jobData.setJobTitle(entity.getJobTitle());
+    jobData.setBusinessName(entity.getBusinessName());
+    jobData.setApplicationLimit(entity.getApplicationLimit());
+    // need to add numberOfApps to JobListingData object?
+    jobData.setPositionType(entity.getPositionType());
+    jobData.setNonNegParams(entity.getNonNegParams());
+    jobData.setLocationOption(entity.getLocationOption());
+
+    PayDetailsData payDetails = getPayDetailsData(entity);
+    jobData.setPayDetails(payDetails);
+
+    HybridDetailsData hybridDetails = getHybridDetailsData(entity);
+    jobData.setHybridDetails(hybridDetails);
+
+    jobData.setExperienceLevel(entity.getExperienceLevel());
+    jobData.setPreferredSkills(entity.getPreferredSkills());
+    jobData.setMoreAboutPosition(entity.getMoreAboutPosition());
+    jobData.setResponsibilities(entity.getResponsibilities());
+    jobData.setPerks(entity.getPerks());
+
+    List<InterviewProcessData> interviewProcessDataList = getInterviewProcessDataList(entity);
+    jobData.setInterviewProcess(interviewProcessDataList);
+    jobData.setLocation(entity.getLocation());
+    jobData.setCountry(entity.getCountry());
+    jobData.setRoundNumber(entity.getRoundNumber());
+
+    jobData.setApplications(entity.getJobApplications() != null
+      ? entity.getJobApplications().stream().map(application -> application.getId()).toList()
+      : List.of());
+
+    return jobData;
+  }
+
+  private PayDetailsData getPayDetailsData(JobListingEntity entity){
+    PayDetailsData payDetails = new PayDetailsData();
+    payDetails.setPayScaleMin(entity.getPayScaleMin());
+    payDetails.setPayScaleMax(entity.getPayScaleMax());
+    payDetails.setPayOption(entity.getPayOption());
+
+    return payDetails;
+  }
+
+  private HybridDetailsData getHybridDetailsData(JobListingEntity entity){
+    HybridDetailsData hybridDetails = new HybridDetailsData();
+    hybridDetails.setDaysInOffice(entity.getDaysInOffice());
+    hybridDetails.setDaysRemote(entity.getDaysRemote());
+
+    return hybridDetails;
+  }
+
+  private List<InterviewProcessData> getInterviewProcessDataList(JobListingEntity entity) {
+    List<InterviewProcessEntity> interviewProcessEntities = entity.getInterviewProcess();
+    List<InterviewProcessData> interviewProcessDataList = new ArrayList<InterviewProcessData>();
+
+    for (InterviewProcessEntity interviewProcessEntity : interviewProcessEntities){
+      InterviewProcessData interviewProcessData = new InterviewProcessData();
+
+      interviewProcessData.setStage(interviewProcessEntity.getStage());
+      interviewProcessData.setStep(interviewProcessEntity.getStep());
+      interviewProcessData.setDetails(interviewProcessEntity.getDetails());
+
+      interviewProcessDataList.add(interviewProcessData);
+    }
+    return interviewProcessDataList;
   }
 
   public JobListingData saveJobListing(JobListingData requestBody, DataFetchingEnvironment environment) throws Exception {

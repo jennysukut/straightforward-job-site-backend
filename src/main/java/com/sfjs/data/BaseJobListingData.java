@@ -31,4 +31,5 @@ public class BaseJobListingData extends BaseData {
   @Getter @Setter String location; //?: string;
   @Getter @Setter String country; //?: string;
 //  Boolean jobIsBeingEdited; //?: boolean;
+  @Getter @Setter Integer roundNumber;
 }

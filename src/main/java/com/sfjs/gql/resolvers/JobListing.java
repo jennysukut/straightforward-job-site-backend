@@ -1,5 +1,8 @@
 package com.sfjs.gql.resolvers;
 
+import java.util.List;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -12,10 +15,6 @@ import com.sfjs.gql.svc.JobListingService;
 
 import graphql.schema.DataFetchingEnvironment;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
 @Controller
 @Transactional
 public class JobListing {
@@ -26,9 +25,9 @@ public class JobListing {
   private JobListingService jobListingService;
 
   @QueryMapping(name = "listAllJobs")
-  public List<JobListing> listAllJobs(){
+  public List<JobListingData> listAllJobs(){
 
-    List<JobListing> allJobs = new ArrayList<JobListing>();
+    List<JobListingData> allJobs = jobListingService.listAllJobs();
 
     logger.info("listAllJobs query executed...");
 

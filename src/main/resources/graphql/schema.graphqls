@@ -111,8 +111,8 @@ type JobListing {
   location : String
   country : String
   jobIsBeingEdited : Boolean
-  roundNumber : String
-  applications : [String!]
+  roundNumber : Int
+  applications : [ID]!
 }
 
 type PayDetails {
