@@ -15,18 +15,18 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sfjs.jpa.entity.BusinessEntity;
-import com.sfjs.jpa.entity.FellowEntity;
-import com.sfjs.jpa.entity.NumericMetricEntity;
-import com.sfjs.jpa.entity.PaymentEntity;
-import com.sfjs.jpa.entity.PaymentStatus;
+import com.sfjs.data.entity.BusinessEntity;
+import com.sfjs.data.entity.FellowEntity;
+import com.sfjs.data.entity.NumericMetricEntity;
+import com.sfjs.data.entity.PaymentEntity;
 import com.sfjs.jpa.repo.BusinessRepository;
 import com.sfjs.jpa.repo.FellowRepository;
 import com.sfjs.jpa.repo.NumericMetricRepository;
 import com.sfjs.jpa.repo.PaymentRepository;
 import com.sfjs.crud.svc.BusinessService;
 import com.sfjs.crud.svc.FellowService;
-import com.sfjs.data.PaymentData;
+import com.sfjs.data.api.PaymentData;
+import com.sfjs.data.core.PaymentStatus;
 import com.sfjs.gql.schema.BusinessDonation;
 import com.sfjs.gql.schema.BusinessInput;
 import com.sfjs.gql.schema.FellowDonation;
@@ -50,11 +50,11 @@ public class CheckoutService {
   @Autowired
   HelcimService helcimService;
 
-  @Autowired
-  BusinessService businessService;
+//  @Autowired
+//  BusinessService businessService;
 
-  @Autowired
-  FellowService fellowService;
+//  @Autowired
+//  FellowService fellowService;
 
   @Autowired
   SignupService signupService;

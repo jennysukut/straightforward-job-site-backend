@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.AccountConverter;
 import com.sfjs.conv.BusinessConverter;
-import com.sfjs.data.BusinessData;
-import com.sfjs.jpa.entity.BusinessEntity;
+import com.sfjs.data.api.BusinessData;
+import com.sfjs.data.entity.BusinessEntity;
 import com.sfjs.jpa.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;

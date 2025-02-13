@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
-import com.sfjs.data.AccountData;
-import com.sfjs.jpa.entity.AccountEntity;
+import com.sfjs.data.api.AccountData;
+import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.jpa.repo.AccountRepository;
 import com.sfjs.jpa.repo.BaseRepository;
 

@@ -9,10 +9,10 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
 
-import com.sfjs.jpa.entity.BaseEntity;
+import com.sfjs.data.BaseObject;
 
 @NoRepositoryBean
-public interface BaseRepository<ENTITY extends BaseEntity> extends JpaRepository<ENTITY, Long>, CrudRepository<ENTITY, Long> {
+public interface BaseRepository<ENTITY extends BaseObject> extends JpaRepository<ENTITY, Long>, CrudRepository<ENTITY, Long> {
 
   @Override
   @Modifying

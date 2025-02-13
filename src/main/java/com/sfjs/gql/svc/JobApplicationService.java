@@ -10,17 +10,17 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sfjs.jpa.entity.AccountEntity;
-import com.sfjs.jpa.entity.BusinessEntity;
-import com.sfjs.jpa.entity.FellowEntity;
-import com.sfjs.jpa.entity.JobApplicationEntity;
-import com.sfjs.jpa.entity.JobApplicationNoteEntity;
-import com.sfjs.jpa.entity.JobListingEntity;
+import com.sfjs.data.entity.AccountEntity;
+import com.sfjs.data.entity.BusinessEntity;
+import com.sfjs.data.entity.FellowEntity;
+import com.sfjs.data.entity.JobApplicationEntity;
+import com.sfjs.data.entity.JobApplicationNoteEntity;
+import com.sfjs.data.entity.JobListingEntity;
 import com.sfjs.jpa.repo.JobApplicationNoteRepository;
 import com.sfjs.jpa.repo.JobApplicationRepository;
 import com.sfjs.jpa.repo.JobListingRepository;
-import com.sfjs.data.JobApplicationData;
-import com.sfjs.data.JobApplicationNoteData;
+import com.sfjs.data.api.JobApplicationData;
+import com.sfjs.data.core.JobApplicationNote;
 import com.sfjs.security.AuthorizationService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -75,7 +75,7 @@ public class JobApplicationService {
       requestBody.setId(entity.getId());
       requestBody.setJobListingId(jobListing.getId());
       requestBody.setMessage(entity.getMessage());
-      requestBody.setObjectId(entity.getId());
+//      requestBody.setObjectId(entity.getId());
       requestBody.setStatus(entity.getStatus());
       return requestBody;
     } else {
@@ -84,7 +84,7 @@ public class JobApplicationService {
     }
   }
 
-  public Long saveJobApplicationNote(Long jobApplicationId, JobApplicationNoteData requestBody, DataFetchingEnvironment environment) {
+  public Long saveJobApplicationNote(Long jobApplicationId, JobApplicationNote requestBody, DataFetchingEnvironment environment) {
     logger.info("saveJobApplicationNote: " + requestBody.getText());
     Optional<JobApplicationEntity> opt = jobApplicationRepository.findById(jobApplicationId);
     if (opt.isPresent()) {

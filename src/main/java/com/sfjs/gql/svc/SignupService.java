@@ -13,21 +13,20 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sfjs.jpa.entity.AccomplishmentEntity;
-import com.sfjs.jpa.entity.AccountEntity;
-import com.sfjs.jpa.entity.AwardEntity;
-import com.sfjs.jpa.entity.BaseEntity;
-import com.sfjs.jpa.entity.BookOrQuoteEntity;
-import com.sfjs.jpa.entity.BusinessEntity;
-import com.sfjs.jpa.entity.BusinessProfileEntity;
-import com.sfjs.jpa.entity.EducationEntity;
-import com.sfjs.jpa.entity.ExperienceEntity;
-import com.sfjs.jpa.entity.ExperienceLevelEntity;
-import com.sfjs.jpa.entity.ExtendedProfileEntity;
-import com.sfjs.jpa.entity.FellowEntity;
-import com.sfjs.jpa.entity.HobbyEntity;
-import com.sfjs.jpa.entity.LinkEntity;
-import com.sfjs.jpa.entity.RoleEntity;
+import com.sfjs.data.entity.AccomplishmentEntity;
+import com.sfjs.data.entity.AccountEntity;
+import com.sfjs.data.entity.AwardEntity;
+import com.sfjs.data.entity.BookOrQuoteEntity;
+import com.sfjs.data.entity.BusinessEntity;
+import com.sfjs.data.entity.BusinessProfileEntity;
+import com.sfjs.data.entity.EducationEntity;
+import com.sfjs.data.entity.ExperienceEntity;
+import com.sfjs.data.entity.ExperienceLevelEntity;
+import com.sfjs.data.entity.FellowProfileEntity;
+import com.sfjs.data.entity.FellowEntity;
+import com.sfjs.data.entity.HobbyEntity;
+import com.sfjs.data.entity.LinkEntity;
+import com.sfjs.data.entity.RoleEntity;
 import com.sfjs.jpa.repo.AccomplishmentRepository;
 import com.sfjs.jpa.repo.AccountRepository;
 import com.sfjs.jpa.repo.AwardRepository;
@@ -43,18 +42,19 @@ import com.sfjs.jpa.repo.HobbyRepository;
 import com.sfjs.jpa.repo.LinkRepository;
 import com.sfjs.jpa.repo.ProfileRepository;
 import com.sfjs.jpa.repo.RoleRepository;
-import com.sfjs.data.AccomplishmentData;
-import com.sfjs.data.AwardData;
-import com.sfjs.data.BaseProfileData;
-import com.sfjs.data.BookOrQuoteData;
-import com.sfjs.data.BusinessProfileData;
-import com.sfjs.data.EducationData;
-import com.sfjs.data.ExperienceData;
-import com.sfjs.data.ExperienceLevelData;
-import com.sfjs.data.ExtendedProfileData;
-import com.sfjs.data.HobbyData;
-import com.sfjs.data.LinkData;
-import com.sfjs.data.ProfileElementData;
+import com.sfjs.data.BaseObject;
+import com.sfjs.data.api.FellowProfileData;
+import com.sfjs.data.api.ProfileElementData;
+import com.sfjs.data.core.Accomplishment;
+import com.sfjs.data.core.Award;
+import com.sfjs.data.core.BookOrQuote;
+import com.sfjs.data.core.BusinessProfile;
+import com.sfjs.data.core.Education;
+import com.sfjs.data.core.Experience;
+import com.sfjs.data.core.ExperienceLevel;
+import com.sfjs.data.core.FellowProfile;
+import com.sfjs.data.core.Hobby;
+import com.sfjs.data.core.Link;
 import com.sfjs.gql.schema.BusinessInput;
 import com.sfjs.gql.schema.FellowInput;
 import com.sfjs.security.AuthorizationService;
@@ -348,20 +348,20 @@ public class SignupService {
     return savedBusinessEntity;
   }
 
-  public ExtendedProfileData saveProfile(ExtendedProfileData requestBody, DataFetchingEnvironment environment) throws Exception {
+  public FellowProfileData saveProfile(FellowProfileData requestBody, DataFetchingEnvironment environment) throws Exception {
     AccountEntity accountEntity = authorizationService.getAccount();
     FellowEntity fellowEntity = accountEntity.getFellow();
-    ExtendedProfileEntity profileEntity = fellowEntity.getProfile();
+    FellowProfileEntity profileEntity = fellowEntity.getProfile();
 
     if (profileEntity == null) {
-      profileEntity = new ExtendedProfileEntity();
+      profileEntity = new FellowProfileEntity();
       profileEntity.setFellow(fellowEntity);
     }
 
     convertBaseProfile(requestBody, profileEntity);
     convertExtendedProfileData(requestBody, profileEntity);
     profileEntity = profileRepository.save(profileEntity);
-    ExtendedProfileData extendedProfileData = new ExtendedProfileData();
+    FellowProfileData extendedProfileData = new FellowProfileData();
     String json = mapper.writeValueAsString(profileEntity);
     logger.info("Extended profile entity: " + json);
     convertBaseProfile(profileEntity, extendedProfileData);
@@ -371,7 +371,7 @@ public class SignupService {
     return extendedProfileData;
   }
 
-  private void convertExtendedProfileData(ExtendedProfileData in, ExtendedProfileEntity out) {
+  private void convertExtendedProfileData(FellowProfileData in, FellowProfileEntity out) {
     if (in.getExperience() != null) {
       out.setExperience(in.getExperience().stream().map(data -> {
         ExperienceEntity e = this.convertProfileElementData(data, ExperienceEntity.class, experienceRepository);
@@ -438,13 +438,13 @@ public class SignupService {
     }
   }
 
-  private <E extends BaseEntity, D extends ProfileElementData>
+  private <E extends BaseObject, D extends ProfileElementData>
     E convertProfileElementData(D data, Class<E> entityType,
       BaseRepository<E> repository) {
     try {
       String json = mapper.writeValueAsString(data);
       E e = mapper.readValue(json, entityType);
-      e.setId(data.getObjectId());
+//      e.setId(data.getObjectId());
       if (e.getId() != null) {
         Optional<E> opt = repository.findById(e.getId());
         if (opt.isPresent()) {
@@ -457,74 +457,74 @@ public class SignupService {
     }
   }
 
-  public ExtendedProfileData getFellowProfile() {
+  public FellowProfileData getFellowProfile() {
     AccountEntity accountEntity = authorizationService.getAccount();
     FellowEntity fellowEntity = accountEntity.getFellow();
-    ExtendedProfileEntity profileEntity = fellowEntity.getProfile();
-    ExtendedProfileData extendedProfileData = new ExtendedProfileData();
+    FellowProfileEntity profileEntity = fellowEntity.getProfile();
+    FellowProfileData extendedProfileData = new FellowProfileData();
     convertBaseProfile(profileEntity, extendedProfileData);
     convertExtendedProfileEntity(profileEntity, extendedProfileData);
     return extendedProfileData;
   }
 
-  private void convertExtendedProfileEntity(ExtendedProfileEntity in, ExtendedProfileData out) {
+  private void convertExtendedProfileEntity(FellowProfileEntity in, FellowProfileData out) {
     if (in.getExperience() != null) {
       out.setExperience(in.getExperience().stream().map(data -> {
-        return this.convertProfileElementEntity(data, ExperienceData.class);
+        return this.convertProfileElementEntity(data, Experience.class);
       }).collect(Collectors.toList()));
     }
     if (in.getEducation() != null) {
       out.setEducation(in.getEducation().stream().map(data -> {
-        return this.convertProfileElementEntity(data, EducationData.class);
+        return this.convertProfileElementEntity(data, Education.class);
       }).collect(Collectors.toList()));
     }
     if (in.getAwards() != null) {
       out.setAwards(in.getAwards().stream().map(data -> {
-        return this.convertProfileElementEntity(data, AwardData.class);
+        return this.convertProfileElementEntity(data, Award.class);
       }).collect(Collectors.toList()));
     }
     if (in.getExperienceLevels() != null) {
       out.setExperienceLevels(in.getExperienceLevels().stream().map(data -> {
-        return this.convertProfileElementEntity(data, ExperienceLevelData.class);
+        return this.convertProfileElementEntity(data, ExperienceLevel.class);
       }).collect(Collectors.toList()));
     }
     if (in.getAccomplishments() != null) {
       out.setAccomplishments(in.getAccomplishments().stream().map(data -> {
-        return this.convertProfileElementEntity(data, AccomplishmentData.class);
+        return this.convertProfileElementEntity(data, Accomplishment.class);
       }).collect(Collectors.toList()));
     }
     if (in.getHobbies() != null) {
       out.setHobbies(in.getHobbies().stream().map(data -> {
-        return this.convertProfileElementEntity(data, HobbyData.class);
+        return this.convertProfileElementEntity(data, Hobby.class);
       }).collect(Collectors.toList()));
     }
     if (in.getBookOrQuote() != null) {
       out.setBookOrQuote(in.getBookOrQuote().stream().map(data -> {
-        return this.convertProfileElementEntity(data, BookOrQuoteData.class);
+        return this.convertProfileElementEntity(data, BookOrQuote.class);
       }).collect(Collectors.toList()));
     }
     if (in.getLinks() != null) {
       out.setLinks(in.getLinks().stream().map(data -> {
-        return this.convertProfileElementEntity(data, LinkData.class);
+        return this.convertProfileElementEntity(data, Link.class);
       }).collect(Collectors.toList()));
     }
   }
 
-  private <E extends BaseEntity, D extends ProfileElementData>
+  private <E extends BaseObject, D extends ProfileElementData>
     D convertProfileElementEntity(E entity,
       Class<D> dataType) {
     try {
       String json = mapper.writeValueAsString(entity);
       D d = mapper.readValue(json, dataType);
-      d.setObjectId(entity.getId());
+//      d.setObjectId(entity.getId());
       return d;
     } catch (Exception ex) {
       return (D) null;
     }
   }
 
-  private void convertBaseProfile(BaseProfileData in, BaseProfileData out) {
-    out.setObjectId(in.getObjectId());
+  private void convertBaseProfile(FellowProfile in, FellowProfile out) {
+//    out.setObjectId(in.getObjectId());
     out.setSmallBio(in.getSmallBio());
     out.setCountry(in.getCountry());
     out.setLocation(in.getLocation());
@@ -538,7 +538,7 @@ public class SignupService {
     out.setLanguages(in.getLanguages());
   }
 
-  public BusinessProfileData saveBusinessProfile(BusinessProfileData requestBody, DataFetchingEnvironment environment) throws Exception {
+  public BusinessProfile saveBusinessProfile(BusinessProfile requestBody, DataFetchingEnvironment environment) throws Exception {
     AccountEntity accountEntity = authorizationService.getAccount();
     BusinessEntity businessEntity = accountEntity.getBusiness();
     BusinessProfileEntity profileEntity = businessEntity.getBusinessProfile();
@@ -550,7 +550,7 @@ public class SignupService {
 
     convertBusinessProfile(requestBody, profileEntity);
     profileEntity = businessProfileRepository.save(profileEntity);
-    BusinessProfileData businessProfileData = new BusinessProfileData();
+    BusinessProfile businessProfileData = new BusinessProfile();
     String json = mapper.writeValueAsString(profileEntity);
     logger.info("Business profile entity: " + json);
     convertBusinessProfile(profileEntity, businessProfileData);
@@ -559,8 +559,8 @@ public class SignupService {
     return businessProfileData;
   }
 
-  private void convertBusinessProfile(BusinessProfileData in, BusinessProfileData out) {
-    out.setObjectId(in.getObjectId());
+  private void convertBusinessProfile(BusinessProfile in, BusinessProfile out) {
+//    out.setObjectId(in.getObjectId());
     out.setSmallBio(in.getSmallBio());
     out.setCountry(in.getCountry());
     out.setLocation(in.getLocation());

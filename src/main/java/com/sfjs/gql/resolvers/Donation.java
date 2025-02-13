@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.svc.NumericMetricService;
-import com.sfjs.data.PaymentData;
-import com.sfjs.data.NumericMetricData;
+import com.sfjs.data.api.PaymentData;
+import com.sfjs.data.core.NumericMetric;
 import com.sfjs.gql.schema.BusinessDonation;
 import com.sfjs.gql.schema.FellowDonation;
 import com.sfjs.gql.svc.CheckoutService;
@@ -46,8 +46,8 @@ public class Donation {
 
   @QueryMapping(name = "currentDonations")
   public String currentDonations() {
-    NumericMetricData fellowDonations = numericMetricService.findByName("CURRENT_FELLOW_DONATION");
-    NumericMetricData businessDonations = numericMetricService.findByName("CURRENT_BUSINESS_DONATION");
+    NumericMetric fellowDonations = numericMetricService.findByName("CURRENT_FELLOW_DONATION");
+    NumericMetric businessDonations = numericMetricService.findByName("CURRENT_BUSINESS_DONATION");
     return fellowDonations.getMetric().add(businessDonations.getMetric()).toString();
   }
 }

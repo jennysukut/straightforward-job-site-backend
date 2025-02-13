@@ -10,7 +10,7 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sfjs.data.JobListingData;
+import com.sfjs.data.api.JobListingData;
 import com.sfjs.gql.svc.JobListingService;
 
 import graphql.schema.DataFetchingEnvironment;

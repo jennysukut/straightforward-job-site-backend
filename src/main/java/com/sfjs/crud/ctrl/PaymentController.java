@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.svc.PaymentService;
-import com.sfjs.data.PaymentData;
-import com.sfjs.jpa.entity.PaymentEntity;
+import com.sfjs.data.api.PaymentData;
+import com.sfjs.data.entity.PaymentEntity;
 
 @RestController
 @EnableWebMvc

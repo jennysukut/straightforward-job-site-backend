@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.svc.AccountService;
-import com.sfjs.data.AccountData;
-import com.sfjs.jpa.entity.AccountEntity;
+import com.sfjs.data.api.AccountData;
+import com.sfjs.data.entity.AccountEntity;
 
 @RestController
 @EnableWebMvc

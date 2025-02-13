@@ -2,8 +2,8 @@ package com.sfjs.conv;
 
 import org.springframework.stereotype.Service;
 
-import com.sfjs.data.BusinessData;
-import com.sfjs.jpa.entity.BusinessEntity;
+import com.sfjs.data.api.BusinessData;
+import com.sfjs.data.entity.BusinessEntity;
 
 import jakarta.transaction.Transactional;
 

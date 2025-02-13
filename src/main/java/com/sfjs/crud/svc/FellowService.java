@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.AccountConverter;
 import com.sfjs.conv.FellowConverter;
-import com.sfjs.data.FellowData;
-import com.sfjs.jpa.entity.FellowEntity;
+import com.sfjs.data.api.FellowData;
+import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.jpa.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;

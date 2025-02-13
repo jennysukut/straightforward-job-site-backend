@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.data.BusinessProfileData;
-import com.sfjs.data.ExtendedProfileData;
+import com.sfjs.data.api.FellowProfileData;
+import com.sfjs.data.core.BusinessProfile;
 import com.sfjs.gql.schema.BusinessInput;
 import com.sfjs.gql.schema.FellowInput;
 import com.sfjs.gql.svc.SignupService;
@@ -37,20 +37,20 @@ public class Signup {
 
   @MutationMapping(name = "saveProfile")
   @PreAuthorize("hasRole('ROLE_FELLOW')")
-  public ExtendedProfileData saveProfile(@Argument(name = "requestBody") ExtendedProfileData requestBody,
+  public FellowProfileData saveProfile(@Argument(name = "requestBody") FellowProfileData requestBody,
       DataFetchingEnvironment environment) throws Exception {
     return signupService.saveProfile(requestBody, environment);
   }
 
   @QueryMapping(name = "fellowProfile")
   @PreAuthorize("hasRole('ROLE_FELLOW')")
-  public ExtendedProfileData fellowProfile() {
+  public FellowProfileData fellowProfile() {
     return signupService.getFellowProfile();
   }
 
   @MutationMapping(name = "saveBusinessProfile")
   @PreAuthorize("hasRole('ROLE_BUSINESS')")
-  public BusinessProfileData saveBusinessProfile(@Argument(name = "requestBody") BusinessProfileData requestBody,
+  public BusinessProfile saveBusinessProfile(@Argument(name = "requestBody") BusinessProfile requestBody,
       DataFetchingEnvironment environment) throws Exception {
     return signupService.saveBusinessProfile(requestBody, environment);
   }

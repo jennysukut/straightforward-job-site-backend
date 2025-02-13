@@ -6,8 +6,8 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sfjs.data.JobApplicationData;
-import com.sfjs.data.JobApplicationNoteData;
+import com.sfjs.data.api.JobApplicationData;
+import com.sfjs.data.core.JobApplicationNote;
 import com.sfjs.gql.svc.JobApplicationService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -29,7 +29,7 @@ public class JobApplication {
   @MutationMapping(name = "saveJobApplicationNote")
   public Long saveJobApplicationNote(
       @Argument(name = "jobApplicationId") Long jobApplicationId,
-      @Argument(name = "requestBody") JobApplicationNoteData requestBody,
+      @Argument(name = "requestBody") JobApplicationNote requestBody,
       DataFetchingEnvironment environment) throws Exception {
     System.out.println("saveJobApplicationNote");
     return jobApplicationService.saveJobApplicationNote(jobApplicationId, requestBody, environment);

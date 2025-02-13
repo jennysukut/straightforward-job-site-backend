@@ -7,10 +7,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sfjs.data.BaseData;
-import com.sfjs.jpa.entity.BaseEntity;
+import com.sfjs.data.BaseObject;
+import com.sfjs.data.BaseObject;
 
-public class BaseConverter<ENTITY extends BaseEntity, BODY extends BaseData> {
+public class BaseConverter<ENTITY extends BaseObject, BODY extends BaseObject> {
 
   Logger logger = Logger.getLogger(getClass().getName());
 

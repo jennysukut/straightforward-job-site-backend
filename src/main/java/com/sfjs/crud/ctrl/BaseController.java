@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.svc.BaseService;
-import com.sfjs.data.BaseData;
-import com.sfjs.jpa.entity.BaseEntity;
+import com.sfjs.data.BaseObject;
+import com.sfjs.data.BaseObject;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public abstract class BaseController<SERVICE extends BaseService<ENTITY, BODY>, ENTITY extends BaseEntity, BODY extends BaseData> {
+public abstract class BaseController<SERVICE extends BaseService<ENTITY, BODY>, ENTITY extends BaseObject, BODY extends BaseObject> {
 
   @Autowired
   private SERVICE service;

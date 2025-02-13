@@ -1,6 +1,6 @@
 package com.sfjs.repo;
 
-import com.sfjs.jpa.entity.AddressEntity;
+import com.sfjs.data.entity.AddressEntity;
 import com.sfjs.jpa.repo.AddressRepository;
 
 public class AddressRepositoryTest extends BaseRepositoryTest<AddressRepository, AddressEntity> {

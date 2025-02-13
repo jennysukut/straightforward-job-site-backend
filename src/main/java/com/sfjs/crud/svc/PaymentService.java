@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import com.sfjs.conv.BusinessConverter;
 import com.sfjs.conv.FellowConverter;
 import com.sfjs.conv.PaymentConverter;
-import com.sfjs.data.PaymentData;
-import com.sfjs.jpa.entity.PaymentEntity;
+import com.sfjs.data.api.PaymentData;
+import com.sfjs.data.entity.PaymentEntity;
 import com.sfjs.jpa.repo.BaseRepository;
 
 import jakarta.transaction.Transactional;

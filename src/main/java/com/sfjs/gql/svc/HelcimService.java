@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sfjs.data.PaymentData;
+import com.sfjs.data.api.PaymentData;
 import com.sfjs.gql.schema.PaymentInput;
 import jakarta.annotation.PostConstruct;
 import okhttp3.Call;

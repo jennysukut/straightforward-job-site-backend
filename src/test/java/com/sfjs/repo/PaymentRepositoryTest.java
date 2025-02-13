@@ -1,6 +1,6 @@
 package com.sfjs.repo;
 
-import com.sfjs.jpa.entity.PaymentEntity;
+import com.sfjs.data.entity.PaymentEntity;
 import com.sfjs.jpa.repo.PaymentRepository;
 
 public class PaymentRepositoryTest extends BaseRepositoryTest<PaymentRepository, PaymentEntity> {

@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.jpa.entity.FellowEntity;
+import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.crud.svc.FellowService;
-import com.sfjs.data.FellowData;
+import com.sfjs.data.api.FellowData;
 
 @RestController
 @EnableWebMvc

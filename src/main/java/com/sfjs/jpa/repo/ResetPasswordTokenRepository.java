@@ -3,7 +3,7 @@ package com.sfjs.jpa.repo;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sfjs.jpa.entity.ResetPasswordTokenEntity;
+import com.sfjs.data.entity.ResetPasswordTokenEntity;
 
 @Repository
 @Transactional

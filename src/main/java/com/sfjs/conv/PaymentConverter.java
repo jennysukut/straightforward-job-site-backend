@@ -2,9 +2,9 @@ package com.sfjs.conv;
 
 import org.springframework.stereotype.Service;
 
-import com.sfjs.data.PaymentData;
-import com.sfjs.jpa.entity.PaymentEntity;
-import com.sfjs.jpa.entity.PaymentStatus;
+import com.sfjs.data.api.PaymentData;
+import com.sfjs.data.core.PaymentStatus;
+import com.sfjs.data.entity.PaymentEntity;
 
 @Service
 public class PaymentConverter extends BaseConverter<PaymentEntity, PaymentData> {

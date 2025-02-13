@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.crud.svc.BusinessService;
-import com.sfjs.data.BaseBusinessData;
-import com.sfjs.data.BusinessData;
-import com.sfjs.jpa.entity.BusinessEntity;
+import com.sfjs.data.api.BusinessData;
+import com.sfjs.data.core.Business;
+import com.sfjs.data.entity.BusinessEntity;
 
 @RestController
 @EnableWebMvc

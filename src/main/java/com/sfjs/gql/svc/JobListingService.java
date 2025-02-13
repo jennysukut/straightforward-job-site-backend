@@ -12,19 +12,19 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sfjs.jpa.entity.AccountEntity;
-import com.sfjs.jpa.entity.BaseEntity;
-import com.sfjs.jpa.entity.BusinessEntity;
-import com.sfjs.jpa.entity.InterviewProcessEntity;
-import com.sfjs.jpa.entity.JobListingEntity;
+import com.sfjs.data.entity.AccountEntity;
+import com.sfjs.data.entity.BusinessEntity;
+import com.sfjs.data.entity.InterviewProcessEntity;
+import com.sfjs.data.entity.JobListingEntity;
 import com.sfjs.jpa.repo.BaseRepository;
 import com.sfjs.jpa.repo.InterviewProcessRepository;
 import com.sfjs.jpa.repo.JobListingRepository;
-import com.sfjs.data.HybridDetailsData;
-import com.sfjs.data.InterviewProcessData;
-import com.sfjs.data.JobListingData;
-import com.sfjs.data.JobListingElementData;
-import com.sfjs.data.PayDetailsData;
+import com.sfjs.data.BaseObject;
+import com.sfjs.data.api.JobListingData;
+import com.sfjs.data.api.JobListingElementData;
+import com.sfjs.data.api.PayDetailsData;
+import com.sfjs.data.core.HybridDetails;
+import com.sfjs.data.core.InterviewProcess;
 import com.sfjs.security.AuthorizationService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -69,7 +69,7 @@ public class JobListingService {
   private JobListingData convertJobEntityToJobData(JobListingEntity entity){
     JobListingData jobData = new JobListingData();
 
-    jobData.setObjectId(entity.getId());
+//    jobData.setObjectId(entity.getId());
     jobData.setJobTitle(entity.getJobTitle());
     jobData.setBusinessName(entity.getBusinessName());
     jobData.setApplicationLimit(entity.getApplicationLimit());
@@ -81,7 +81,7 @@ public class JobListingService {
     PayDetailsData payDetails = getPayDetailsData(entity);
     jobData.setPayDetails(payDetails);
 
-    HybridDetailsData hybridDetails = getHybridDetailsData(entity);
+    HybridDetails hybridDetails = getHybridDetailsData(entity);
     jobData.setHybridDetails(hybridDetails);
 
     jobData.setExperienceLevel(entity.getExperienceLevel());
@@ -90,7 +90,7 @@ public class JobListingService {
     jobData.setResponsibilities(entity.getResponsibilities());
     jobData.setPerks(entity.getPerks());
 
-    List<InterviewProcessData> interviewProcessDataList = getInterviewProcessDataList(entity);
+    List<InterviewProcess> interviewProcessDataList = getInterviewProcessDataList(entity);
     jobData.setInterviewProcess(interviewProcessDataList);
     jobData.setLocation(entity.getLocation());
     jobData.setCountry(entity.getCountry());
@@ -112,20 +112,20 @@ public class JobListingService {
     return payDetails;
   }
 
-  private HybridDetailsData getHybridDetailsData(JobListingEntity entity){
-    HybridDetailsData hybridDetails = new HybridDetailsData();
+  private HybridDetails getHybridDetailsData(JobListingEntity entity){
+    HybridDetails hybridDetails = new HybridDetails();
     hybridDetails.setDaysInOffice(entity.getDaysInOffice());
     hybridDetails.setDaysRemote(entity.getDaysRemote());
 
     return hybridDetails;
   }
 
-  private List<InterviewProcessData> getInterviewProcessDataList(JobListingEntity entity) {
+  private List<InterviewProcess> getInterviewProcessDataList(JobListingEntity entity) {
     List<InterviewProcessEntity> interviewProcessEntities = entity.getInterviewProcess();
-    List<InterviewProcessData> interviewProcessDataList = new ArrayList<InterviewProcessData>();
+    List<InterviewProcess> interviewProcessDataList = new ArrayList<InterviewProcess>();
 
     for (InterviewProcessEntity interviewProcessEntity : interviewProcessEntities){
-      InterviewProcessData interviewProcessData = new InterviewProcessData();
+      InterviewProcess interviewProcessData = new InterviewProcess();
 
       interviewProcessData.setStage(interviewProcessEntity.getStage());
       interviewProcessData.setStep(interviewProcessEntity.getStep());
@@ -200,13 +200,13 @@ public class JobListingService {
     }
   }
 
-  private <E extends BaseEntity, D extends JobListingElementData>
+  private <E extends BaseObject, D extends JobListingElementData>
   E convertJobListingElementData(D data, Class<E> entityType,
     BaseRepository<E> repository) {
   try {
     String json = mapper.writeValueAsString(data);
     E e = mapper.readValue(json, entityType);
-    e.setId(data.getObjectId());
+//    e.setId(data.getObjectId());
     if (e.getId() != null) {
       Optional<E> opt = repository.findById(e.getId());
       if (opt.isPresent()) {

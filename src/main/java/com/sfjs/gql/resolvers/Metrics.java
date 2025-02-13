@@ -7,12 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.jpa.entity.BusinessEntity;
-import com.sfjs.jpa.entity.FellowEntity;
+import com.sfjs.data.entity.BusinessEntity;
+import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.jpa.repo.BusinessRepository;
 import com.sfjs.jpa.repo.FellowRepository;
 import com.sfjs.crud.svc.NumericMetricService;
-import com.sfjs.data.NumericMetricData;
+import com.sfjs.data.core.NumericMetric;
 import com.sfjs.gql.schema.BusinessMetrics;
 import com.sfjs.gql.schema.DonationMetrics;
 import com.sfjs.gql.schema.FellowMetrics;
@@ -51,9 +51,9 @@ public class Metrics {
     }
     {
       DonationMetrics donationMetrics = new DonationMetrics();
-      NumericMetricData fellowDonations = numericMetricService.findByName("CURRENT_FELLOW_DONATION");
+      NumericMetric fellowDonations = numericMetricService.findByName("CURRENT_FELLOW_DONATION");
       donationMetrics.setFellowDonations(fellowDonations.getMetric().toString());
-      NumericMetricData businessDonations = numericMetricService.findByName("CURRENT_BUSINESS_DONATION");
+      NumericMetric businessDonations = numericMetricService.findByName("CURRENT_BUSINESS_DONATION");
       donationMetrics.setBusinessDonations(businessDonations.getMetric().toString());
       donationMetrics.setTotalDonations(fellowDonations.getMetric().add(businessDonations.getMetric()).toString());
       result.setDonationMetrics(donationMetrics);

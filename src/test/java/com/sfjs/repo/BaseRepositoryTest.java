@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import com.sfjs.jpa.entity.BaseEntity;
+import com.sfjs.data.BaseObject;
 import com.sfjs.jpa.repo.BaseRepository;
 
 @DataJpaTest
-public abstract class BaseRepositoryTest<R extends BaseRepository<E>, E extends BaseEntity> {
+public abstract class BaseRepositoryTest<R extends BaseRepository<E>, E extends BaseObject> {
 
   @Autowired
   private TestEntityManager entityManager;
