@@ -1,9 +1,8 @@
 package com.sfjs.jpa.entity;
 
-import jakarta.persistence.Column;
+import com.sfjs.data.BasePaymentData;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -15,19 +14,19 @@ import lombok.Setter;
 
 @Entity(name = "payment")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class PaymentEntity extends BaseEntity {
+public class PaymentEntity extends BasePaymentData {
 
-  @Getter
-  @Setter
-  private String paymentType; // example: "purchase"
-
-  @Getter
-  @Setter
-  private String amount; // example: "0.01"
-
-  @Getter
-  @Setter
-  private String currency; // example: "CAD"
+//  @Getter
+//  @Setter
+//  private String paymentType; // example: "purchase"
+//
+//  @Getter
+//  @Setter
+//  private String amount; // example: "0.01"
+//
+//  @Getter
+//  @Setter
+//  private String currency; // example: "CAD"
 
   @Getter
   @Setter
@@ -37,10 +36,10 @@ public class PaymentEntity extends BaseEntity {
   @Setter
   private String SALT; // For encryption of secret token
 
-  @Getter
-  @Setter
-  @Transient
-  private String checkoutToken; // from helcim - don't store
+//  @Getter
+//  @Setter
+//  @Transient
+//  private String checkoutToken; // from helcim - don't store
 
   @Getter
   @Setter
@@ -54,9 +53,9 @@ public class PaymentEntity extends BaseEntity {
   @JoinColumn(name = "fellow_id", nullable = true)
   private FellowEntity fellow;
 
-  @Getter
-  @Setter
-  @Enumerated(EnumType.ORDINAL)
-  @Column(name = "status")
-  private PaymentStatus status;
+//  @Getter
+//  @Setter
+//  @Enumerated(EnumType.ORDINAL)
+//  @Column(name = "status")
+//  private PaymentStatus status;
 }

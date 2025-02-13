@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.jpa.entity.FellowEntity;
-import com.sfjs.crud.response.FellowResponse;
 import com.sfjs.crud.svc.FellowService;
+import com.sfjs.data.FellowData;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public class FellowController extends BaseController<FellowService, FellowEntity, FellowResponse> {
+public class FellowController extends BaseController<FellowService, FellowEntity, FellowData> {
 
   @MutationMapping(name = "deleteFellow")
   public Boolean deleteFellow(@Argument(name = "id") Long id) {
@@ -32,43 +32,43 @@ public class FellowController extends BaseController<FellowService, FellowEntity
   }
 
   @RequestMapping(path = "/fellow/getbyid/{id}", method = RequestMethod.GET)
-  public FellowResponse getById(@PathVariable("id") Long id) {
+  public FellowData getById(@PathVariable("id") Long id) {
     return super.getById(id);
   }
 
   @RequestMapping(path = "/fellow/findbyid/{id}", method = RequestMethod.GET)
-  public FellowResponse findById(@PathVariable("id") Long id) {
+  public FellowData findById(@PathVariable("id") Long id) {
     return super.findById(id);
   }
 
   @RequestMapping(path = "/fellow/findallbyid/{id}", method = RequestMethod.GET)
-  public List<FellowResponse> findAllById(@PathVariable("id") Long id) {
+  public List<FellowData> findAllById(@PathVariable("id") Long id) {
     return super.findAllById(id);
   }
 
   @RequestMapping(path = "/fellow/findbyname/{name}", method = RequestMethod.GET)
-  public FellowResponse findByName(@PathVariable("name") String name) {
+  public FellowData findByName(@PathVariable("name") String name) {
     return super.findByName(name);
   }
 
   @RequestMapping(path = "/fellow/findallbyname/{name}", method = RequestMethod.GET)
-  public List<FellowResponse> findAllByName(@PathVariable("name") String name) {
+  public List<FellowData> findAllByName(@PathVariable("name") String name) {
     return super.findAllByName(name);
   }
 
   @RequestMapping(path = "/fellow/findbylabel/{label}", method = RequestMethod.GET)
-  public FellowResponse findByLabel(@PathVariable("label") String label) {
+  public FellowData findByLabel(@PathVariable("label") String label) {
     return super.findByLabel(label);
   }
 
   @RequestMapping(path = "/fellow/findallbylabel/{label}", method = RequestMethod.GET)
-  public List<FellowResponse> findAllByLabel(@PathVariable("label") String label) {
+  public List<FellowData> findAllByLabel(@PathVariable("label") String label) {
     return super.findAllByLabel(label);
   }
 
   @QueryMapping(name = "findAllFellows")
   @RequestMapping(path = "/fellow/findall", method = RequestMethod.GET)
-  public List<FellowResponse> findAll(@Argument(name = "limit") Integer limit) {
+  public List<FellowData> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 }

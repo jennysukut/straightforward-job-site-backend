@@ -4,21 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
+import com.sfjs.data.NumericMetricData;
 import com.sfjs.jpa.entity.NumericMetricEntity;
 import com.sfjs.jpa.repo.BaseRepository;
-import com.sfjs.crud.response.NumericMetricResponse;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class NumericMetricService extends BaseService<NumericMetricEntity, NumericMetricResponse> {
+public class NumericMetricService extends BaseService<NumericMetricEntity, NumericMetricData> {
 
   @Autowired
   BaseRepository<NumericMetricEntity> repository;
 
   public NumericMetricService() {
-    super(new BaseConverter<NumericMetricEntity, NumericMetricResponse>(NumericMetricResponse.class));
+    super(new BaseConverter<NumericMetricEntity, NumericMetricData>(NumericMetricData.class));
   }
 
   @Override

@@ -2,18 +2,18 @@ package com.sfjs.conv;
 
 import org.springframework.stereotype.Service;
 
+import com.sfjs.data.PaymentData;
 import com.sfjs.jpa.entity.PaymentEntity;
 import com.sfjs.jpa.entity.PaymentStatus;
-import com.sfjs.crud.response.PaymentResponse;
 
 @Service
-public class PaymentConverter extends BaseConverter<PaymentEntity, PaymentResponse> {
+public class PaymentConverter extends BaseConverter<PaymentEntity, PaymentData> {
 
   BusinessConverter businessConverter;
   FellowConverter fellowConverter;
 
   public PaymentConverter(BusinessConverter businessConverter, FellowConverter fellowConverter) {
-    super(PaymentResponse.class);
+    super(PaymentData.class);
     this.businessConverter = businessConverter;
     this.fellowConverter = fellowConverter;
   }
@@ -27,9 +27,9 @@ public class PaymentConverter extends BaseConverter<PaymentEntity, PaymentRespon
    * @return Payment - data transfer object
    */
   @Override
-  public PaymentResponse convertToBody(PaymentEntity entity) {
+  public PaymentData convertToBody(PaymentEntity entity) {
     // Default conversion
-    PaymentResponse payment = super.convertToBody(entity);
+    PaymentData payment = super.convertToBody(entity);
     payment.setStatus(entity.getStatus() != null ? entity.getStatus() : PaymentStatus.PENDING);
     return payment;
   }

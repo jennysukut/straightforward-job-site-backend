@@ -1,11 +1,13 @@
-package com.sfjs.crud.response;
+package com.sfjs.data;
 
 import com.sfjs.jpa.entity.PaymentStatus;
 
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
-public class PaymentResponse extends BaseResponse {
+@MappedSuperclass
+public class BasePaymentData extends BaseData {
 
   @Getter
   @Setter
@@ -21,17 +23,5 @@ public class PaymentResponse extends BaseResponse {
 
   @Getter
   @Setter
-  private BusinessResponse business;
-
-  @Getter
-  @Setter
-  private FellowResponse fellow;
-
-  @Getter
-  @Setter
   private PaymentStatus status;
-
-  @Getter
-  @Setter
-  private String checkoutToken;
 }

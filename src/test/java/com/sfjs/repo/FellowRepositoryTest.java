@@ -1,7 +1,7 @@
 package com.sfjs.repo;
 
-import com.sfjs.crud.entity.FellowEntity;
-import com.sfjs.crud.repo.FellowRepository;
+import com.sfjs.jpa.entity.FellowEntity;
+import com.sfjs.jpa.repo.FellowRepository;
 
 public class FellowRepositoryTest extends BaseRepositoryTest<FellowRepository, FellowEntity> {
 

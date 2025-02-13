@@ -10,11 +10,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import com.sfjs.conv.BaseConverter;
+import com.sfjs.data.BaseData;
 import com.sfjs.jpa.entity.BaseEntity;
 import com.sfjs.jpa.repo.BaseRepository;
-import com.sfjs.crud.response.BaseResponse;
 
-public abstract class BaseService<ENTITY extends BaseEntity, BODY extends BaseResponse> {
+public abstract class BaseService<ENTITY extends BaseEntity, BODY extends BaseData> {
 
   Logger logger = Logger.getLogger(getClass().getName());
 

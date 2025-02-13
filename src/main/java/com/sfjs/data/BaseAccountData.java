@@ -1,11 +1,11 @@
-package com.sfjs.crud.response;
+package com.sfjs.data;
 
-import java.util.Set;
-
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
-public class AccountResponse extends BaseResponse {
+@MappedSuperclass
+public class BaseAccountData extends BaseData {
 
   @Getter
   @Setter
@@ -18,8 +18,4 @@ public class AccountResponse extends BaseResponse {
   @Getter
   @Setter
   private boolean enabled;
-
-  @Getter
-  @Setter
-  private Set<RoleResponse> roles;
 }

@@ -12,14 +12,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.jpa.entity.BusinessEntity;
-import com.sfjs.crud.response.BusinessResponse;
 import com.sfjs.crud.svc.BusinessService;
+import com.sfjs.data.BaseBusinessData;
+import com.sfjs.data.BusinessData;
+import com.sfjs.jpa.entity.BusinessEntity;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public class BusinessController extends BaseController<BusinessService, BusinessEntity, BusinessResponse> {
+public class BusinessController extends BaseController<BusinessService, BusinessEntity, BusinessData> {
 
   @MutationMapping(name = "deleteBusiness")
   public Boolean deleteBusiness(@Argument(name = "id") Long id) {
@@ -32,43 +33,43 @@ public class BusinessController extends BaseController<BusinessService, Business
   }
 
   @RequestMapping(path = "/business/getbyid/{id}", method = RequestMethod.GET)
-  public BusinessResponse getById(@PathVariable("id") Long id) {
+  public BusinessData getById(@PathVariable("id") Long id) {
     return super.getById(id);
   }
 
   @RequestMapping(path = "/business/findbyid/{id}", method = RequestMethod.GET)
-  public BusinessResponse findById(@PathVariable("id") Long id) {
+  public BusinessData findById(@PathVariable("id") Long id) {
     return super.findById(id);
   }
 
   @RequestMapping(path = "/business/findallbyid/{id}", method = RequestMethod.GET)
-  public List<BusinessResponse> findAllById(@PathVariable("id") Long id) {
+  public List<BusinessData> findAllById(@PathVariable("id") Long id) {
     return super.findAllById(id);
   }
 
   @RequestMapping(path = "/business/findbyname/{name}", method = RequestMethod.GET)
-  public BusinessResponse findByName(@PathVariable("name") String name) {
+  public BusinessData findByName(@PathVariable("name") String name) {
     return super.findByName(name);
   }
 
   @RequestMapping(path = "/business/findallbyname/{name}", method = RequestMethod.GET)
-  public List<BusinessResponse> findAllByName(@PathVariable("name") String name) {
+  public List<BusinessData> findAllByName(@PathVariable("name") String name) {
     return super.findAllByName(name);
   }
 
   @RequestMapping(path = "/business/findbylabel/{label}", method = RequestMethod.GET)
-  public BusinessResponse findByLabel(@PathVariable("label") String label) {
+  public BusinessData findByLabel(@PathVariable("label") String label) {
     return super.findByLabel(label);
   }
 
   @RequestMapping(path = "/business/findallbylabel/{label}", method = RequestMethod.GET)
-  public List<BusinessResponse> findAllByLabel(@PathVariable("label") String label) {
+  public List<BusinessData> findAllByLabel(@PathVariable("label") String label) {
     return super.findAllByLabel(label);
   }
 
   @QueryMapping(name = "findAllBusinesses")
   @RequestMapping(path = "/business/findall", method = RequestMethod.GET)
-  public List<BusinessResponse> findAll(@Argument(name = "limit") Integer limit) {
+  public List<BusinessData> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 }

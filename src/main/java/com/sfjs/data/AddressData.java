@@ -1,9 +1,9 @@
-package com.sfjs.crud.response;
+package com.sfjs.data;
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class AddressResponse extends BaseResponse {
+public class AddressData extends BaseData {
 
   @Getter
   @Setter

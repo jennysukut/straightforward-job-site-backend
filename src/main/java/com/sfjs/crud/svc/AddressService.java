@@ -4,21 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
+import com.sfjs.data.AddressData;
 import com.sfjs.jpa.entity.AddressEntity;
 import com.sfjs.jpa.repo.BaseRepository;
-import com.sfjs.crud.response.AddressResponse;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class AddressService extends BaseService<AddressEntity, AddressResponse> {
+public class AddressService extends BaseService<AddressEntity, AddressData> {
 
   @Autowired
   BaseRepository<AddressEntity> repository;
 
   public AddressService() {
-    super(new BaseConverter<AddressEntity, AddressResponse>(AddressResponse.class));
+    super(new BaseConverter<AddressEntity, AddressData>(AddressData.class));
   }
 
   @Override

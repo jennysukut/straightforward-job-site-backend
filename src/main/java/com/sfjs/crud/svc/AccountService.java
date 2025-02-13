@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
+import com.sfjs.data.AccountData;
 import com.sfjs.jpa.entity.AccountEntity;
 import com.sfjs.jpa.repo.AccountRepository;
 import com.sfjs.jpa.repo.BaseRepository;
-import com.sfjs.crud.response.AccountResponse;
 
 import jakarta.transaction.Transactional;
 
@@ -21,7 +21,7 @@ import jakarta.transaction.Transactional;
  */
 @Service
 @Transactional
-public class AccountService extends BaseService<AccountEntity, AccountResponse> {
+public class AccountService extends BaseService<AccountEntity, AccountData> {
 
   @Autowired
   AccountRepository repository;
@@ -32,7 +32,7 @@ public class AccountService extends BaseService<AccountEntity, AccountResponse> 
   }
 
   public AccountService() {
-    super(new BaseConverter<AccountEntity, AccountResponse>(AccountResponse.class));
+    super(new BaseConverter<AccountEntity, AccountData>(AccountData.class));
   }
 
   public AccountEntity findByEmail(String email) {

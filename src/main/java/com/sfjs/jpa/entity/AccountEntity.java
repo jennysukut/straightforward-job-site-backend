@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sfjs.data.BaseAccountData;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,19 +20,7 @@ import lombok.Setter;
 
 @Entity(name = "account")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class AccountEntity extends BaseEntity {
-
-  @Getter
-  @Setter
-  private String email;
-
-  @Getter
-  @Setter
-  private String password;
-
-  @Getter
-  @Setter
-  private boolean enabled;
+public class AccountEntity extends BaseAccountData {
 
   @Getter
   @Setter

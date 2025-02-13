@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.jpa.entity.RoleEntity;
-import com.sfjs.crud.response.RoleResponse;
 import com.sfjs.crud.svc.RoleService;
+import com.sfjs.data.RoleData;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public class RoleController extends BaseController<RoleService, RoleEntity, RoleResponse> {
+public class RoleController extends BaseController<RoleService, RoleEntity, RoleData> {
 
   @MutationMapping(name = "deleteRole")
   public Boolean deleteRole(@Argument(name = "id") Long id) {
@@ -32,43 +32,43 @@ public class RoleController extends BaseController<RoleService, RoleEntity, Role
   }
 
   @RequestMapping(path = "/role/getbyid/{id}", method = RequestMethod.GET)
-  public RoleResponse getById(@PathVariable("id") Long id) {
+  public RoleData getById(@PathVariable("id") Long id) {
     return super.getById(id);
   }
 
   @RequestMapping(path = "/role/findbyid/{id}", method = RequestMethod.GET)
-  public RoleResponse findById(@PathVariable("id") Long id) {
+  public RoleData findById(@PathVariable("id") Long id) {
     return super.findById(id);
   }
 
   @RequestMapping(path = "/role/findallbyid/{id}", method = RequestMethod.GET)
-  public List<RoleResponse> findAllById(@PathVariable("id") Long id) {
+  public List<RoleData> findAllById(@PathVariable("id") Long id) {
     return super.findAllById(id);
   }
 
   @RequestMapping(path = "/role/findbyname/{name}", method = RequestMethod.GET)
-  public RoleResponse findByName(@PathVariable("name") String name) {
+  public RoleData findByName(@PathVariable("name") String name) {
     return super.findByName(name);
   }
 
   @RequestMapping(path = "/role/findallbyname/{name}", method = RequestMethod.GET)
-  public List<RoleResponse> findAllByName(@PathVariable("name") String name) {
+  public List<RoleData> findAllByName(@PathVariable("name") String name) {
     return super.findAllByName(name);
   }
 
   @RequestMapping(path = "/role/findbylabel/{label}", method = RequestMethod.GET)
-  public RoleResponse findByLabel(@PathVariable("label") String label) {
+  public RoleData findByLabel(@PathVariable("label") String label) {
     return super.findByLabel(label);
   }
 
   @RequestMapping(path = "/role/findallbylabel/{label}", method = RequestMethod.GET)
-  public List<RoleResponse> findAllByLabel(@PathVariable("label") String label) {
+  public List<RoleData> findAllByLabel(@PathVariable("label") String label) {
     return super.findAllByLabel(label);
   }
 
   @QueryMapping(name = "findAllRoles")
   @RequestMapping(path = "/role/findall", method = RequestMethod.GET)
-  public List<RoleResponse> findAll(@Argument(name = "limit") Integer limit) {
+  public List<RoleData> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 }

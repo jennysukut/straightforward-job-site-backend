@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sfjs.data.BaseBusinessData;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
@@ -17,7 +18,7 @@ import lombok.Setter;
 
 @Entity(name = "business")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class BusinessEntity extends BaseEntity {
+public class BusinessEntity extends BaseBusinessData {
 
   @Getter
   @Setter
@@ -25,21 +26,21 @@ public class BusinessEntity extends BaseEntity {
   @JoinColumn(name = "account_id", unique = false)
   private AccountEntity account;
 
-  @Getter
-  @Setter
-  private Boolean betaTester;
+//  @Getter
+//  @Setter
+//  private Boolean betaTester;
 
-  @Getter
-  @Setter
-  private Boolean earlySignup;
+//  @Getter
+//  @Setter
+//  private Boolean earlySignup;
 
-  @Getter
-  @Setter
-  private String contactName;
+//  @Getter
+//  @Setter
+//  private String contactName;
 
-  @Getter
-  @Setter
-  private String referral;
+//  @Getter
+//  @Setter
+//  private String referral;
 
   @Getter
   @Setter

@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.jpa.entity.AccountEntity;
-import com.sfjs.crud.response.AccountResponse;
 import com.sfjs.crud.svc.AccountService;
+import com.sfjs.data.AccountData;
+import com.sfjs.jpa.entity.AccountEntity;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public class AccountController extends BaseController<AccountService, AccountEntity, AccountResponse> {
+public class AccountController extends BaseController<AccountService, AccountEntity, AccountData> {
 
   @MutationMapping(name = "deleteAccount")
   public Boolean deleteAccount(@Argument(name = "id") Long id) {
@@ -32,43 +32,43 @@ public class AccountController extends BaseController<AccountService, AccountEnt
   }
 
   @RequestMapping(path = "/account/getbyid/{id}", method = RequestMethod.GET)
-  public AccountResponse getById(@PathVariable("id") Long id) {
+  public AccountData getById(@PathVariable("id") Long id) {
     return super.getById(id);
   }
 
   @RequestMapping(path = "/account/findbyid/{id}", method = RequestMethod.GET)
-  public AccountResponse findById(@PathVariable("id") Long id) {
+  public AccountData findById(@PathVariable("id") Long id) {
     return super.findById(id);
   }
 
   @RequestMapping(path = "/account/findallbyid/{id}", method = RequestMethod.GET)
-  public List<AccountResponse> findAllById(@PathVariable("id") Long id) {
+  public List<AccountData> findAllById(@PathVariable("id") Long id) {
     return super.findAllById(id);
   }
 
   @RequestMapping(path = "/account/findbyname/{name}", method = RequestMethod.GET)
-  public AccountResponse findByName(@PathVariable("name") String name) {
+  public AccountData findByName(@PathVariable("name") String name) {
     return super.findByName(name);
   }
 
   @RequestMapping(path = "/account/findallbyname/{name}", method = RequestMethod.GET)
-  public List<AccountResponse> findAllByName(@PathVariable("name") String name) {
+  public List<AccountData> findAllByName(@PathVariable("name") String name) {
     return super.findAllByName(name);
   }
 
   @RequestMapping(path = "/account/findbylabel/{label}", method = RequestMethod.GET)
-  public AccountResponse findByLabel(@PathVariable("label") String label) {
+  public AccountData findByLabel(@PathVariable("label") String label) {
     return super.findByLabel(label);
   }
 
   @RequestMapping(path = "/account/findallbylabel/{label}", method = RequestMethod.GET)
-  public List<AccountResponse> findAllByLabel(@PathVariable("label") String label) {
+  public List<AccountData> findAllByLabel(@PathVariable("label") String label) {
     return super.findAllByLabel(label);
   }
 
   @QueryMapping(name = "findAllAccounts")
   @RequestMapping(path = "/account/findall", method = RequestMethod.GET)
-  public List<AccountResponse> findAll(@Argument(name = "limit") Integer limit) {
+  public List<AccountData> findAll(@Argument(name = "limit") Integer limit) {
     return super.findAll(limit);
   }
 }

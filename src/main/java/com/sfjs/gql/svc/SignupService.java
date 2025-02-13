@@ -124,14 +124,15 @@ public class SignupService {
   }
 
   public Long signupFellow(FellowInput requestBody) {
+    logger.info("signupFellow: " + requestBody);
     String email = requestBody.getEmail();
     AccountEntity existingAccountEntity = accountRepository.findByEmail(email);
     if (existingAccountEntity == null) {
-      // This email has never been used
+      logger.info("This email has never been used");
       FellowEntity savedFellowEntity = createNewFellowAndNewAccount(requestBody);
       return savedFellowEntity.getId();
     } else {
-      // This account already exists, so make sure it's the same person
+      logger.info("This account already exists, so make sure it's the same person");
       try {
         authorizationService.login(requestBody.getEmail(), requestBody.getPassword());
       } catch (Exception ex) {
@@ -141,17 +142,17 @@ public class SignupService {
       }
       FellowEntity existingFellowEntity = existingAccountEntity.getFellow();
       if (existingFellowEntity == null) {
-        // No fellow
+        logger.info("No fellow");
         FellowEntity savedFellowEntity = createNewFellow(requestBody, existingAccountEntity);
         return savedFellowEntity.getId();
       } else {
         String existingFellowName = existingFellowEntity.getName();
         if (existingFellowName != null && existingFellowName.contentEquals(requestBody.getName())) {
-          // Same fellow
+          logger.info("Same fellow");
           FellowEntity savedFellowEntity = updateExistingFellow(requestBody, existingFellowEntity);
           return savedFellowEntity.getId();
         } else {
-          // Different fellow
+          logger.info("Different fellow");
           throw new IllegalArgumentException("Email is unavailable");
         }
       }

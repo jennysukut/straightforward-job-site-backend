@@ -2,8 +2,6 @@ package com.sfjs.data;
 
 import java.util.List;
 
-import com.sfjs.crud.response.BaseResponse;
-
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;

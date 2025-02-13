@@ -9,9 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sfjs.jpa.entity.PaymentEntity;
+import com.sfjs.data.PaymentData;
 import com.sfjs.gql.schema.PaymentInput;
-
 import jakarta.annotation.PostConstruct;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -44,7 +43,7 @@ public class HelcimService {
     apiUrl = env.getProperty("helcim.api.url");
   }
 
-  public Mono<PaymentEntity> initializeCheckout(PaymentInput checkout) {
+  public Mono<PaymentData> initializeCheckout(PaymentInput checkout) {
     MediaType mediaType = MediaType.parse("application/json");
     String json;
     try {
@@ -74,7 +73,7 @@ public class HelcimService {
               if (responseBody != null) {
                 String body = responseBody.string();
                 try {
-                  PaymentEntity checkoutResponse = mapper.readValue(body, PaymentEntity.class);
+                  PaymentData checkoutResponse = mapper.readValue(body, PaymentData.class);
                   sink.success(checkoutResponse);
                 } catch (Exception e) {
                   sink.error(new IOException("Error parsing response body", e));

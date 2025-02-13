@@ -24,9 +24,9 @@ import com.sfjs.jpa.repo.BusinessRepository;
 import com.sfjs.jpa.repo.FellowRepository;
 import com.sfjs.jpa.repo.NumericMetricRepository;
 import com.sfjs.jpa.repo.PaymentRepository;
-import com.sfjs.crud.response.PaymentResponse;
 import com.sfjs.crud.svc.BusinessService;
 import com.sfjs.crud.svc.FellowService;
+import com.sfjs.data.PaymentData;
 import com.sfjs.gql.schema.BusinessDonation;
 import com.sfjs.gql.schema.BusinessInput;
 import com.sfjs.gql.schema.FellowDonation;
@@ -73,7 +73,7 @@ public class CheckoutService {
 
   Logger logger = Logger.getLogger(getClass().getName());
 
-  public Mono<PaymentResponse> acceptBusinessDonation(BusinessDonation donation) {
+  public Mono<PaymentData> acceptBusinessDonation(BusinessDonation donation) {
 
     logger.info("Implicit business signup");
     BusinessInput business = new BusinessInput();
@@ -124,7 +124,7 @@ public class CheckoutService {
         Optional<BusinessEntity> businessEntity = businessRepository.findById(businessId);
         paymentEntity.setBusiness(businessEntity.get());
         PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
-        PaymentResponse paymentResponse = new PaymentResponse();
+        PaymentData paymentResponse = new PaymentData();
         paymentResponse.setId(savedPaymentEntity.getId());
         paymentResponse.setStatus(savedPaymentEntity.getStatus());
         return paymentResponse;
@@ -135,7 +135,7 @@ public class CheckoutService {
     });
   }
 
-  public Mono<PaymentResponse> acceptFellowDonation(FellowDonation donation) {
+  public Mono<PaymentData> acceptFellowDonation(FellowDonation donation) {
 
     logger.info("Implicit fellow signup");
     FellowInput fellow = new FellowInput();
@@ -184,7 +184,7 @@ public class CheckoutService {
         Optional<FellowEntity> fellowEntity = fellowRepository.findById(fellowId);
         paymentEntity.setFellow(fellowEntity.get());
         PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
-        PaymentResponse paymentResponse = new PaymentResponse();
+        PaymentData paymentResponse = new PaymentData();
         paymentResponse.setId(savedPaymentEntity.getId());
         paymentResponse.setStatus(savedPaymentEntity.getStatus());
         return paymentResponse;

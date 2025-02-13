@@ -1,13 +1,15 @@
-package com.sfjs.crud.response;
+package com.sfjs.data;
 
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
-public class FellowResponse extends BaseResponse {
+@MappedSuperclass
+public class BaseFellowData extends BaseData {
 
   @Getter
   @Setter
-  private Boolean collaborator;
+  private boolean collaborator;
 
   @Getter
   @Setter
@@ -15,7 +17,7 @@ public class FellowResponse extends BaseResponse {
 
   @Getter
   @Setter
-  private Boolean referralPartner;
+  private boolean referralPartner;
 
   @Getter
   @Setter
@@ -24,8 +26,4 @@ public class FellowResponse extends BaseResponse {
   @Getter
   @Setter
   private Boolean betaTester;
-
-  @Getter
-  @Setter
-  private AccountResponse account;
 }

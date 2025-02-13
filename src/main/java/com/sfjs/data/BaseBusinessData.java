@@ -1,9 +1,11 @@
-package com.sfjs.crud.response;
+package com.sfjs.data;
 
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
-public class BusinessResponse extends BaseResponse {
+@MappedSuperclass
+public class BaseBusinessData extends BaseData {
 
   @Getter
   @Setter
@@ -20,8 +22,4 @@ public class BusinessResponse extends BaseResponse {
   @Getter
   @Setter
   private String referral;
-
-  @Getter
-  @Setter
-  private AccountResponse account;
 }

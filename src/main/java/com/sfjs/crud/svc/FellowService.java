@@ -5,15 +5,15 @@ import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.AccountConverter;
 import com.sfjs.conv.FellowConverter;
+import com.sfjs.data.FellowData;
 import com.sfjs.jpa.entity.FellowEntity;
 import com.sfjs.jpa.repo.BaseRepository;
-import com.sfjs.crud.response.FellowResponse;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class FellowService extends BaseService<FellowEntity, FellowResponse> {
+public class FellowService extends BaseService<FellowEntity, FellowData> {
 
   @Autowired
   BaseRepository<FellowEntity> repository;

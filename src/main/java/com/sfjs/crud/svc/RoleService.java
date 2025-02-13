@@ -4,21 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sfjs.conv.BaseConverter;
+import com.sfjs.data.RoleData;
 import com.sfjs.jpa.entity.RoleEntity;
 import com.sfjs.jpa.repo.BaseRepository;
-import com.sfjs.crud.response.RoleResponse;
 
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class RoleService extends BaseService<RoleEntity, RoleResponse> {
+public class RoleService extends BaseService<RoleEntity, RoleData> {
 
   @Autowired
   BaseRepository<RoleEntity> repository;
 
   public RoleService() {
-    super(new BaseConverter<RoleEntity, RoleResponse>(RoleResponse.class));
+    super(new BaseConverter<RoleEntity, RoleData>(RoleData.class));
   }
 
   @Override

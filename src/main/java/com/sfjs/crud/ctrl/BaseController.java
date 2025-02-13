@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.sfjs.jpa.entity.BaseEntity;
-import com.sfjs.crud.response.BaseResponse;
 import com.sfjs.crud.svc.BaseService;
+import com.sfjs.data.BaseData;
+import com.sfjs.jpa.entity.BaseEntity;
 
 @RestController
 @EnableWebMvc
 @Transactional
-public abstract class BaseController<SERVICE extends BaseService<ENTITY, BODY>, ENTITY extends BaseEntity, BODY extends BaseResponse> {
+public abstract class BaseController<SERVICE extends BaseService<ENTITY, BODY>, ENTITY extends BaseEntity, BODY extends BaseData> {
 
   @Autowired
   private SERVICE service;
