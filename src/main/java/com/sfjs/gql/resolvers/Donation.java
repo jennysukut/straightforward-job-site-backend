@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.sfjs.crud.svc.NumericMetricService;
 import com.sfjs.data.api.PaymentData;
 import com.sfjs.data.core.NumericMetric;
 import com.sfjs.gql.schema.BusinessDonation;
 import com.sfjs.gql.schema.FellowDonation;
 import com.sfjs.gql.svc.CheckoutService;
-import com.sfjs.jpa.repo.NumericMetricRepository;
 
 import reactor.core.publisher.Mono;
 
@@ -30,7 +30,7 @@ public class Donation {
   private CheckoutService checkoutService;
 
   @Autowired
-  private NumericMetricRepository numericMetricRepository;
+  private NumericMetricService numericMetricService;
 
   @MutationMapping(name = "acceptBusinessDonation")
   public Mono<PaymentData> acceptBusinessDonation(@Argument(name = "donation") BusinessDonation donation) {
@@ -46,8 +46,8 @@ public class Donation {
 
   @QueryMapping(name = "currentDonations")
   public String currentDonations() {
-    NumericMetric fellowDonations = numericMetricRepository.findByName("CURRENT_FELLOW_DONATION");
-    NumericMetric businessDonations = numericMetricRepository.findByName("CURRENT_BUSINESS_DONATION");
+    NumericMetric fellowDonations = numericMetricService.findByName("CURRENT_FELLOW_DONATION");
+    NumericMetric businessDonations = numericMetricService.findByName("CURRENT_BUSINESS_DONATION");
     return fellowDonations.getMetric().add(businessDonations.getMetric()).toString();
   }
 }

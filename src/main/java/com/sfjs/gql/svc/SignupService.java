@@ -160,7 +160,7 @@ public class SignupService {
   }
 
   private FellowEntity updateExistingFellow(FellowInput requestBody, FellowEntity existingFellowEntity) {
-    if (valueChanged(requestBody.getBetaTester(), existingFellowEntity.isBetaTester())) {
+    if (valueChanged(requestBody.getBetaTester(), existingFellowEntity.getBetaTester())) {
       existingFellowEntity.setBetaTester(requestBody.getBetaTester());
     }
     if (valueChanged(requestBody.getCollaborator(), existingFellowEntity.isCollaborator())) {
