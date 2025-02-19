@@ -1,6 +1,6 @@
 package com.sfjs.data.core;
 
-import com.sfjs.data.api.JobListingElementData;
+import com.sfjs.data.entity.JobListingElementData;
 
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;

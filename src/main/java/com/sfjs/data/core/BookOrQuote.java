@@ -1,6 +1,6 @@
 package com.sfjs.data.core;
 
-import com.sfjs.data.api.ProfileElementData;
+import com.sfjs.data.entity.ProfileElementData;
 
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;

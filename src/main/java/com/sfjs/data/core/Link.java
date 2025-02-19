@@ -2,7 +2,7 @@ package com.sfjs.data.core;
 
 import java.net.URL;
 
-import com.sfjs.data.api.ProfileElementData;
+import com.sfjs.data.entity.ProfileElementData;
 
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
