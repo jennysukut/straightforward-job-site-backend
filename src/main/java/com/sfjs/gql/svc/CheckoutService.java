@@ -15,18 +15,12 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sfjs.data.api.PaymentData;
+import com.sfjs.data.core.PaymentStatus;
 import com.sfjs.data.entity.BusinessEntity;
 import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.data.entity.NumericMetricEntity;
 import com.sfjs.data.entity.PaymentEntity;
-import com.sfjs.jpa.repo.BusinessRepository;
-import com.sfjs.jpa.repo.FellowRepository;
-import com.sfjs.jpa.repo.NumericMetricRepository;
-import com.sfjs.jpa.repo.PaymentRepository;
-import com.sfjs.crud.svc.BusinessService;
-import com.sfjs.crud.svc.FellowService;
-import com.sfjs.data.api.PaymentData;
-import com.sfjs.data.core.PaymentStatus;
 import com.sfjs.gql.schema.BusinessDonation;
 import com.sfjs.gql.schema.BusinessInput;
 import com.sfjs.gql.schema.FellowDonation;
@@ -34,8 +28,14 @@ import com.sfjs.gql.schema.FellowInput;
 import com.sfjs.gql.schema.PaymentInput;
 import com.sfjs.gql.schema.PaymentResult;
 import com.sfjs.gql.schema.PaymentResultInput;
+import com.sfjs.jpa.repo.BusinessRepository;
+import com.sfjs.jpa.repo.FellowRepository;
+import com.sfjs.jpa.repo.NumericMetricRepository;
+import com.sfjs.jpa.repo.PaymentRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.Getter;
+import lombok.Setter;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -250,5 +250,10 @@ public class CheckoutService {
     } catch (NoSuchAlgorithmException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  static class CheckoutResponse {
+    @Getter @Setter private String checkoutToken;
+    @Getter @Setter private String secretToken;
   }
 }
