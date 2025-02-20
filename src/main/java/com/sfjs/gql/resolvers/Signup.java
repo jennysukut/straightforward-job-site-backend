@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.sfjs.data.core.Education;
+import com.sfjs.data.core.Experience;
 import com.sfjs.gql.svc.SignupService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -58,6 +60,15 @@ public class Signup {
       @Argument(name = "languages") List<String> languages,
       DataFetchingEnvironment environment) throws Exception {
     return signupService.saveFellowProfilePage1(smallBio, country, location, skills, jobTitles, languages, environment);
+  }
+
+  @MutationMapping(name = "saveFellowProfilePage2")
+  @PreAuthorize("hasRole('ROLE_FELLOW')")
+  public boolean saveFellowProfilePage2(
+      @Argument(name = "experience") List<Experience> experience,
+      @Argument(name = "education") List<Education> education,
+      DataFetchingEnvironment environment) throws Exception {
+    return signupService.saveFellowProfilePage2(experience, education, environment);
   }
 
 //  @MutationMapping(name = "saveProfile")

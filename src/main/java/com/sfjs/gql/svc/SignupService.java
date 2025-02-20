@@ -3,6 +3,7 @@ package com.sfjs.gql.svc;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,14 +12,20 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.sfjs.data.core.Education;
+import com.sfjs.data.core.Experience;
 import com.sfjs.data.core.Fellow;
 import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.BusinessEntity;
+import com.sfjs.data.entity.EducationEntity;
+import com.sfjs.data.entity.ExperienceEntity;
 import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.data.entity.FellowProfileEntity;
 import com.sfjs.data.entity.RoleEntity;
 import com.sfjs.jpa.repo.AccountRepository;
 import com.sfjs.jpa.repo.BusinessRepository;
+import com.sfjs.jpa.repo.EducationRepository;
+import com.sfjs.jpa.repo.ExperienceRepository;
 import com.sfjs.jpa.repo.FellowRepository;
 import com.sfjs.jpa.repo.ProfileRepository;
 import com.sfjs.jpa.repo.RoleRepository;
@@ -51,11 +58,11 @@ public class SignupService {
   @Autowired
   private AuthorizationService authorizationService;
 
-//  @Autowired
-//  private ExperienceRepository experienceRepository;
+  @Autowired
+  private ExperienceRepository experienceRepository;
 
-//  @Autowired
-//  private EducationRepository educationRepository;
+  @Autowired
+  private EducationRepository educationRepository;
 
   @Autowired
   private ProfileRepository profileRepository;
@@ -211,8 +218,6 @@ public class SignupService {
       profileEntity.setFellow(fellowEntity);
     }
 
-//    convertBaseProfile(requestBody, profileEntity);
-//    convertExtendedProfileData(requestBody, profileEntity);
     profileEntity.setSmallBio(smallBio);
     profileEntity.setCountry(country);
     profileEntity.setLocation(location);
@@ -221,13 +226,42 @@ public class SignupService {
 //    profileEntity.setAvatar(avatar);
     profileEntity.setLanguages(languages);
     profileEntity = profileRepository.save(profileEntity);
-//    FellowProfileData extendedProfileData = new FellowProfileData();
-//    String json = mapper.writeValueAsString(profileEntity);
-//    logger.info("Extended profile entity: " + json);
-//    convertBaseProfile(profileEntity, extendedProfileData);
-//    convertExtendedProfileEntity(profileEntity, extendedProfileData);
-//    json = mapper.writeValueAsString(extendedProfileData);
-//    logger.info("Extended profile data: " + json);
+    return true;
+  }
+
+  public boolean saveFellowProfilePage2(List<Experience> experience, List<Education> education,
+      DataFetchingEnvironment environment) {
+    AccountEntity accountEntity = authorizationService.getAccount();
+    FellowEntity fellowEntity = accountEntity.getFellow();
+    final FellowProfileEntity profileEntity = fellowEntity.getProfile();
+
+    if (profileEntity == null) {
+      logger.info("No profile associated with this fellow account");
+      throw new IllegalArgumentException("No profile for this fellow account");
+    }
+
+    profileEntity.setExperience(experience.stream().map(data -> {
+      ExperienceEntity entity = new ExperienceEntity();
+      entity.setCompanyName(data.getCompanyName());
+      entity.setTitle(data.getTitle());
+      entity.setYearDetails(data.getYearDetails());
+      entity.setDetails(data.getDetails());
+      entity.setProfile(profileEntity);
+      entity = experienceRepository.save(entity);
+      return entity;
+    }).collect(Collectors.toList()));
+
+    profileEntity.setEducation(education.stream().map(data -> {
+      EducationEntity entity = new EducationEntity();
+      entity.setDegree(data.getDegree());
+      entity.setSchool(data.getSchool());
+      entity.setFieldOfStudy(data.getFieldOfStudy());
+      entity.setProfile(profileEntity);
+      entity = educationRepository.save(entity);
+      return entity;
+    }).collect(Collectors.toList()));
+
+    profileRepository.save(profileEntity);
     return true;
   }
 

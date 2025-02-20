@@ -65,6 +65,11 @@ type Mutation {
     jobTitles: [String!]!,
     languages: [String!]!
     ): Boolean!
+
+  saveFellowProfilePage2(
+    experience: [Experience!]!,
+    education: [Education!]!
+    ): Boolean!
 }
 
 scalar Long
@@ -79,4 +84,17 @@ type ClientCheckoutData {
 enum PaymentStatus {
   APPROVED
   PENDING
+}
+
+input Experience {
+  title: String!
+  companyName: String!
+  yearDetails: String!
+  details: String!
+}
+
+input Education {
+  degree: String!
+  school: String!
+  fieldOfStudy: String!
 }
