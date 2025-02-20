@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sfjs.gql.schema.PaymentResult;
-import com.sfjs.gql.schema.PaymentResultInput;
+import com.sfjs.data.core.PaymentStatus;
 import com.sfjs.gql.svc.CheckoutService;
 
 @RestController
@@ -21,8 +20,11 @@ public class Payment {
   CheckoutService service;
 
   @MutationMapping(name = "completePayment")
-  public PaymentResult completePayment(@Argument(name = "input") PaymentResultInput input)
+  public PaymentStatus completePayment(
+      @Argument(name="cleanedJsonEncodedData") String cleanedJsonEncodedData,
+      @Argument(name="hash") String hash,
+      @Argument(name="paymentId") Long paymentId)
       throws JsonProcessingException {
-    return service.completePayment(input);
+    return service.completePayment(cleanedJsonEncodedData, hash, paymentId);
   }
 }

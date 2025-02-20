@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sfjs.data.api.PaymentData;
-import com.sfjs.gql.schema.PaymentInput;
+
 import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import lombok.Setter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -43,15 +43,21 @@ public class HelcimService {
     apiUrl = env.getProperty("helcim.api.url");
   }
 
-  public Mono<PaymentData> initializeCheckout(PaymentInput checkout) {
+  static class CheckoutTokens {
+    @Getter @Setter private String checkoutToken;
+    @Getter @Setter private String secretToken;
+  }
+
+  public Mono<CheckoutTokens> initializeCheckout(String amount, String currency,
+      String paymentType) {
     MediaType mediaType = MediaType.parse("application/json");
     String json;
-    try {
-      json = mapper.writeValueAsString(checkout);
-    } catch (JsonProcessingException e) {
-      json = String.format("{\"paymentType\":\"%s\",\"amount\":\"%s\",\"currency\":\"%s\"}", checkout.getPaymentType(),
-          checkout.getAmount(), checkout.getCurrency());
-    }
+//    try {
+//      json = mapper.writeValueAsString(checkout);
+//    } catch (JsonProcessingException e) {
+      json = String.format("{\"paymentType\":\"%s\",\"amount\":\"%s\",\"currency\":\"%s\"}", paymentType,
+          amount, currency);
+//    }
     @SuppressWarnings("deprecation")
     RequestBody body = RequestBody.create(mediaType, json);
     Request request = new Request.Builder().url(apiUrl).post(body).addHeader("accept", "application/json")
@@ -73,7 +79,7 @@ public class HelcimService {
               if (responseBody != null) {
                 String body = responseBody.string();
                 try {
-                  PaymentData checkoutResponse = mapper.readValue(body, PaymentData.class);
+                  CheckoutTokens checkoutResponse = mapper.readValue(body, CheckoutTokens.class);
                   sink.success(checkoutResponse);
                 } catch (Exception e) {
                   sink.error(new IOException("Error parsing response body", e));
