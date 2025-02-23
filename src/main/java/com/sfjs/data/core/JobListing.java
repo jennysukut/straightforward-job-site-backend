@@ -10,28 +10,77 @@ import lombok.Setter;
 
 @MappedSuperclass
 public class JobListing extends BaseObject {
+  // Stored separately
+  // applicants?: Array<string>;
 
-  @Getter @Setter String jobTitle; //?: string;
-  @Getter @Setter String businessName; //?: string;
+  // Let's just use "name"
+  // @Getter @Setter String title; //?: string;
+
+  // Stored separately
+  // businessName?: string;
+
+  // Stored separately
+  // businessId?: string;
+
+  // Stored separately
+  // applications?: Array<string>;
+
   @Getter @Setter String applicationLimit; //?: string;
-  // this job number will probably get replaced by an
-  // auto-generated id made by sending details to the server?
-  @Getter @Setter Long jobNumber; //?: number;
+
+  // Every entity has an id
+  // jobId?: string;
+
   @Getter @Setter String positionType; //?: string;
+
   @Getter @Setter String positionSummary; //?: string;
+
   @Getter @Setter List<String> nonNegParams; //?: Array<string>;
-//  @Getter @Setter PayDetailsData payDetails; //?: any;
+
+  // Flattened
+  // payDetails?: { payscaleMin?: number; payscaleMax?: number; payOption?: string; };
+  @Getter @Setter float payscaleMin;
+  @Getter @Setter float payscaleMax;
+  @Getter @Setter String payOption;
+
   @Getter @Setter String locationOption; //?: string;
+
   @Getter @Setter String idealCandidate; //?: string;
-//  @Getter @Setter HybridDetailsData hybridDetails; //?: any;
+
+  // Flattened
+  // hybridDetails?: { daysInOffice?: string; daysRemote?: string; };
+  @Getter @Setter String daysInOffice;
+  @Getter @Setter String daysRemote;
+
   @Getter @Setter List<String> experienceLevel; //?: any;
+
+  // Flattened
+  // interviewer?: { name: string; details: string };
+  @Getter @Setter String interviewerName;
+  @Getter @Setter String interviewerDetails;
+
   @Getter @Setter List<String> preferredSkills; //?: Array<string>;
+
   @Getter @Setter String moreAboutPosition; //?: string;
+
+  // Flattened
+  // responsibilities?: Array<{ id?: number; responsibility?: string }> | [];
   @Getter @Setter List<String> responsibilities; //?: any;
+
   @Getter @Setter List<String> perks; //?: Array<string>;
-//  @Getter @Setter List<InterviewProcessData> interviewProcess; //?: Array<any>;
-  @Getter @Setter String location; //?: string;
-  @Getter @Setter String country; //?: string;
-//  Boolean jobIsBeingEdited; //?: boolean;
+
+  // Nested structure
+//  interviewProcess?: Array<{
+//    stage: string;
+//    step: string;
+//    details: string;
+//    id: number;
+//  }>;
+
+  // Stored separately
+  // @Getter @Setter String location; //?: string;
+
+  // Stored separately
+  // @Getter @Setter String country; //?: string;
+
   @Getter @Setter Integer roundNumber;
 }

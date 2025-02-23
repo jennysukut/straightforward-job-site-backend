@@ -1,5 +1,6 @@
 type Query {
   helloWorld: String
+  jobs: [JobListing!]!
 }
 
 type Mutation {
@@ -70,6 +71,17 @@ type Mutation {
     experience: [Experience!]!,
     education: [Education!]!
     ): Boolean!
+
+  createJobListing(
+    jobTitle: String!,
+    positionType: String!
+  ): ID!
+
+  addJobListingDetailsStep1(
+    id: ID!,
+    positionSummary: String!,
+    nonNegParams: [String!]!
+    ): ID!
 }
 
 scalar Long
@@ -97,4 +109,8 @@ input Education {
   degree: String!
   school: String!
   fieldOfStudy: String!
+}
+
+type JobListing {
+  id: ID
 }

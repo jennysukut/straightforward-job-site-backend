@@ -10,8 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,15 +26,7 @@ import lombok.Setter;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class JobListingEntity extends JobListing {
 
-  //@Getter @Setter PayDetailsData payDetails; //?: any;
-  // This is not sharable because we are flattening it
-  @Getter @Setter private float payScaleMin; // : Float
-  @Getter @Setter private float payScaleMax; // : Float
-  @Getter @Setter private String payOption; // : String
   //@Getter @Setter HybridDetailsData hybridDetails; //?: any;
-  // This is not sharable because we are flattening it
-  @Getter @Setter private String daysInOffice; // : String
-  @Getter @Setter private String daysRemote; // : String
 
   @Getter
   @Setter
@@ -43,9 +35,9 @@ public class JobListingEntity extends JobListing {
 
   @Getter
   @Setter
-  @OneToOne(optional = true)
+  @ManyToOne(optional = false)
   @JsonIgnore
-  @JoinColumn(name = "business_id", unique = true)
+  @JoinColumn(name = "business_id", unique = false)
   private BusinessEntity business;
 
   @Getter
