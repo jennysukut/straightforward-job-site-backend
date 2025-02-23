@@ -82,6 +82,11 @@ type Mutation {
     positionSummary: String!,
     nonNegParams: [String!]!
     ): ID!
+
+  applyToJob(
+    jobId: ID!,
+    message: String!
+  ): ID!
 }
 
 scalar Long
