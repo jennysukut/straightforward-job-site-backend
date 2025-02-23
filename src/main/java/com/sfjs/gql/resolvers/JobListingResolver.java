@@ -31,7 +31,7 @@ public class JobListingResolver {
   private JobListingRepository jobListingRepository;
 
   @QueryMapping(name = "jobs")
-  public List<JobListing> listAllJobs() {
+  public List<JobListing> jobs() {
     return jobListingRepository.findAll().stream().map(entity -> entity)
         .collect(Collectors.toList());
   }
