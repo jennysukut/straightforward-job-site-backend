@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.ResetPasswordTokenEntity;
@@ -20,7 +21,6 @@ import com.sfjs.jpa.repo.AccountRepository;
 import com.sfjs.jpa.repo.ResetPasswordTokenRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional

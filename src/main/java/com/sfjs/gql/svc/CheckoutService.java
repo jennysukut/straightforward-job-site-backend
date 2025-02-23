@@ -12,6 +12,7 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +27,6 @@ import com.sfjs.jpa.repo.FellowRepository;
 import com.sfjs.jpa.repo.NumericMetricRepository;
 import com.sfjs.jpa.repo.PaymentRepository;
 
-import jakarta.transaction.Transactional;
 import reactor.core.publisher.Mono;
 
 @Service
