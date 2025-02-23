@@ -86,21 +86,19 @@ public class CheckoutService {
 //    payment.setPaymentType("purchase");
 //    payment.setBusinessName(donation.getBusinessName());
 
-    return helcimService.initializeCheckout(amount, currency, paymentType).flatMap(response -> {
-      logger.info("Response: " + response);
+    return helcimService.initializeCheckout(amount, currency, paymentType).flatMap(helcimResponse -> {
+      logger.info("Helcim response: " + helcimResponse);
       // Save a field to the database
       return Mono.fromCallable(() -> {
-        PaymentEntity paymentEntity = createPaymentEntity(amount, currency, paymentType, response.getCheckoutToken());
+        PaymentEntity paymentEntity = createPaymentEntity(amount, currency, paymentType, helcimResponse.getCheckoutToken());
         Optional<BusinessEntity> businessEntity = businessRepository.findById(businessId);
         paymentEntity.setBusiness(businessEntity.get());
         PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
-        ClientCheckoutData paymentResponse = new ClientCheckoutData();
-        paymentResponse.setId(savedPaymentEntity.getId());
-        paymentResponse.setStatus(savedPaymentEntity.getStatus());
-        return paymentResponse;
-      }).map(anotherPayment -> {
-        anotherPayment.setCheckoutToken(response.getCheckoutToken());
-        return anotherPayment;
+        ClientCheckoutData clientCheckoutData = new ClientCheckoutData();
+        clientCheckoutData.setId(savedPaymentEntity.getId());
+        clientCheckoutData.setStatus(savedPaymentEntity.getStatus());
+        clientCheckoutData.setCheckoutToken(helcimResponse.getCheckoutToken());
+        return clientCheckoutData;
       });
     });
   }
