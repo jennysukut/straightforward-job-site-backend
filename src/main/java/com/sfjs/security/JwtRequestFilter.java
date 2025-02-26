@@ -2,6 +2,7 @@ package com.sfjs.security;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.sfjs.jpa.entity.AccountEntity;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.jpa.repo.AccountRepository;
 
 import jakarta.servlet.FilterChain;
@@ -24,6 +26,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
+
+  Logger logger = Logger.getLogger(getClass().getName());
 
   @Autowired
   private JwtTokenUtil jwtTokenUtil;
@@ -35,6 +39,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
       throws ServletException, IOException {
 
+    logger.entering(this.getClass().getName(), "doFilterInternal");
+
     // TODO Verify if we can remove this and then remove it
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if (authentication != null && authentication.isAuthenticated()) {
@@ -44,6 +50,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     // Get the authorization header
     final String requestTokenHeader = request.getHeader("Authorization");
+    logger.info("Authorization header: " + requestTokenHeader);
 
     // If there is no proper header, move on to next request filter
     if (requestTokenHeader == null || !requestTokenHeader.startsWith("Bearer ")) {
@@ -55,7 +62,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     String jwtToken = requestTokenHeader.substring(7);
 
     // Check if the token is valid
-    boolean isValid = jwtTokenUtil.validateToken(jwtToken);
+    boolean isValid = false;
+    try {
+      isValid = jwtTokenUtil.validateToken(jwtToken);
+    } catch (TokenExpiredException ex) {
+      // If the token has expired, move on to next request filter
+      logger.severe(ex.getMessage());
+      chain.doFilter(request, response);
+      return;
+    }
 
     // If the token is valid...
     if (isValid) {
