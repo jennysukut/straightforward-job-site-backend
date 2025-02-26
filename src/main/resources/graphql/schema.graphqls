@@ -87,10 +87,27 @@ type Mutation {
     jobId: ID!,
     message: String!
   ): ID!
+
+  keepNotes(
+    jobApplicationId: ID!,
+    notes: [String!]!
+  ): [ID!]!
+
+  scheduleAppointments(
+    jobApplicationId: ID!,
+    appointments: [JobInterviewAppointmentInput!]!
+  ): [ID!]!
+
+  saveJobListing(
+    jobId: ID!
+  ): String
 }
 
 scalar Long
 scalar Url
+scalar DateTime
+
+directive @Pattern(regexp: String!) on FIELD_DEFINITION | ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
 
 type ClientCheckoutData {
   id: ID!,
@@ -118,4 +135,10 @@ input Education {
 
 type JobListing {
   id: ID
+}
+
+input JobInterviewAppointmentInput {
+  interviewDateAndTime: DateTime!
+  # interviewDateAndTime: DateTime! @Pattern(regexp: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$")
+  note: String
 }

@@ -1,7 +1,5 @@
 package com.sfjs.data.entity;
 
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sfjs.data.core.InterviewAppointment;
 
@@ -23,8 +21,6 @@ import lombok.Setter;
 @Entity(name = "interview_appointment")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class InterviewAppointmentEntity extends InterviewAppointment {
-
-  @Getter @Setter private LocalDateTime interviewDateAndTime;
 
   @Getter
   @Setter

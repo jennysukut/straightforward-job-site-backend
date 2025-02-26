@@ -2,14 +2,18 @@ package com.sfjs.data.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sfjs.data.core.Fellow;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
@@ -41,4 +45,10 @@ public class FellowEntity extends Fellow {
   @JsonIgnore
   @OneToMany(mappedBy = "fellow")
   private List<JobApplicationEntity> jobApplications = new ArrayList<>();
+
+  @Getter
+  @Setter
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "saved_jobs", joinColumns = @JoinColumn(name = "fellow_id"), inverseJoinColumns = @JoinColumn(name = "job_listing_id"))
+  private Set<JobListingEntity> savedJobs;
 }

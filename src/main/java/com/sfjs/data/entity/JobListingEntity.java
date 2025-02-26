@@ -1,7 +1,9 @@
 package com.sfjs.data.entity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sfjs.data.core.JobListing;
@@ -10,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
@@ -45,4 +48,10 @@ public class JobListingEntity extends JobListing {
   @JsonIgnore
   @OneToMany(mappedBy = "jobListing")
   private List<JobApplicationEntity> jobApplications = new ArrayList<>();
+
+  @Getter
+  @Setter
+  @JsonIgnore
+  @ManyToMany(mappedBy = "savedJobs")
+  private Set<FellowEntity> fellows = new HashSet<>();
 }
