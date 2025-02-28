@@ -1,0 +1,15 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests
+        run: |
+          # Add your test commands here
+          echo "Running tests..."
+      - name: Check code coverage
+        run: |
+          # Add your code coverage check here
+          echo "Checking code coverage..."
