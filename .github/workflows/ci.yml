@@ -8,6 +8,7 @@ jobs:
       - name: Run tests
         run: |
           # Add your test commands here
+          # Note sure how to do this part
           echo "Running tests..."
       - name: Check code coverage
         run: |
