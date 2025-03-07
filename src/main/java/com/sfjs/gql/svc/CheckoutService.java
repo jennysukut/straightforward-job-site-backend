@@ -200,11 +200,11 @@ public class CheckoutService {
 //      result.setSuccess(false);
     }
     if (paymentEntity.getFellow() != null) {
-      NumericMetricEntity metric = numericMetricRepository.findByName("CURRENT_FELLOW_DONATION");
+      NumericMetricEntity metric = numericMetricRepository.findByReference("CURRENT_FELLOW_DONATION");
       metric.setMetric(metric.getMetric().add(new BigDecimal(paymentEntity.getAmount())));
       numericMetricRepository.save(metric);
     } else if (paymentEntity.getBusiness() != null) {
-      NumericMetricEntity metric = numericMetricRepository.findByName("CURRENT_BUSINESS_DONATION");
+      NumericMetricEntity metric = numericMetricRepository.findByReference("CURRENT_BUSINESS_DONATION");
       metric.setMetric(metric.getMetric().add(new BigDecimal(paymentEntity.getAmount())));
       numericMetricRepository.save(metric);
     }

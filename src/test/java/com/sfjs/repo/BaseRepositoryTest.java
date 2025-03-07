@@ -23,36 +23,36 @@ public abstract class BaseRepositoryTest<R extends BaseRepository<E>, E extends 
   protected abstract E createEntity();
 
   @ParameterizedTest
-  @ValueSource(strings = {"entity_name_1", "entity_name_2", "entity_name_3"})
-  public void whenFindByName_thenReturnEntity(String name) {
+  @ValueSource(strings = {"entity_1", "entity_2", "entity_3"})
+  public void whenFindByReference_thenReturnEntity(String reference) {
     // given
     E entity = createEntity();
-    entity.setName(name);
+    entity.setReference(reference);
 
     entityManager.persist(entity);
     entityManager.flush();
 
     // when
-    E found = repository.findByName(name);
+    E found = repository.findByReference(reference);
 
     // then
-    assertThat(found.getName()).isEqualTo(name);
+    assertThat(found.getReference()).isEqualTo(reference);
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"entity_label_1", "entity_label_2", "entity_label_3"})
-  public void whenFindByLabel_thenReturnEntity(String label) {
+  @ValueSource(strings = {"details_1", "details_2", "details_3"})
+  public void whenFindByLabel_thenReturnEntity(String details) {
     // given
     E entity = createEntity();
-    entity.setLabel(label);
+    entity.setDetails(details);
 
     entityManager.persist(entity);
     entityManager.flush();
 
     // when
-    E found = repository.findByLabel(label);
+    E found = repository.findByDetails(details);
 
     // then
-    assertThat(found.getLabel()).isEqualTo(label);
+    assertThat(found.getDetails()).isEqualTo(details);
   }
 }

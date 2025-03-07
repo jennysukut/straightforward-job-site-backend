@@ -79,7 +79,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
       AccountEntity accountEntity = accountRepository.findByEmail(email);
       if (accountEntity != null) {
         Collection<? extends GrantedAuthority> authorities = accountEntity.getRoles().stream()
-            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())).collect(Collectors.toList());
+            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getReference())).collect(Collectors.toList());
         // Create the authentication object
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, null, authorities);
         token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

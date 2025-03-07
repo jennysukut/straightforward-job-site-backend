@@ -39,7 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
       @Override
       public Collection<? extends GrantedAuthority> getAuthorities() {
-        return accountEntity.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
+        return accountEntity.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getReference()))
             .collect(Collectors.toList());
       }
     };

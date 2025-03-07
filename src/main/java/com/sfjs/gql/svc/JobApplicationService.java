@@ -92,7 +92,7 @@ public class JobApplicationService {
       JobApplicationNoteEntity noteEntity = new JobApplicationNoteEntity();
       noteEntity.setBusinessNote(businessEntity != null);
       noteEntity.setFellowNote(fellowEntity != null);
-      noteEntity.setText(note);
+      noteEntity.setDetails(note);
       noteEntity.setApplication(entity);
       noteEntity = jobApplicationNoteRepository.save(noteEntity);
       return noteEntity.getId();
@@ -128,7 +128,7 @@ public class JobApplicationService {
     logger.info("Account: " + accountEntity.getEmail());
 
     FellowEntity fellowEntity = accountEntity.getFellow();
-    logger.info("Fellow: " + fellowEntity.getName());
+    logger.info("Fellow: " + fellowEntity.getReference());
 
     // This should work but maybe the job listing has been deleted??
     Optional<JobListingEntity> optionalJobListing = jobListingRepository.findById(jobId);

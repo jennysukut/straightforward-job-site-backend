@@ -103,7 +103,7 @@ public class SignupService {
       newAccountEntity.setPassword(passwordEncoder.encode(password));
     }
     newAccountEntity.setEnabled(true);
-    RoleEntity roleEntity = roleRepository.findByName(role);
+    RoleEntity roleEntity = roleRepository.findByReference(role);
     newAccountEntity.setRoles(Set.of(roleEntity));
     AccountEntity savedAccountEntity = accountRepository.save(newAccountEntity);
     return savedAccountEntity;
@@ -116,7 +116,7 @@ public class SignupService {
     if (existingAccountEntity == null) {
       AccountEntity savedAccountEntity = createNewAccount(email, password, "FELLOW");
       FellowEntity newEntity = new FellowEntity();
-      newEntity.setName(name);
+      newEntity.setReference(name);
       newEntity.setAccount(savedAccountEntity);
       setFellowFields(isBetaTester, isCollaborator, message, referralCode, isReferralPartner, newEntity);
       FellowEntity savedEntity = fellowRepository.save(newEntity);
@@ -131,7 +131,7 @@ public class SignupService {
       }
       logger.info("This account already exists, so make sure it's the same person");
       authorizationService.login(email, password);
-      String existingEntityName = existingEntity.getName();
+      String existingEntityName = existingEntity.getReference();
       if (existingEntityName != null && existingEntityName.contentEquals(name)) {
         logger.info("Same fellow");
         setFellowFields(isBetaTester, isCollaborator, message, referralCode, isReferralPartner, existingEntity);
@@ -171,7 +171,7 @@ public class SignupService {
     if (existingAccountEntity == null) {
       AccountEntity savedAccountEntity = createNewAccount(email, password, "BUSINESS");
       BusinessEntity newEntity = new BusinessEntity();
-      newEntity.setName(name);
+      newEntity.setReference(name);
       newEntity.setAccount(savedAccountEntity);
       setBusinessFields(isBetaTester, contactName, isEarlySignup, referral, newEntity);
       BusinessEntity savedEntity = businessRepository.save(newEntity);
@@ -186,7 +186,7 @@ public class SignupService {
       }
       logger.info("This account already exists, so make sure it's the same person");
       authorizationService.login(email, password);
-      String existingEntityName = existingEntity.getName();
+      String existingEntityName = existingEntity.getReference();
       if (existingEntityName != null && existingEntityName.contentEquals(name)) {
         logger.info("Same business");
         setBusinessFields(isBetaTester, contactName, isEarlySignup, referral, existingEntity);
@@ -243,7 +243,7 @@ public class SignupService {
     profileEntity.setExperience(experience.stream().map(data -> {
       ExperienceEntity entity = new ExperienceEntity();
       entity.setCompanyName(data.getCompanyName());
-      entity.setTitle(data.getTitle());
+      entity.setReference(data.getReference());
       entity.setYearDetails(data.getYearDetails());
       entity.setDetails(data.getDetails());
       entity.setProfile(profileEntity);
@@ -253,8 +253,8 @@ public class SignupService {
 
     profileEntity.setEducation(education.stream().map(data -> {
       EducationEntity entity = new EducationEntity();
-      entity.setDegree(data.getDegree());
-      entity.setSchool(data.getSchool());
+      entity.setDetails(data.getDetails());
+      entity.setReference(data.getReference());
       entity.setFieldOfStudy(data.getFieldOfStudy());
       entity.setProfile(profileEntity);
       entity = educationRepository.save(entity);

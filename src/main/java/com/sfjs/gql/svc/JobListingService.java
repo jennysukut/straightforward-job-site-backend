@@ -157,7 +157,7 @@ public class JobListingService {
     entity.setBusiness(businessEntity);
 
 //    @Argument(name = "jobTitle")    String jobTitle, //?: string;
-    entity.setName(name);
+    entity.setReference(name);
 //    @Argument(name = "businessName")    String businessName, //?: string;
 //    @Argument(name = "applicationLimit")    String applicationLimit, //?: string;
     entity.setApplicationLimit(applicationLimit);
@@ -213,7 +213,7 @@ public class JobListingService {
     JobListingEntity entity = new JobListingEntity();
     entity.setBusiness(businessEntity);
 
-    entity.setName(name);
+    entity.setReference(name);
     entity.setPositionType(positionType);
 
     entity = jobListingRepository.save(entity);
