@@ -13,15 +13,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.sfjs.crud.entity.AccountEntity;
-import com.sfjs.crud.entity.ResetPasswordTokenEntity;
-import com.sfjs.crud.repo.AccountRepository;
-import com.sfjs.crud.repo.ResetPasswordTokenRepository;
-import com.sfjs.gql.schema.Result;
+import com.sfjs.data.entity.AccountEntity;
+import com.sfjs.data.entity.ResetPasswordTokenEntity;
+import com.sfjs.jpa.repo.AccountRepository;
+import com.sfjs.jpa.repo.ResetPasswordTokenRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -46,14 +45,15 @@ public class AuthorizationService {
 
   @Autowired
   private HttpServletResponse response;
-  
-  public Result resetPassword(String email, String password, String token) {
-    Result result = new Result();
+
+  public boolean resetPassword(String email, String password, String token) {
+//    Result result = new Result();
     AccountEntity accountEntity = accountRepository.findByEmail(email);
     if (accountEntity == null) {
-      result.setSuccess(false);
-      result.setMessage("Account not found");
-      return result;
+//      result.setSuccess(false);
+//      result.setMessage("Account not found");
+//      return result;
+      throw new IllegalArgumentException("Account not found");
     }
     Optional<ResetPasswordTokenEntity> filteredTokenEntityList = accountEntity.getTokens()
         .stream().filter(new Predicate<ResetPasswordTokenEntity>() {
@@ -69,21 +69,23 @@ public class AuthorizationService {
           }
         }).findAny();
     if (filteredTokenEntityList.isEmpty()) {
-      result.setSuccess(false);
-      result.setMessage("Token not found");
-      return result;
+//      result.setSuccess(false);
+//      result.setMessage("Token not found");
+//      return result;
+      throw new IllegalArgumentException("Token not found");
     }
     ResetPasswordTokenEntity tokenEntity = filteredTokenEntityList.get();
     accountEntity.setPassword(passwordEncoder.encode(password));
     accountRepository.save(accountEntity);
     tokenEntity.setUsed(true);
     resetPasswordTokenRepository.save(tokenEntity);
-    result.setSuccess(true);
-    return result;
+//    result.setSuccess(true);
+//    return result;
+    return true;
   }
 
-  public Result login(String email, String password) {
-    Result result = new Result();
+  public boolean login(String email, String password) {
+//    Result result = new Result();
 
     // Create the authentication object
     Authentication authentication = authenticationManager
@@ -98,23 +100,25 @@ public class AuthorizationService {
     if (authentication.isAuthenticated()) {
       // Add the authentication object to the security context
       SecurityContextHolder.getContext().setAuthentication(authentication);
-      result.setSuccess(true);
+//      result.setSuccess(true);
       // Generate a JWT token for future requests
       String token = jwtTokenUtil.generateToken(email, authentication.getAuthorities());
       response.setHeader("Authorization", "Bearer " + token);
     } else {
-      result.setSuccess(false);
+//      result.setSuccess(false);
     }
-    return result;
+//    return result;
+    return true;
   }
 
-  public Result generateResetPasswordToken(String email) {
-    Result result = new Result();
+  public String generateResetPasswordToken(String email) {
+//    Result result = new Result();
     AccountEntity accountEntity = accountRepository.findByEmail(email);
     if (accountEntity == null) {
-      result.setSuccess(false);
-      result.setMessage("Account not found");
-      return result;
+//      result.setSuccess(false);
+//      result.setMessage("Account not found");
+//      return result;
+      throw new IllegalArgumentException("Account not found");
     }
     ResetPasswordTokenEntity entity = new ResetPasswordTokenEntity();
     entity.setAccount(accountEntity);
@@ -125,9 +129,10 @@ public class AuthorizationService {
     logger.info("Expires at: " + expiresAt);
     entity.setExpiresAt(expiresAt);
     entity = resetPasswordTokenRepository.save(entity);
-    result.setSuccess(true);
-    result.setMessage(token);
-    return result;
+//    result.setSuccess(true);
+//    result.setMessage(token);
+//    return result;
+    return token;
   }
 
   public AccountEntity getAccount() {

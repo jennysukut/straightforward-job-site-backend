@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.sfjs.crud.entity.AccountEntity;
-import com.sfjs.crud.repo.AccountRepository;
+import com.sfjs.data.entity.AccountEntity;
+import com.sfjs.jpa.repo.AccountRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -39,7 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
       @Override
       public Collection<? extends GrantedAuthority> getAuthorities() {
-        return accountEntity.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
+        return accountEntity.getRoles().stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role.getReference()))
             .collect(Collectors.toList());
       }
     };

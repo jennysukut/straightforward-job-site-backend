@@ -1,66 +1,38 @@
 package com.sfjs.gql.svc;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sfjs.crud.entity.AccomplishmentEntity;
-import com.sfjs.crud.entity.AccountEntity;
-import com.sfjs.crud.entity.AwardEntity;
-import com.sfjs.crud.entity.BaseEntity;
-import com.sfjs.crud.entity.BookOrQuoteEntity;
-import com.sfjs.crud.entity.BusinessEntity;
-import com.sfjs.crud.entity.BusinessProfileEntity;
-import com.sfjs.crud.entity.EducationEntity;
-import com.sfjs.crud.entity.ExperienceEntity;
-import com.sfjs.crud.entity.ExperienceLevelEntity;
-import com.sfjs.crud.entity.ExtendedProfileEntity;
-import com.sfjs.crud.entity.FellowEntity;
-import com.sfjs.crud.entity.HobbyEntity;
-import com.sfjs.crud.entity.LinkEntity;
-import com.sfjs.crud.entity.RoleEntity;
-import com.sfjs.crud.repo.AccomplishmentRepository;
-import com.sfjs.crud.repo.AccountRepository;
-import com.sfjs.crud.repo.AwardRepository;
-import com.sfjs.crud.repo.BaseRepository;
-import com.sfjs.crud.repo.BookOrQuoteRepository;
-import com.sfjs.crud.repo.BusinessProfileRepository;
-import com.sfjs.crud.repo.BusinessRepository;
-import com.sfjs.crud.repo.EducationRepository;
-import com.sfjs.crud.repo.ExperienceLevelRepository;
-import com.sfjs.crud.repo.ExperienceRepository;
-import com.sfjs.crud.repo.FellowRepository;
-import com.sfjs.crud.repo.HobbyRepository;
-import com.sfjs.crud.repo.LinkRepository;
-import com.sfjs.crud.repo.ProfileRepository;
-import com.sfjs.crud.repo.RoleRepository;
-import com.sfjs.data.AccomplishmentData;
-import com.sfjs.data.AwardData;
-import com.sfjs.data.BaseProfileData;
-import com.sfjs.data.BookOrQuoteData;
-import com.sfjs.data.BusinessProfileData;
-import com.sfjs.data.EducationData;
-import com.sfjs.data.ExperienceData;
-import com.sfjs.data.ExperienceLevelData;
-import com.sfjs.data.ExtendedProfileData;
-import com.sfjs.data.HobbyData;
-import com.sfjs.data.LinkData;
-import com.sfjs.data.ProfileElementData;
-import com.sfjs.gql.schema.BusinessInput;
-import com.sfjs.gql.schema.FellowInput;
+import com.sfjs.data.core.Education;
+import com.sfjs.data.core.Experience;
+import com.sfjs.data.core.Fellow;
+import com.sfjs.data.entity.AccountEntity;
+import com.sfjs.data.entity.BusinessEntity;
+import com.sfjs.data.entity.EducationEntity;
+import com.sfjs.data.entity.ExperienceEntity;
+import com.sfjs.data.entity.FellowEntity;
+import com.sfjs.data.entity.FellowProfileEntity;
+import com.sfjs.data.entity.RoleEntity;
+import com.sfjs.jpa.repo.AccountRepository;
+import com.sfjs.jpa.repo.BusinessRepository;
+import com.sfjs.jpa.repo.EducationRepository;
+import com.sfjs.jpa.repo.ExperienceRepository;
+import com.sfjs.jpa.repo.FellowRepository;
+import com.sfjs.jpa.repo.ProfileRepository;
+import com.sfjs.jpa.repo.RoleRepository;
 import com.sfjs.security.AuthorizationService;
 
 import graphql.schema.DataFetchingEnvironment;
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
@@ -95,26 +67,26 @@ public class SignupService {
   @Autowired
   private ProfileRepository profileRepository;
 
-  @Autowired
-  private BusinessProfileRepository businessProfileRepository;
+//  @Autowired
+//  private BusinessProfileRepository businessProfileRepository;
 
-  @Autowired
-  private AwardRepository awardRepository;
+//  @Autowired
+//  private AwardRepository awardRepository;
 
-  @Autowired
-  private ExperienceLevelRepository experienceLevelRepository;
+//  @Autowired
+//  private ExperienceLevelRepository experienceLevelRepository;
 
-  @Autowired
-  private AccomplishmentRepository accomplishmentRepository;
+//  @Autowired
+//  private AccomplishmentRepository accomplishmentRepository;
 
-  @Autowired
-  private HobbyRepository hobbyRepository;
+//  @Autowired
+//  private HobbyRepository hobbyRepository;
 
-  @Autowired
-  private BookOrQuoteRepository bookOrQuoteRepository;
+//  @Autowired
+//  private BookOrQuoteRepository bookOrQuoteRepository;
 
-  @Autowired
-  private LinkRepository linkRepository;
+//  @Autowired
+//  private LinkRepository linkRepository;
 
   static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
 
@@ -123,452 +95,452 @@ public class SignupService {
     mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
   }
 
-  public Long signupFellow(FellowInput requestBody) {
-    String email = requestBody.getEmail();
-    AccountEntity existingAccountEntity = accountRepository.findByEmail(email);
-    if (existingAccountEntity == null) {
-      // This email has never been used
-      FellowEntity savedFellowEntity = createNewFellowAndNewAccount(requestBody);
-      return savedFellowEntity.getId();
-    } else {
-      // This account already exists, so make sure it's the same person
-      try {
-        authorizationService.login(requestBody.getEmail(), requestBody.getPassword());
-      } catch (Exception ex) {
-        logger.log(Level.INFO, "login", ex);
-//        throw new IllegalArgumentException("Email is unavailable");
-        throw ex;
-      }
-      FellowEntity existingFellowEntity = existingAccountEntity.getFellow();
-      if (existingFellowEntity == null) {
-        // No fellow
-        FellowEntity savedFellowEntity = createNewFellow(requestBody, existingAccountEntity);
-        return savedFellowEntity.getId();
-      } else {
-        String existingFellowName = existingFellowEntity.getName();
-        if (existingFellowName != null && existingFellowName.contentEquals(requestBody.getName())) {
-          // Same fellow
-          FellowEntity savedFellowEntity = updateExistingFellow(requestBody, existingFellowEntity);
-          return savedFellowEntity.getId();
-        } else {
-          // Different fellow
-          throw new IllegalArgumentException("Email is unavailable");
-        }
-      }
-    }
-  }
-
-  private FellowEntity updateExistingFellow(FellowInput requestBody, FellowEntity existingFellowEntity) {
-    if (valueChanged(requestBody.getBetaTester(), existingFellowEntity.getBetaTester())) {
-      existingFellowEntity.setBetaTester(requestBody.getBetaTester());
-    }
-    if (valueChanged(requestBody.getCollaborator(), existingFellowEntity.isCollaborator())) {
-      existingFellowEntity.setCollaborator(requestBody.getCollaborator());
-    }
-    if (valueChanged(requestBody.getMessage(), existingFellowEntity.getMessage())) {
-      existingFellowEntity.setMessage(requestBody.getMessage());
-    }
-    if (valueChanged(requestBody.getReferralCode(), existingFellowEntity.getReferralCode())) {
-      existingFellowEntity.setReferralCode(requestBody.getReferralCode());
-    }
-    if (valueChanged(requestBody.getReferralPartner(), existingFellowEntity.isReferralPartner())) {
-      existingFellowEntity.setReferralPartner(requestBody.getReferralPartner());
-    }
-    FellowEntity savedFellowEntity = fellowRepository.save(existingFellowEntity);
-    return savedFellowEntity;
-  }
-
-  private boolean valueChanged(String newValue, String original) {
-    if (newValue == null)
-      return false;
-    if (original == null)
-      return true;
-    return !newValue.contentEquals(original);
-  }
-
-  private boolean valueChanged(Boolean newValue, Boolean original) {
-    if (newValue == null)
-      return false;
-    if (original == null)
-      return true;
-    return newValue.booleanValue() != original.booleanValue();
-  }
-
-  /**
-   * Create a new fellow entity
-   *
-   * Because the is a new entity, we don't need to worry about changing value of
-   * existing fields. If an input field is null Then it's okay to set the entity
-   * field to null
-   *
-   * @param requestBody
-   * @param existingAccountEntity
-   * @return
-   */
-  private FellowEntity createNewFellow(FellowInput requestBody, AccountEntity existingAccountEntity) {
-    // Create a new FellowEntity
-    // Associate new fellow with existing account
-    FellowEntity newFellowEntity = new FellowEntity();
-    newFellowEntity.setName(requestBody.getName());
-    newFellowEntity.setAccount(existingAccountEntity);
-    // TODO is this necessary?
-    existingAccountEntity.setFellow(newFellowEntity);
-    newFellowEntity.setBetaTester(requestBody.getBetaTester());
-    newFellowEntity.setCollaborator(requestBody.getCollaborator());
-    newFellowEntity.setMessage(requestBody.getMessage());
-    newFellowEntity.setReferralCode(requestBody.getReferralCode());
-    newFellowEntity.setReferralPartner(requestBody.getReferralPartner());
-    FellowEntity savedFellowEntity = fellowRepository.save(newFellowEntity);
-    return savedFellowEntity;
-  }
-
-  /**
-   * Create a new fellow entity and account entity
-   *
-   * Because the is a new entity, we don't need to worry about changing value of
-   * existing fields. If an input field is null Then it's okay to set the entity
-   * field to null
-   *
-   * @param requestBody
-   * @return
-   */
-  private FellowEntity createNewFellowAndNewAccount(FellowInput requestBody) {
-    // Create a new FellowEntity
-    // Create a new AccountEntity
-    RoleEntity fellowRoleEntity = roleRepository.findByName("FELLOW");
+  private AccountEntity createNewAccount(String email, String password, String role) {
+    logger.info("This email has never been used");
     AccountEntity newAccountEntity = new AccountEntity();
-    newAccountEntity.setEmail(requestBody.getEmail());
-    if (requestBody.getPassword() != null) {
-      newAccountEntity.setPassword(passwordEncoder.encode(requestBody.getPassword()));
+    newAccountEntity.setEmail(email);
+    if (password != null) {
+      newAccountEntity.setPassword(passwordEncoder.encode(password));
     }
     newAccountEntity.setEnabled(true);
-    newAccountEntity.setRoles(Set.of(fellowRoleEntity));
+    RoleEntity roleEntity = roleRepository.findByReference(role);
+    newAccountEntity.setRoles(Set.of(roleEntity));
     AccountEntity savedAccountEntity = accountRepository.save(newAccountEntity);
-    FellowEntity newFellowEntity = new FellowEntity();
-    newFellowEntity.setName(requestBody.getName());
-    newFellowEntity.setAccount(savedAccountEntity);
-    newFellowEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
-    newFellowEntity.setCollaborator(requestBody.getCollaborator() != null ? requestBody.getCollaborator() : false);
-    newFellowEntity.setMessage(requestBody.getMessage());
-    newFellowEntity.setReferralCode(requestBody.getReferralCode());
-    newFellowEntity
-        .setReferralPartner(requestBody.getReferralPartner() != null ? requestBody.getReferralPartner() : false);
-    FellowEntity savedFellowEntity = fellowRepository.save(newFellowEntity);
-    authorizationService.login(requestBody.getEmail(), requestBody.getPassword());
-    return savedFellowEntity;
+    return savedAccountEntity;
   }
 
-  public Long signupBusiness(BusinessInput requestBody) {
-    String email = requestBody.getEmail();
+  public Long signupFellow(String email, String password, String name,
+      boolean isBetaTester, boolean isCollaborator, String message, String referralCode, boolean isReferralPartner) {
+    logger.info(String.format("signupFellow: email [%s] password [%s]", email, password));
     AccountEntity existingAccountEntity = accountRepository.findByEmail(email);
     if (existingAccountEntity == null) {
-      // This email has never been used
-      BusinessEntity savedBusinessEntity = createNewBusinessAndNewAccount(requestBody);
-      return savedBusinessEntity.getId();
+      AccountEntity savedAccountEntity = createNewAccount(email, password, "FELLOW");
+      FellowEntity newEntity = new FellowEntity();
+      newEntity.setReference(name);
+      newEntity.setAccount(savedAccountEntity);
+      setFellowFields(isBetaTester, isCollaborator, message, referralCode, isReferralPartner, newEntity);
+      FellowEntity savedEntity = fellowRepository.save(newEntity);
+      authorizationService.login(email, password);
+      return savedEntity.getId();
     } else {
-      // This account already exists, so make sure it's the same person
-      try {
-        authorizationService.login(requestBody.getEmail(), requestBody.getPassword());
-      } catch (Exception ex) {
-        logger.log(Level.INFO, "login", ex);
-//        throw new IllegalArgumentException("Email is unavailable");
-        throw ex;
+      FellowEntity existingEntity = existingAccountEntity.getFellow();
+      if (existingEntity == null) {
+        logger.info("No fellow associated with this account");
+        // Every account must have exactly one fellow or one business
+        throw new IllegalArgumentException("Email is unavailable");
       }
-      BusinessEntity existingBusinessEntity = existingAccountEntity.getBusiness();
-      if (existingBusinessEntity == null) {
-        // No business
-        BusinessEntity savedBusinessEntity = createNewBusiness(requestBody, existingAccountEntity);
-        return savedBusinessEntity.getId();
+      logger.info("This account already exists, so make sure it's the same person");
+      authorizationService.login(email, password);
+      String existingEntityName = existingEntity.getReference();
+      if (existingEntityName != null && existingEntityName.contentEquals(name)) {
+        logger.info("Same fellow");
+        setFellowFields(isBetaTester, isCollaborator, message, referralCode, isReferralPartner, existingEntity);
+        FellowEntity savedEntity = fellowRepository.save(existingEntity);
+        return savedEntity.getId();
       } else {
-        String existingBusinessName = existingBusinessEntity.getName();
-        if (existingBusinessName != null && existingBusinessName.contentEquals(requestBody.getBusinessName())) {
-          // Same business
-          BusinessEntity savedBusinessEntity = updateExistingBusiness(requestBody, existingBusinessEntity);
-          return savedBusinessEntity.getId();
-        } else {
-          // Different business
-          throw new IllegalArgumentException("Email is unavailable");
-        }
+        logger.info("Different fellow");
+        throw new IllegalArgumentException("Email is unavailable");
       }
     }
   }
 
-  private BusinessEntity updateExistingBusiness(BusinessInput requestBody, BusinessEntity existingBusinessEntity) {
-    if (valueChanged(requestBody.getBetaTester(), existingBusinessEntity.getBetaTester())) {
-      existingBusinessEntity.setBetaTester(requestBody.getBetaTester());
-    }
-    if (valueChanged(requestBody.getContactName(), existingBusinessEntity.getContactName())) {
-      existingBusinessEntity.setContactName(requestBody.getContactName());
-    }
-    if (valueChanged(requestBody.getEarlySignup(), existingBusinessEntity.getEarlySignup())) {
-      existingBusinessEntity.setEarlySignup(requestBody.getEarlySignup());
-    }
-    if (valueChanged(requestBody.getReferral(), existingBusinessEntity.getReferral())) {
-      existingBusinessEntity.setReferral(requestBody.getReferral());
-    }
-    BusinessEntity savedBusinessEntity = businessRepository.save(existingBusinessEntity);
-    return savedBusinessEntity;
+  private void setFellowFields(Boolean isBetaTester, boolean isCollaborator, String message, String referralCode,
+      boolean isReferralPartner, Fellow fellow) {
+    fellow.setBetaTester(isBetaTester);
+    fellow.setCollaborator(isCollaborator);
+    fellow.setMessage(message);
+    fellow.setReferralCode(referralCode);
+    fellow.setReferralPartner(isReferralPartner);
   }
 
-  private BusinessEntity createNewBusiness(BusinessInput requestBody, AccountEntity existingAccountEntity) {
-    // Create a new BusinessEntity
-    // Associate new business with existing account
-    BusinessEntity newBusinessEntity = new BusinessEntity();
-    newBusinessEntity.setName(requestBody.getBusinessName());
-    newBusinessEntity.setAccount(existingAccountEntity);
-//    existingAccountEntity.setBusiness(newBusinessEntity);
-    newBusinessEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
-    newBusinessEntity.setContactName(requestBody.getContactName());
-    newBusinessEntity.setEarlySignup(requestBody.getEarlySignup() != null ? requestBody.getEarlySignup() : false);
-    BusinessEntity savedBusinessEntity = businessRepository.save(newBusinessEntity);
-    return savedBusinessEntity;
-  }
+//  private void login(String email, String password) throws Exception {
+//    logger.info("This account already exists, so make sure it's the same person");
+//    try {
+//      authorizationService.login(email, password);
+//    } catch (Exception ex) {
+//      logger.log(Level.INFO, "login", ex);
+////        throw new IllegalArgumentException("Email is unavailable");
+//      throw ex;
+//    }
+//  }
 
-  private BusinessEntity createNewBusinessAndNewAccount(BusinessInput requestBody) {
-    // Create a new BusinessEntity
-    // Create a new AccountEntity
-    RoleEntity businessRoleEntity = roleRepository.findByName("BUSINESS");
-    AccountEntity newAccountEntity = new AccountEntity();
-    newAccountEntity.setEmail(requestBody.getEmail());
-    if (requestBody.getPassword() != null) {
-      newAccountEntity.setPassword(passwordEncoder.encode(requestBody.getPassword()));
+  public Long signupBusiness(String email, String password, String name,
+      Boolean isBetaTester, String contactName, Boolean isEarlySignup, String referral) {
+    logger.info(String.format("signupBusiness: email [%s] password [%s]", email, password));
+    AccountEntity existingAccountEntity = accountRepository.findByEmail(email);
+    if (existingAccountEntity == null) {
+      AccountEntity savedAccountEntity = createNewAccount(email, password, "BUSINESS");
+      BusinessEntity newEntity = new BusinessEntity();
+      newEntity.setReference(name);
+      newEntity.setAccount(savedAccountEntity);
+      setBusinessFields(isBetaTester, contactName, isEarlySignup, referral, newEntity);
+      BusinessEntity savedEntity = businessRepository.save(newEntity);
+      authorizationService.login(email, password);
+      return savedEntity.getId();
+    } else {
+      BusinessEntity existingEntity = existingAccountEntity.getBusiness();
+      if (existingEntity == null) {
+        logger.info("No business associated with this account");
+        // Every account must have exactly one fellow or one business
+        throw new IllegalArgumentException("Email is unavailable");
+      }
+      logger.info("This account already exists, so make sure it's the same person");
+      authorizationService.login(email, password);
+      String existingEntityName = existingEntity.getReference();
+      if (existingEntityName != null && existingEntityName.contentEquals(name)) {
+        logger.info("Same business");
+        setBusinessFields(isBetaTester, contactName, isEarlySignup, referral, existingEntity);
+        BusinessEntity savedEntity = businessRepository.save(existingEntity);
+        return savedEntity.getId();
+      } else {
+        logger.info("Different business");
+        throw new IllegalArgumentException("Email is unavailable");
+      }
     }
-    newAccountEntity.setEnabled(true);
-    newAccountEntity.setRoles(Set.of(businessRoleEntity));
-    AccountEntity savedAccountEntity = accountRepository.save(newAccountEntity);
-    BusinessEntity newBusinessEntity = new BusinessEntity();
-    newBusinessEntity.setName(requestBody.getBusinessName());
-    newBusinessEntity.setAccount(savedAccountEntity);
-    newBusinessEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
-    newBusinessEntity.setContactName(requestBody.getContactName());
-    newBusinessEntity.setEarlySignup(requestBody.getEarlySignup() != null ? requestBody.getEarlySignup() : false);
-    BusinessEntity savedBusinessEntity = businessRepository.save(newBusinessEntity);
-    authorizationService.login(requestBody.getEmail(), requestBody.getPassword());
-    return savedBusinessEntity;
   }
 
-  public ExtendedProfileData saveProfile(ExtendedProfileData requestBody, DataFetchingEnvironment environment) throws Exception {
+  private void setBusinessFields(Boolean isBetaTester, String contactName, Boolean isEarlySignup, String referral,
+      BusinessEntity newEntity) {
+    newEntity.setBetaTester(isBetaTester);
+    newEntity.setContactName(contactName);
+    newEntity.setEarlySignup(isEarlySignup);
+    newEntity.setReferral(referral);
+  }
+
+  public boolean saveFellowProfilePage1(String smallBio, String country, String location, List<String> skills,
+      List<String> jobTitles, List<String> languages, DataFetchingEnvironment environment) {
     AccountEntity accountEntity = authorizationService.getAccount();
     FellowEntity fellowEntity = accountEntity.getFellow();
-    ExtendedProfileEntity profileEntity = fellowEntity.getProfile();
+    FellowProfileEntity profileEntity = fellowEntity.getProfile();
 
     if (profileEntity == null) {
-      profileEntity = new ExtendedProfileEntity();
+      profileEntity = new FellowProfileEntity();
       profileEntity.setFellow(fellowEntity);
     }
 
-    convertBaseProfile(requestBody, profileEntity);
-    convertExtendedProfileData(requestBody, profileEntity);
+    profileEntity.setSmallBio(smallBio);
+    profileEntity.setCountry(country);
+    profileEntity.setLocation(location);
+    profileEntity.setSkills(skills);
+    profileEntity.setJobTitles(jobTitles);
+//    profileEntity.setAvatar(avatar);
+    profileEntity.setLanguages(languages);
     profileEntity = profileRepository.save(profileEntity);
-    ExtendedProfileData extendedProfileData = new ExtendedProfileData();
-    String json = mapper.writeValueAsString(profileEntity);
-    logger.info("Extended profile entity: " + json);
-    convertBaseProfile(profileEntity, extendedProfileData);
-    convertExtendedProfileEntity(profileEntity, extendedProfileData);
-    json = mapper.writeValueAsString(extendedProfileData);
-    logger.info("Extended profile data: " + json);
-    return extendedProfileData;
+    return true;
   }
 
-  private void convertExtendedProfileData(ExtendedProfileData in, ExtendedProfileEntity out) {
-    if (in.getExperience() != null) {
-      out.setExperience(in.getExperience().stream().map(data -> {
-        ExperienceEntity e = this.convertProfileElementData(data, ExperienceEntity.class, experienceRepository);
-        e.setProfile(out);
-        experienceRepository.save(e);
-        return e;
-      }).collect(Collectors.toList()));
-    }
-    if (in.getEducation() != null) {
-      out.setEducation(in.getEducation().stream().map(data -> {
-        EducationEntity e = this.convertProfileElementData(data, EducationEntity.class, educationRepository);
-        e.setProfile(out);
-        educationRepository.save(e);
-        return e;
-      }).collect(Collectors.toList()));
-    }
-    if (in.getAwards() != null) {
-      out.setAwards(in.getAwards().stream().map(data -> {
-        AwardEntity e = this.convertProfileElementData(data, AwardEntity.class, awardRepository);
-        e.setProfile(out);
-        awardRepository.save(e);
-        return e;
-      }).collect(Collectors.toList()));
-    }
-    if (in.getExperienceLevels() != null) {
-      out.setExperienceLevels(in.getExperienceLevels().stream().map(data -> {
-        ExperienceLevelEntity e = this.convertProfileElementData(data, ExperienceLevelEntity.class, experienceLevelRepository);
-        e.setProfile(out);
-        experienceLevelRepository.save(e);
-        return e;
-      }).collect(Collectors.toList()));
-    }
-    if (in.getAccomplishments() != null) {
-      out.setAccomplishments(in.getAccomplishments().stream().map(data -> {
-        AccomplishmentEntity e = this.convertProfileElementData(data, AccomplishmentEntity.class, accomplishmentRepository);
-        e.setProfile(out);
-        accomplishmentRepository.save(e);
-        return e;
-      }).collect(Collectors.toList()));
-    }
-    if (in.getHobbies() != null) {
-      out.setHobbies(in.getHobbies().stream().map(data -> {
-        HobbyEntity e = this.convertProfileElementData(data, HobbyEntity.class, hobbyRepository);
-        e.setProfile(out);
-        hobbyRepository.save(e);
-        return e;
-      }).collect(Collectors.toList()));
-    }
-    if (in.getBookOrQuote() != null) {
-      out.setBookOrQuote(in.getBookOrQuote().stream().map(data -> {
-        BookOrQuoteEntity e = this.convertProfileElementData(data, BookOrQuoteEntity.class, bookOrQuoteRepository);
-        e.setProfile(out);
-        bookOrQuoteRepository.save(e);
-        return e;
-      }).collect(Collectors.toList()));
-    }
-    if (in.getLinks() != null) {
-      out.setLinks(in.getLinks().stream().map(data -> {
-        LinkEntity e = this.convertProfileElementData(data, LinkEntity.class, linkRepository);
-        e.setProfile(out);
-        linkRepository.save(e);
-        return e;
-      }).collect(Collectors.toList()));
-    }
-  }
-
-  private <E extends BaseEntity, D extends ProfileElementData>
-    E convertProfileElementData(D data, Class<E> entityType,
-      BaseRepository<E> repository) {
-    try {
-      String json = mapper.writeValueAsString(data);
-      E e = mapper.readValue(json, entityType);
-      e.setId(data.getObjectId());
-      if (e.getId() != null) {
-        Optional<E> opt = repository.findById(e.getId());
-        if (opt.isPresent()) {
-          return opt.get();
-        }
-      }
-      return repository.save(e);
-    } catch (Exception ex) {
-      return (E)null;
-    }
-  }
-
-  public ExtendedProfileData getFellowProfile() {
+  public boolean saveFellowProfilePage2(List<Experience> experience, List<Education> education,
+      DataFetchingEnvironment environment) {
     AccountEntity accountEntity = authorizationService.getAccount();
     FellowEntity fellowEntity = accountEntity.getFellow();
-    ExtendedProfileEntity profileEntity = fellowEntity.getProfile();
-    ExtendedProfileData extendedProfileData = new ExtendedProfileData();
-    convertBaseProfile(profileEntity, extendedProfileData);
-    convertExtendedProfileEntity(profileEntity, extendedProfileData);
-    return extendedProfileData;
-  }
-
-  private void convertExtendedProfileEntity(ExtendedProfileEntity in, ExtendedProfileData out) {
-    if (in.getExperience() != null) {
-      out.setExperience(in.getExperience().stream().map(data -> {
-        return this.convertProfileElementEntity(data, ExperienceData.class);
-      }).collect(Collectors.toList()));
-    }
-    if (in.getEducation() != null) {
-      out.setEducation(in.getEducation().stream().map(data -> {
-        return this.convertProfileElementEntity(data, EducationData.class);
-      }).collect(Collectors.toList()));
-    }
-    if (in.getAwards() != null) {
-      out.setAwards(in.getAwards().stream().map(data -> {
-        return this.convertProfileElementEntity(data, AwardData.class);
-      }).collect(Collectors.toList()));
-    }
-    if (in.getExperienceLevels() != null) {
-      out.setExperienceLevels(in.getExperienceLevels().stream().map(data -> {
-        return this.convertProfileElementEntity(data, ExperienceLevelData.class);
-      }).collect(Collectors.toList()));
-    }
-    if (in.getAccomplishments() != null) {
-      out.setAccomplishments(in.getAccomplishments().stream().map(data -> {
-        return this.convertProfileElementEntity(data, AccomplishmentData.class);
-      }).collect(Collectors.toList()));
-    }
-    if (in.getHobbies() != null) {
-      out.setHobbies(in.getHobbies().stream().map(data -> {
-        return this.convertProfileElementEntity(data, HobbyData.class);
-      }).collect(Collectors.toList()));
-    }
-    if (in.getBookOrQuote() != null) {
-      out.setBookOrQuote(in.getBookOrQuote().stream().map(data -> {
-        return this.convertProfileElementEntity(data, BookOrQuoteData.class);
-      }).collect(Collectors.toList()));
-    }
-    if (in.getLinks() != null) {
-      out.setLinks(in.getLinks().stream().map(data -> {
-        return this.convertProfileElementEntity(data, LinkData.class);
-      }).collect(Collectors.toList()));
-    }
-  }
-
-  private <E extends BaseEntity, D extends ProfileElementData>
-    D convertProfileElementEntity(E entity,
-      Class<D> dataType) {
-    try {
-      String json = mapper.writeValueAsString(entity);
-      D d = mapper.readValue(json, dataType);
-      d.setObjectId(entity.getId());
-      return d;
-    } catch (Exception ex) {
-      return (D) null;
-    }
-  }
-
-  private void convertBaseProfile(BaseProfileData in, BaseProfileData out) {
-    out.setObjectId(in.getObjectId());
-    out.setSmallBio(in.getSmallBio());
-    out.setCountry(in.getCountry());
-    out.setLocation(in.getLocation());
-    out.setSkills(in.getSkills());
-    out.setJobTitles(in.getJobTitles());
-    out.setPassions(in.getPassions());
-    out.setLookingFor(in.getLookingFor());
-    out.setPetDetails(in.getPetDetails());
-    out.setAboutMe(in.getAboutMe());
-    out.setLocationOptions(in.getLocationOptions());
-    out.setLanguages(in.getLanguages());
-  }
-
-  public BusinessProfileData saveBusinessProfile(BusinessProfileData requestBody, DataFetchingEnvironment environment) throws Exception {
-    AccountEntity accountEntity = authorizationService.getAccount();
-    BusinessEntity businessEntity = accountEntity.getBusiness();
-    BusinessProfileEntity profileEntity = businessEntity.getBusinessProfile();
+    final FellowProfileEntity profileEntity = fellowEntity.getProfile();
 
     if (profileEntity == null) {
-      profileEntity = new BusinessProfileEntity();
-      profileEntity.setBusiness(businessEntity);
+      logger.info("No profile associated with this fellow account");
+      throw new IllegalArgumentException("No profile for this fellow account");
     }
 
-    convertBusinessProfile(requestBody, profileEntity);
-    profileEntity = businessProfileRepository.save(profileEntity);
-    BusinessProfileData businessProfileData = new BusinessProfileData();
-    String json = mapper.writeValueAsString(profileEntity);
-    logger.info("Business profile entity: " + json);
-    convertBusinessProfile(profileEntity, businessProfileData);
-    json = mapper.writeValueAsString(businessProfileData);
-    logger.info("Business profile data: " + json);
-    return businessProfileData;
+    profileEntity.setExperience(experience.stream().map(data -> {
+      ExperienceEntity entity = new ExperienceEntity();
+      entity.setCompanyName(data.getCompanyName());
+      entity.setReference(data.getReference());
+      entity.setYearDetails(data.getYearDetails());
+      entity.setDetails(data.getDetails());
+      entity.setProfile(profileEntity);
+      entity = experienceRepository.save(entity);
+      return entity;
+    }).collect(Collectors.toList()));
+
+    profileEntity.setEducation(education.stream().map(data -> {
+      EducationEntity entity = new EducationEntity();
+      entity.setDetails(data.getDetails());
+      entity.setReference(data.getReference());
+      entity.setFieldOfStudy(data.getFieldOfStudy());
+      entity.setProfile(profileEntity);
+      entity = educationRepository.save(entity);
+      return entity;
+    }).collect(Collectors.toList()));
+
+    profileRepository.save(profileEntity);
+    return true;
   }
 
-  private void convertBusinessProfile(BusinessProfileData in, BusinessProfileData out) {
-    out.setObjectId(in.getObjectId());
-    out.setSmallBio(in.getSmallBio());
-    out.setCountry(in.getCountry());
-    out.setLocation(in.getLocation());
-    out.setWebsite(in.getWebsite());
-    out.setBusinessField(in.getBusinessField());
-    out.setMissionVision(in.getMissionVision());
-    out.setMoreAboutBusiness(in.getMoreAboutBusiness());
-    out.setBillingDetails(in.getBillingDetails());
-    out.setAmountDue(in.getAmountDue());
-  }
+//  private BusinessEntity updateExistingBusiness(BusinessInput requestBody, BusinessEntity existingBusinessEntity) {
+//    if (valueChanged(requestBody.getBetaTester(), existingBusinessEntity.getBetaTester())) {
+//      existingBusinessEntity.setBetaTester(requestBody.getBetaTester());
+//    }
+//    if (valueChanged(requestBody.getContactName(), existingBusinessEntity.getContactName())) {
+//      existingBusinessEntity.setContactName(requestBody.getContactName());
+//    }
+//    if (valueChanged(requestBody.getEarlySignup(), existingBusinessEntity.getEarlySignup())) {
+//      existingBusinessEntity.setEarlySignup(requestBody.getEarlySignup());
+//    }
+//    if (valueChanged(requestBody.getReferral(), existingBusinessEntity.getReferral())) {
+//      existingBusinessEntity.setReferral(requestBody.getReferral());
+//    }
+//    BusinessEntity savedBusinessEntity = businessRepository.save(existingBusinessEntity);
+//    return savedBusinessEntity;
+//  }
+
+//  private BusinessEntity createNewBusiness(BusinessInput requestBody, AccountEntity existingAccountEntity) {
+//    // Create a new BusinessEntity
+//    // Associate new business with existing account
+//    BusinessEntity newBusinessEntity = new BusinessEntity();
+//    newBusinessEntity.setName(requestBody.getBusinessName());
+//    newBusinessEntity.setAccount(existingAccountEntity);
+////    existingAccountEntity.setBusiness(newBusinessEntity);
+//    newBusinessEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
+//    newBusinessEntity.setContactName(requestBody.getContactName());
+//    newBusinessEntity.setEarlySignup(requestBody.getEarlySignup() != null ? requestBody.getEarlySignup() : false);
+//    BusinessEntity savedBusinessEntity = businessRepository.save(newBusinessEntity);
+//    return savedBusinessEntity;
+//  }
+
+//  private BusinessEntity createNewBusinessAndNewAccount(BusinessInput requestBody) {
+//    // Create a new BusinessEntity
+//    // Create a new AccountEntity
+//    RoleEntity businessRoleEntity = roleRepository.findByName("BUSINESS");
+//    AccountEntity newAccountEntity = new AccountEntity();
+//    newAccountEntity.setEmail(requestBody.getEmail());
+//    if (requestBody.getPassword() != null) {
+//      newAccountEntity.setPassword(passwordEncoder.encode(requestBody.getPassword()));
+//    }
+//    newAccountEntity.setEnabled(true);
+//    newAccountEntity.setRoles(Set.of(businessRoleEntity));
+//    AccountEntity savedAccountEntity = accountRepository.save(newAccountEntity);
+//    BusinessEntity newBusinessEntity = new BusinessEntity();
+//    newBusinessEntity.setName(requestBody.getBusinessName());
+//    newBusinessEntity.setAccount(savedAccountEntity);
+//    newBusinessEntity.setBetaTester(requestBody.getBetaTester() != null ? requestBody.getBetaTester() : false);
+//    newBusinessEntity.setContactName(requestBody.getContactName());
+//    newBusinessEntity.setEarlySignup(requestBody.getEarlySignup() != null ? requestBody.getEarlySignup() : false);
+//    BusinessEntity savedBusinessEntity = businessRepository.save(newBusinessEntity);
+//    authorizationService.login(requestBody.getEmail(), requestBody.getPassword());
+//    return savedBusinessEntity;
+//  }
+
+//  public Long saveProfile(FellowProfile requestBody, DataFetchingEnvironment environment) throws Exception {
+//    AccountEntity accountEntity = authorizationService.getAccount();
+//    FellowEntity fellowEntity = accountEntity.getFellow();
+//    FellowProfileEntity profileEntity = fellowEntity.getProfile();
+//
+//    if (profileEntity == null) {
+//      profileEntity = new FellowProfileEntity();
+//      profileEntity.setFellow(fellowEntity);
+//    }
+//
+//    convertBaseProfile(requestBody, profileEntity);
+//    convertExtendedProfileData(requestBody, profileEntity);
+//    profileEntity = profileRepository.save(profileEntity);
+//    FellowProfileData extendedProfileData = new FellowProfileData();
+//    String json = mapper.writeValueAsString(profileEntity);
+//    logger.info("Extended profile entity: " + json);
+//    convertBaseProfile(profileEntity, extendedProfileData);
+//    convertExtendedProfileEntity(profileEntity, extendedProfileData);
+//    json = mapper.writeValueAsString(extendedProfileData);
+//    logger.info("Extended profile data: " + json);
+//    return extendedProfileData;
+//  }
+//
+//  private void convertExtendedProfileData(FellowProfileData in, FellowProfileEntity out) {
+//    if (in.getExperience() != null) {
+//      out.setExperience(in.getExperience().stream().map(data -> {
+//        ExperienceEntity e = this.convertProfileElementData(data, ExperienceEntity.class, experienceRepository);
+//        e.setProfile(out);
+//        experienceRepository.save(e);
+//        return e;
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getEducation() != null) {
+//      out.setEducation(in.getEducation().stream().map(data -> {
+//        EducationEntity e = this.convertProfileElementData(data, EducationEntity.class, educationRepository);
+//        e.setProfile(out);
+//        educationRepository.save(e);
+//        return e;
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getAwards() != null) {
+//      out.setAwards(in.getAwards().stream().map(data -> {
+//        AwardEntity e = this.convertProfileElementData(data, AwardEntity.class, awardRepository);
+//        e.setProfile(out);
+//        awardRepository.save(e);
+//        return e;
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getExperienceLevels() != null) {
+//      out.setExperienceLevels(in.getExperienceLevels().stream().map(data -> {
+//        ExperienceLevelEntity e = this.convertProfileElementData(data, ExperienceLevelEntity.class, experienceLevelRepository);
+//        e.setProfile(out);
+//        experienceLevelRepository.save(e);
+//        return e;
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getAccomplishments() != null) {
+//      out.setAccomplishments(in.getAccomplishments().stream().map(data -> {
+//        AccomplishmentEntity e = this.convertProfileElementData(data, AccomplishmentEntity.class, accomplishmentRepository);
+//        e.setProfile(out);
+//        accomplishmentRepository.save(e);
+//        return e;
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getHobbies() != null) {
+//      out.setHobbies(in.getHobbies().stream().map(data -> {
+//        HobbyEntity e = this.convertProfileElementData(data, HobbyEntity.class, hobbyRepository);
+//        e.setProfile(out);
+//        hobbyRepository.save(e);
+//        return e;
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getBookOrQuote() != null) {
+//      out.setBookOrQuote(in.getBookOrQuote().stream().map(data -> {
+//        BookOrQuoteEntity e = this.convertProfileElementData(data, BookOrQuoteEntity.class, bookOrQuoteRepository);
+//        e.setProfile(out);
+//        bookOrQuoteRepository.save(e);
+//        return e;
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getLinks() != null) {
+//      out.setLinks(in.getLinks().stream().map(data -> {
+//        LinkEntity e = this.convertProfileElementData(data, LinkEntity.class, linkRepository);
+//        e.setProfile(out);
+//        linkRepository.save(e);
+//        return e;
+//      }).collect(Collectors.toList()));
+//    }
+//  }
+//
+//  private <E extends BaseObject, D extends ProfileElementData>
+//    E convertProfileElementData(D data, Class<E> entityType,
+//      BaseRepository<E> repository) {
+//    try {
+//      String json = mapper.writeValueAsString(data);
+//      E e = mapper.readValue(json, entityType);
+////      e.setId(data.getObjectId());
+//      if (e.getId() != null) {
+//        Optional<E> opt = repository.findById(e.getId());
+//        if (opt.isPresent()) {
+//          return opt.get();
+//        }
+//      }
+//      return repository.save(e);
+//    } catch (Exception ex) {
+//      return (E)null;
+//    }
+//  }
+//
+//  public FellowProfileData getFellowProfile() {
+//    AccountEntity accountEntity = authorizationService.getAccount();
+//    FellowEntity fellowEntity = accountEntity.getFellow();
+//    FellowProfileEntity profileEntity = fellowEntity.getProfile();
+//    FellowProfileData extendedProfileData = new FellowProfileData();
+//    convertBaseProfile(profileEntity, extendedProfileData);
+//    convertExtendedProfileEntity(profileEntity, extendedProfileData);
+//    return extendedProfileData;
+//  }
+//
+//  private void convertExtendedProfileEntity(FellowProfileEntity in, FellowProfileData out) {
+//    if (in.getExperience() != null) {
+//      out.setExperience(in.getExperience().stream().map(data -> {
+//        return this.convertProfileElementEntity(data, Experience.class);
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getEducation() != null) {
+//      out.setEducation(in.getEducation().stream().map(data -> {
+//        return this.convertProfileElementEntity(data, Education.class);
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getAwards() != null) {
+//      out.setAwards(in.getAwards().stream().map(data -> {
+//        return this.convertProfileElementEntity(data, Award.class);
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getExperienceLevels() != null) {
+//      out.setExperienceLevels(in.getExperienceLevels().stream().map(data -> {
+//        return this.convertProfileElementEntity(data, ExperienceLevel.class);
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getAccomplishments() != null) {
+//      out.setAccomplishments(in.getAccomplishments().stream().map(data -> {
+//        return this.convertProfileElementEntity(data, Accomplishment.class);
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getHobbies() != null) {
+//      out.setHobbies(in.getHobbies().stream().map(data -> {
+//        return this.convertProfileElementEntity(data, Hobby.class);
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getBookOrQuote() != null) {
+//      out.setBookOrQuote(in.getBookOrQuote().stream().map(data -> {
+//        return this.convertProfileElementEntity(data, BookOrQuote.class);
+//      }).collect(Collectors.toList()));
+//    }
+//    if (in.getLinks() != null) {
+//      out.setLinks(in.getLinks().stream().map(data -> {
+//        return this.convertProfileElementEntity(data, Link.class);
+//      }).collect(Collectors.toList()));
+//    }
+//  }
+//
+//  private <E extends BaseObject, D extends ProfileElementData>
+//    D convertProfileElementEntity(E entity,
+//      Class<D> dataType) {
+//    try {
+//      String json = mapper.writeValueAsString(entity);
+//      D d = mapper.readValue(json, dataType);
+////      d.setObjectId(entity.getId());
+//      return d;
+//    } catch (Exception ex) {
+//      return (D) null;
+//    }
+//  }
+//
+//  private void convertBaseProfile(FellowProfile in, FellowProfile out) {
+////    out.setObjectId(in.getObjectId());
+//    out.setSmallBio(in.getSmallBio());
+//    out.setCountry(in.getCountry());
+//    out.setLocation(in.getLocation());
+//    out.setSkills(in.getSkills());
+//    out.setJobTitles(in.getJobTitles());
+//    out.setPassions(in.getPassions());
+//    out.setLookingFor(in.getLookingFor());
+//    out.setPetDetails(in.getPetDetails());
+//    out.setAboutMe(in.getAboutMe());
+//    out.setLocationOptions(in.getLocationOptions());
+//    out.setLanguages(in.getLanguages());
+//  }
+
+//  public BusinessProfile saveBusinessProfile(BusinessProfile requestBody, DataFetchingEnvironment environment) throws Exception {
+//    AccountEntity accountEntity = authorizationService.getAccount();
+//    BusinessEntity businessEntity = accountEntity.getBusiness();
+//    BusinessProfileEntity profileEntity = businessEntity.getBusinessProfile();
+//
+//    if (profileEntity == null) {
+//      profileEntity = new BusinessProfileEntity();
+//      profileEntity.setBusiness(businessEntity);
+//    }
+//
+//    convertBusinessProfile(requestBody, profileEntity);
+//    profileEntity = businessProfileRepository.save(profileEntity);
+//    BusinessProfile businessProfileData = new BusinessProfile();
+//    String json = mapper.writeValueAsString(profileEntity);
+//    logger.info("Business profile entity: " + json);
+//    convertBusinessProfile(profileEntity, businessProfileData);
+//    json = mapper.writeValueAsString(businessProfileData);
+//    logger.info("Business profile data: " + json);
+//    return businessProfileData;
+//  }
+//
+//  private void convertBusinessProfile(BusinessProfile in, BusinessProfile out) {
+////    out.setObjectId(in.getObjectId());
+//    out.setSmallBio(in.getSmallBio());
+//    out.setCountry(in.getCountry());
+//    out.setLocation(in.getLocation());
+//    out.setWebsite(in.getWebsite());
+//    out.setBusinessField(in.getBusinessField());
+//    out.setMissionVision(in.getMissionVision());
+//    out.setMoreAboutBusiness(in.getMoreAboutBusiness());
+//    out.setBillingDetails(in.getBillingDetails());
+//    out.setAmountDue(in.getAmountDue());
+//  }
 
 }

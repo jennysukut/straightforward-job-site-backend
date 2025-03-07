@@ -1,0 +1,13 @@
+package com.sfjs.jpa.repo;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.sfjs.data.entity.AccountEntity;
+
+@Repository
+@Transactional
+public interface AccountRepository extends BaseRepository<AccountEntity> {
+
+  AccountEntity findByEmail(String email);
+}

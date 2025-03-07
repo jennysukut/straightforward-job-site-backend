@@ -12,30 +12,21 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sfjs.crud.entity.BusinessEntity;
-import com.sfjs.crud.entity.FellowEntity;
-import com.sfjs.crud.entity.NumericMetricEntity;
-import com.sfjs.crud.entity.PaymentEntity;
-import com.sfjs.crud.entity.PaymentStatus;
-import com.sfjs.crud.repo.BusinessRepository;
-import com.sfjs.crud.repo.FellowRepository;
-import com.sfjs.crud.repo.NumericMetricRepository;
-import com.sfjs.crud.repo.PaymentRepository;
-import com.sfjs.crud.response.PaymentResponse;
-import com.sfjs.crud.svc.BusinessService;
-import com.sfjs.crud.svc.FellowService;
-import com.sfjs.gql.schema.BusinessDonation;
-import com.sfjs.gql.schema.BusinessInput;
-import com.sfjs.gql.schema.FellowDonation;
-import com.sfjs.gql.schema.FellowInput;
-import com.sfjs.gql.schema.PaymentInput;
-import com.sfjs.gql.schema.PaymentResult;
-import com.sfjs.gql.schema.PaymentResultInput;
+import com.sfjs.data.core.ClientCheckoutData;
+import com.sfjs.data.core.PaymentStatus;
+import com.sfjs.data.entity.BusinessEntity;
+import com.sfjs.data.entity.FellowEntity;
+import com.sfjs.data.entity.NumericMetricEntity;
+import com.sfjs.data.entity.PaymentEntity;
+import com.sfjs.jpa.repo.BusinessRepository;
+import com.sfjs.jpa.repo.FellowRepository;
+import com.sfjs.jpa.repo.NumericMetricRepository;
+import com.sfjs.jpa.repo.PaymentRepository;
 
-import jakarta.transaction.Transactional;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -50,11 +41,11 @@ public class CheckoutService {
   @Autowired
   HelcimService helcimService;
 
-  @Autowired
-  BusinessService businessService;
+//  @Autowired
+//  BusinessService businessService;
 
-  @Autowired
-  FellowService fellowService;
+//  @Autowired
+//  FellowService fellowService;
 
   @Autowired
   SignupService signupService;
@@ -73,118 +64,104 @@ public class CheckoutService {
 
   Logger logger = Logger.getLogger(getClass().getName());
 
-  public Mono<PaymentResponse> acceptBusinessDonation(BusinessDonation donation) {
+  public Mono<ClientCheckoutData> acceptBusinessDonation(
+      String email, String password, String name,
+      Boolean isBetaTester, String contactName, Boolean isEarlySignup, String referral,
+      String amount, String currency, String paymentType) {
 
     logger.info("Implicit business signup");
-    BusinessInput business = new BusinessInput();
-    business.setBusinessName(donation.getBusinessName());
-    business.setEmail(donation.getEmail());
-    business.setContactName(donation.getContactName());
-    business.setReferral(donation.getReferral());
-    Long businessId = signupService.signupBusiness(business);
-    business.setId(businessId);
+//    BusinessInput business = new BusinessInput();
+//    business.setBusinessName(donation.getBusinessName());
+//    business.setEmail(donation.getEmail());
+//    business.setContactName(donation.getContactName());
+//    business.setReferral(donation.getReferral());
+    Long businessId = signupService.signupBusiness(email, password, name, isBetaTester, contactName, isEarlySignup, referral);
+//    business.setId(businessId);
 
-    PaymentInput payment = new PaymentInput();
-    payment.setBusiness(business);
-    payment.setAmount(donation.getAmount());
-    payment.setCurrency("USD");
-    payment.setEmail(donation.getEmail());
-    payment.setPaymentType("purchase");
-    payment.setBusinessName(donation.getBusinessName());
+//    PaymentInput payment = new PaymentInput();
+//    payment.setBusiness(business);
+//    payment.setAmount(donation.getAmount());
+//    payment.setCurrency("USD");
+//    payment.setEmail(donation.getEmail());
+//    payment.setPaymentType("purchase");
+//    payment.setBusinessName(donation.getBusinessName());
 
-    return helcimService.initializeCheckout(payment).flatMap(response -> {
-      logger.info("Response: " + response);
+    return helcimService.initializeCheckout(amount, currency, paymentType).flatMap(helcimResponse -> {
+      logger.info("Helcim response: " + helcimResponse);
       // Save a field to the database
       return Mono.fromCallable(() -> {
-        logger.info("fromCallable");
-
-        // update this one field from response from helcim service
-        String rawToken = response.getSecretToken();
-        logger.info("Raw token: " + rawToken);
-        String SALT = KeyGenerators.string().generateKey();
-        logger.info("Encryption SALT: " + SALT);
-        payment.setSALT(SALT);
-        logger.info("Encryption password: " + PASSWORD);
-        TextEncryptor encryptor = Encryptors.text(PASSWORD, SALT);
-        String encryptedToken = encryptor.encrypt(rawToken);
-        payment.setSecretToken(encryptedToken);
-        // save the entity and return it
-        logger.info("Save payment: " + payment);
-        // TODO this is where we need to create/convert to entity
-        PaymentEntity paymentEntity = new PaymentEntity(); // paymentConverter.convertToEntity(payment);
-
-        paymentEntity.setAmount(payment.getAmount());
-        paymentEntity.setCurrency(payment.getCurrency());
-        paymentEntity.setPaymentType(payment.getPaymentType());
-
-        paymentEntity.setSALT(payment.getSALT());
-        paymentEntity.setSecretToken(payment.getSecretToken());
-        paymentEntity.setStatus(PaymentStatus.PENDING);
-
+        PaymentEntity paymentEntity = createPaymentEntity(amount, currency, paymentType, helcimResponse.getCheckoutToken());
         Optional<BusinessEntity> businessEntity = businessRepository.findById(businessId);
         paymentEntity.setBusiness(businessEntity.get());
         PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
-        PaymentResponse paymentResponse = new PaymentResponse();
-        paymentResponse.setId(savedPaymentEntity.getId());
-        paymentResponse.setStatus(savedPaymentEntity.getStatus());
-        return paymentResponse;
-      }).map(anotherPayment -> {
-        anotherPayment.setCheckoutToken(response.getCheckoutToken());
-        return anotherPayment;
+        ClientCheckoutData clientCheckoutData = new ClientCheckoutData();
+        clientCheckoutData.setId(savedPaymentEntity.getId());
+        clientCheckoutData.setStatus(savedPaymentEntity.getStatus());
+        clientCheckoutData.setCheckoutToken(helcimResponse.getCheckoutToken());
+        return clientCheckoutData;
       });
     });
   }
 
-  public Mono<PaymentResponse> acceptFellowDonation(FellowDonation donation) {
+  private PaymentEntity createPaymentEntity(String amount, String currency, String paymentType, String secretToken) {
+    logger.info("fromCallable");
+
+    // update this one field from response from helcim service
+//    String secretToken = response.getSecretToken();
+    logger.info("Raw token: " + secretToken);
+    String SALT = KeyGenerators.string().generateKey();
+    logger.info("Encryption SALT: " + SALT);
+    // TODO examine this
+//        payment.setSALT(SALT);
+    logger.info("Encryption password: " + PASSWORD);
+    TextEncryptor encryptor = Encryptors.text(PASSWORD, SALT);
+    String encryptedSecretToken = encryptor.encrypt(secretToken);
+    // TODO examine this
+//        payment.setSecretToken(encryptedToken);
+    // save the entity and return it
+//        logger.info("Save payment: " + payment);
+    // TODO this is where we need to create/convert to entity
+    PaymentEntity paymentEntity = new PaymentEntity(); // paymentConverter.convertToEntity(payment);
+
+    paymentEntity.setAmount(amount);
+    paymentEntity.setCurrency(currency);
+    paymentEntity.setPaymentType(paymentType);
+
+    paymentEntity.setSALT(SALT);
+    paymentEntity.setSecretToken(encryptedSecretToken);
+    paymentEntity.setStatus(PaymentStatus.PENDING);
+    return paymentEntity;
+  }
+
+  public Mono<ClientCheckoutData> acceptFellowDonation(
+      String email, String password, String name,
+      Boolean isBetaTester, boolean isCollaborator, String message, String referralCode, boolean isReferralPartner,
+      String amount, String currency, String paymentType) {
 
     logger.info("Implicit fellow signup");
-    FellowInput fellow = new FellowInput();
-    fellow.setName(donation.getName());
-    fellow.setEmail(donation.getEmail());
-    Long fellowId = signupService.signupFellow(fellow);
-    fellow.setId(fellowId);
+//    FellowInput fellow = new FellowInput();
+//    fellow.setName(donation.getName());
+//    fellow.setEmail(donation.getEmail());
+    Long fellowId = signupService.signupFellow(email, password, name, isBetaTester, isCollaborator, message, referralCode, isReferralPartner);
+//    fellow.setId(fellowId);
 
-    PaymentInput payment = new PaymentInput();
-    payment.setFellow(fellow);
-    payment.setAmount(donation.getAmount());
-    payment.setCurrency("USD");
-    payment.setEmail(donation.getEmail());
-    payment.setPaymentType("purchase");
-    payment.setFellowName(donation.getName());
+//    PaymentInput payment = new PaymentInput();
+//    payment.setFellow(fellow);
+//    payment.setAmount(donation.getAmount());
+//    payment.setCurrency("USD");
+//    payment.setEmail(donation.getEmail());
+//    payment.setPaymentType("purchase");
+//    payment.setFellowName(donation.getName());
 
-    return helcimService.initializeCheckout(payment).flatMap(response -> {
+    return helcimService.initializeCheckout(amount, currency, paymentType).flatMap(response -> {
       logger.info("Response: " + response);
       // Save a field to the database
       return Mono.fromCallable(() -> {
-        logger.info("fromCallable");
-
-        // update this one field from response from helcim service
-        String rawToken = response.getSecretToken();
-        logger.info("Raw token: " + rawToken);
-        String SALT = KeyGenerators.string().generateKey();
-        logger.info("Encryption SALT: " + SALT);
-        payment.setSALT(SALT);
-        logger.info("Encryption password: " + PASSWORD);
-        TextEncryptor encryptor = Encryptors.text(PASSWORD, SALT);
-        String encryptedToken = encryptor.encrypt(rawToken);
-        payment.setSecretToken(encryptedToken);
-        // save the entity and return it
-        logger.info("Save payment: " + payment);
-        // TODO this is where we need to create/convert to entity
-        PaymentEntity paymentEntity = new PaymentEntity(); // paymentConverter.convertToEntity(payment);
-
-        paymentEntity.setAmount(payment.getAmount());
-        paymentEntity.setCurrency(payment.getCurrency());
-        paymentEntity.setPaymentType(payment.getPaymentType());
-
-        paymentEntity.setSALT(payment.getSALT());
-        paymentEntity.setSecretToken(payment.getSecretToken());
-        paymentEntity.setStatus(PaymentStatus.PENDING);
-
+        PaymentEntity paymentEntity = createPaymentEntity(amount, currency, paymentType, response.getCheckoutToken());
         Optional<FellowEntity> fellowEntity = fellowRepository.findById(fellowId);
         paymentEntity.setFellow(fellowEntity.get());
         PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
-        PaymentResponse paymentResponse = new PaymentResponse();
+        ClientCheckoutData paymentResponse = new ClientCheckoutData();
         paymentResponse.setId(savedPaymentEntity.getId());
         paymentResponse.setStatus(savedPaymentEntity.getStatus());
         return paymentResponse;
@@ -195,17 +172,15 @@ public class CheckoutService {
     });
   }
 
-  public PaymentResult completePayment(PaymentResultInput input) throws JsonProcessingException {
-    String cleanedJsonEncodedData = mapper.writeValueAsString(input.getData());
+  public PaymentStatus completePayment(String cleanedJsonEncodedData, String hash, Long paymentId) throws JsonProcessingException {
+//    String cleanedJsonEncodedData = mapper.writeValueAsString(input.getData());
     logger.info("Complete payment: cleaned json data: " + cleanedJsonEncodedData);
-    logger.info("Complete payment: hash: " + input.getHash());
+    logger.info("Complete payment: hash: " + hash);
     // Need to use the persistence layer to get sensitive data
     // That is not serialized by default
-    Optional<PaymentEntity> optional = paymentRepository.findById(input.getPaymentId());
+    Optional<PaymentEntity> optional = paymentRepository.findById(paymentId);
     if (optional.isEmpty()) {
-      PaymentResult result = new PaymentResult();
-      result.setSuccess(false);
-      result.setMessage("Payment not found by id");
+      PaymentStatus result = PaymentStatus.PENDING;
       return result;
     }
     PaymentEntity paymentEntity = optional.get();
@@ -215,20 +190,21 @@ public class CheckoutService {
     logger.info("Complete payment: secret token: " + secretToken);
     String expectedHash = sha256(cleanedJsonEncodedData + secretToken);
     logger.info("Complete payment: Expected hash: " + expectedHash);
-    PaymentResult result = new PaymentResult();
-    if (input.getHash().contentEquals(expectedHash)) {
-      result.setSuccess(true);
-      paymentEntity.setStatus(PaymentStatus.APPROVED);
+    PaymentStatus result;
+    if (hash.contentEquals(expectedHash)) {
+      result = PaymentStatus.APPROVED;
+      paymentEntity.setStatus(result);
       paymentEntity = paymentRepository.save(paymentEntity);
     } else {
-      result.setSuccess(false);
+      result = PaymentStatus.PENDING;
+//      result.setSuccess(false);
     }
     if (paymentEntity.getFellow() != null) {
-      NumericMetricEntity metric = numericMetricRepository.findByName("CURRENT_FELLOW_DONATION");
+      NumericMetricEntity metric = numericMetricRepository.findByReference("CURRENT_FELLOW_DONATION");
       metric.setMetric(metric.getMetric().add(new BigDecimal(paymentEntity.getAmount())));
       numericMetricRepository.save(metric);
     } else if (paymentEntity.getBusiness() != null) {
-      NumericMetricEntity metric = numericMetricRepository.findByName("CURRENT_BUSINESS_DONATION");
+      NumericMetricEntity metric = numericMetricRepository.findByReference("CURRENT_BUSINESS_DONATION");
       metric.setMetric(metric.getMetric().add(new BigDecimal(paymentEntity.getAmount())));
       numericMetricRepository.save(metric);
     }
