@@ -21,17 +21,17 @@ public interface BaseRepository<ENTITY extends BaseObject> extends JpaRepository
 
   List<ENTITY> findAllById(Long id);
 
-  boolean existsByName(String name);
+  boolean existsByReference(String reference);
 
-  ENTITY findByName(String name);
+  ENTITY findByReference(String reference);
 
-  List<ENTITY> findAllByName(String name);
+  List<ENTITY> findAllByReference(String reference);
 
-  boolean existsByLabel(String label);
+  boolean existsByDetails(String details);
 
-  ENTITY findByLabel(String label);
+  ENTITY findByDetails(String details);
 
-  List<ENTITY> findAllByLabel(String label);
+  List<ENTITY> findAllByDetails(String details);
 
   @Override
   @Query("SELECT e FROM #{#entityName} e WHERE e.deletedAt IS NULL")

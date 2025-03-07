@@ -19,7 +19,5 @@ import lombok.Setter;
 @MappedSuperclass
 public class ExperienceLevel extends ProfileElementData {
 
-  @Getter @Setter private String experienceLevel;
-  @Getter @Setter private String expLevelSkill;
   @Getter @Setter private String skillYears;
 }

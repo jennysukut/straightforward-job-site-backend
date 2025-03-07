@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @MappedSuperclass
-public class JobApplicationNote extends BaseObject {
+public class JobApplicationMessage extends BaseObject {
 
-  @Getter @Setter private boolean businessNote;
-  @Getter @Setter private boolean fellowNote;
 }

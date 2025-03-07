@@ -3,8 +3,6 @@ package com.sfjs.data.core;
 import com.sfjs.data.entity.ProfileElementData;
 
 import jakarta.persistence.MappedSuperclass;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Contains fields that can be shared between
@@ -19,6 +17,4 @@ import lombok.Setter;
 @MappedSuperclass
 public class BookOrQuote extends ProfileElementData {
 
-  @Getter @Setter private String bookOrQuote;
-  @Getter @Setter private String author;
 }

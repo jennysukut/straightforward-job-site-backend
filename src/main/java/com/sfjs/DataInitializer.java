@@ -24,25 +24,25 @@ public class DataInitializer implements CommandLineRunner {
   public void run(String... args) throws Exception {
     if (roleRepository.count() == 0) {
       RoleEntity admin = new RoleEntity();
-      admin.setName("ADMIN");
-      admin.setLabel("Admin");
+      admin.setReference("ADMIN");
+      admin.setDetails("Admin");
       roleRepository.save(admin);
       RoleEntity business = new RoleEntity();
-      business.setName("BUSINESS");
-      business.setLabel("Business");
+      business.setReference("BUSINESS");
+      business.setDetails("Business");
       roleRepository.save(business);
       RoleEntity fellow = new RoleEntity();
-      fellow.setName("FELLOW");
-      fellow.setLabel("Fellow");
+      fellow.setReference("FELLOW");
+      fellow.setDetails("Fellow");
       roleRepository.save(fellow);
     }
     if (numericMetricRepository.count() == 0) {
       NumericMetricEntity fellowDonation = new NumericMetricEntity();
-      fellowDonation.setName("CURRENT_FELLOW_DONATION");
+      fellowDonation.setReference("CURRENT_FELLOW_DONATION");
       fellowDonation.setMetric(BigDecimal.ZERO);
       numericMetricRepository.save(fellowDonation);
       NumericMetricEntity businessDonation = new NumericMetricEntity();
-      businessDonation.setName("CURRENT_BUSINESS_DONATION");
+      businessDonation.setReference("CURRENT_BUSINESS_DONATION");
       businessDonation.setMetric(BigDecimal.ZERO);
       numericMetricRepository.save(businessDonation);
     }

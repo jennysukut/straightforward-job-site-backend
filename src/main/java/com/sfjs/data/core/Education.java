@@ -19,7 +19,5 @@ import lombok.Setter;
 @MappedSuperclass
 public class Education extends ProfileElementData {
 
-  @Getter @Setter private String degree;
-  @Getter @Setter private String school;
   @Getter @Setter private String fieldOfStudy;
 }

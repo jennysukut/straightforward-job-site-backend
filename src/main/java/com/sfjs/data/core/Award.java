@@ -19,7 +19,5 @@ import lombok.Setter;
 @MappedSuperclass
 public class Award extends ProfileElementData {
 
-  @Getter @Setter private String awardTitle;
-  @Getter @Setter private String awardDetails;
   @Getter @Setter private String givenBy;
 }

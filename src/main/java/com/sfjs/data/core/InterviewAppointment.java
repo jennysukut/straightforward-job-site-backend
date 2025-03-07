@@ -12,6 +12,5 @@ import lombok.Setter;
 public class InterviewAppointment extends BaseObject {
 
   @Getter @Setter private LocalDateTime interviewDateAndTime;
-
   @Getter @Setter private String note;
 }

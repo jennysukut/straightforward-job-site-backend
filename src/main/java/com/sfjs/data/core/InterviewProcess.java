@@ -19,7 +19,5 @@ import lombok.Setter;
 @MappedSuperclass
 public class InterviewProcess extends JobListingElementData {
 
-  @Getter @Setter private String stage; // : String
-  @Getter @Setter private String step; // : String
-  @Getter @Setter private String details; // : String
+  @Getter @Setter private String stage;
 }
