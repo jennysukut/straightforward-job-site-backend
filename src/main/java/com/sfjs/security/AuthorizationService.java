@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sfjs.data.core.AccountAuthorizationPrincipal;
 import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.ResetPasswordTokenEntity;
 import com.sfjs.jpa.repo.AccountRepository;
@@ -87,8 +88,6 @@ public class AuthorizationService {
   }
 
   public List<String> login(String email, String password) {
-//    Result result = new Result();
-
     // Create the authentication object
     Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -102,19 +101,15 @@ public class AuthorizationService {
     if (authentication.isAuthenticated()) {
       // Add the authentication object to the security context
       SecurityContextHolder.getContext().setAuthentication(authentication);
-//      result.setSuccess(true);
       // Generate a JWT token for future requests
       String token = jwtTokenUtil.generateToken(email, authentication.getAuthorities());
       response.setHeader("Authorization", "Bearer " + token);
+      return authentication.getAuthorities().stream().map(auth -> {
+        return auth.getAuthority();
+      }).collect(Collectors.toList());
     } else {
-//      result.setSuccess(false);
+      return List.of();
     }
-//    return result;
-//    return true;
-    AccountEntity account = getAccount();
-    return account.getRoles().stream().map(role -> {
-      return role.getReference();
-    }).collect(Collectors.toList());
   }
 
   public String generateResetPasswordToken(String email) {
@@ -144,10 +139,10 @@ public class AuthorizationService {
   public AccountEntity getAccount() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     logger.info("getAccount: " + authentication);
-    Object principal = authentication.getPrincipal();
-    logger.info("getAccount: principal: " + principal);
-    if (principal instanceof String) {
-      String email = principal.toString();
+    if (authentication != null && authentication.getPrincipal() != null &&
+        authentication.getPrincipal() instanceof AccountAuthorizationPrincipal) {
+      AccountAuthorizationPrincipal principal = (AccountAuthorizationPrincipal) authentication.getPrincipal();
+      String email = principal.getUsername();
       logger.info("getAccount: email: " + email);
       return accountRepository.findByEmail(email);
     }
