@@ -56,7 +56,7 @@ type Mutation {
 
   resetPassword(email: String!, password: String!, token: String!): Boolean!
 
-  login(email: String!, password: String!): Boolean!
+  login(email: String!, password: String!): [String!]!
 
   saveFellowProfilePage1(
     smallBio: String!,

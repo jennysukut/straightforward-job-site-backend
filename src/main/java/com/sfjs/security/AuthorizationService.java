@@ -1,9 +1,11 @@
 package com.sfjs.security;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -84,7 +86,7 @@ public class AuthorizationService {
     return true;
   }
 
-  public boolean login(String email, String password) {
+  public List<String> login(String email, String password) {
 //    Result result = new Result();
 
     // Create the authentication object
@@ -108,7 +110,11 @@ public class AuthorizationService {
 //      result.setSuccess(false);
     }
 //    return result;
-    return true;
+//    return true;
+    AccountEntity account = getAccount();
+    return account.getRoles().stream().map(role -> {
+      return role.getReference();
+    }).collect(Collectors.toList());
   }
 
   public String generateResetPasswordToken(String email) {
