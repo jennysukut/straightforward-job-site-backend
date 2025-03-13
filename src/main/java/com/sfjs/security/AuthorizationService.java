@@ -139,12 +139,17 @@ public class AuthorizationService {
   public AccountEntity getAccount() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     logger.info("getAccount: " + authentication);
-    if (authentication != null && authentication.getPrincipal() != null &&
-        authentication.getPrincipal() instanceof AccountAuthorizationPrincipal) {
-      AccountAuthorizationPrincipal principal = (AccountAuthorizationPrincipal) authentication.getPrincipal();
-      String email = principal.getUsername();
-      logger.info("getAccount: email: " + email);
-      return accountRepository.findByEmail(email);
+    if (authentication != null && authentication.getPrincipal() != null) {
+      Object principal = authentication.getPrincipal();
+      if (principal instanceof AccountAuthorizationPrincipal) {
+        String email = ((AccountAuthorizationPrincipal)principal).getUsername();
+        logger.info("getAccount: email: " + email);
+        return accountRepository.findByEmail(email);
+      } else if (principal instanceof String) {
+        String email = principal.toString();
+        logger.info("getAccount: email: " + email);
+        return accountRepository.findByEmail(email);
+      }
     }
     return null;
   }
