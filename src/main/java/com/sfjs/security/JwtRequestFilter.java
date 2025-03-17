@@ -67,7 +67,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
       isValid = jwtTokenUtil.validateToken(jwtToken);
     } catch (TokenExpiredException ex) {
       // If the token has expired, move on to next request filter
-      logger.severe(ex.getMessage());
+      logger.warning(ex.getMessage());
       chain.doFilter(request, response);
       return;
     }
