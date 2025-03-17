@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.data.core.Education;
 import com.sfjs.data.core.Experience;
+import com.sfjs.data.core.FellowProfile;
 import com.sfjs.gql.svc.SignupService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -78,11 +80,11 @@ public class Signup {
 //    return signupService.saveProfile(requestBody, environment);
 //  }
 
-//  @QueryMapping(name = "fellowProfile")
-//  @PreAuthorize("hasRole('ROLE_FELLOW')")
-//  public FellowProfileData fellowProfile() {
-//    return signupService.getFellowProfile();
-//  }
+  @QueryMapping(name = "fellowProfile")
+  @PreAuthorize("hasRole('ROLE_FELLOW')")
+  public FellowProfile fellowProfile() {
+    return signupService.getFellowProfile();
+  }
 
 //  @MutationMapping(name = "saveBusinessProfile")
 //  @PreAuthorize("hasRole('ROLE_BUSINESS')")

@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sfjs.data.core.Education;
 import com.sfjs.data.core.Experience;
 import com.sfjs.data.core.Fellow;
+import com.sfjs.data.core.FellowProfile;
 import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.BusinessEntity;
 import com.sfjs.data.entity.EducationEntity;
@@ -427,17 +428,14 @@ public class SignupService {
 //      return (E)null;
 //    }
 //  }
-//
-//  public FellowProfileData getFellowProfile() {
-//    AccountEntity accountEntity = authorizationService.getAccount();
-//    FellowEntity fellowEntity = accountEntity.getFellow();
-//    FellowProfileEntity profileEntity = fellowEntity.getProfile();
-//    FellowProfileData extendedProfileData = new FellowProfileData();
-//    convertBaseProfile(profileEntity, extendedProfileData);
-//    convertExtendedProfileEntity(profileEntity, extendedProfileData);
-//    return extendedProfileData;
-//  }
-//
+
+  public FellowProfile getFellowProfile() {
+    AccountEntity accountEntity = authorizationService.getAccount();
+    FellowEntity fellowEntity = accountEntity.getFellow();
+    FellowProfileEntity profileEntity = fellowEntity.getProfile();
+    return profileEntity;
+  }
+
 //  private void convertExtendedProfileEntity(FellowProfileEntity in, FellowProfileData out) {
 //    if (in.getExperience() != null) {
 //      out.setExperience(in.getExperience().stream().map(data -> {

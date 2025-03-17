@@ -1,6 +1,7 @@
 type Query {
   helloWorld: String
   jobs: [JobListing!]!
+  fellowProfile: Profile
 }
 
 type Mutation {
@@ -141,4 +142,13 @@ input JobInterviewAppointmentInput {
   interviewDateAndTime: DateTime!
   # interviewDateAndTime: DateTime! @Pattern(regexp: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$")
   note: String
+}
+
+type Profile {
+  smallBio: String!,
+  country: String!,
+  location: String!,
+  skills: [String!]!,
+  jobTitles: [String!]!,
+  languages: [String!]!
 }
