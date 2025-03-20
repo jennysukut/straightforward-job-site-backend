@@ -122,6 +122,7 @@ enum PaymentStatus {
 }
 
 input Experience {
+  id: ID
   title: String!
   companyName: String!
   yearDetails: String!
@@ -129,6 +130,7 @@ input Experience {
 }
 
 input Education {
+  id: ID
   degree: String!
   school: String!
   fieldOfStudy: String!
