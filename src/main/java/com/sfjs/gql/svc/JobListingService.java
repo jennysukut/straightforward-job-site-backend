@@ -228,8 +228,8 @@ public class JobListingService {
     Optional<JobListingEntity> optionalEntity = jobListingRepository.findById(id);
 
     if (optionalEntity.isEmpty()) {
-      logger.info("No profile associated with this fellow account");
-      throw new IllegalArgumentException("No profile for this fellow account");
+      logger.info("No job listing with this id: " + id);
+      throw new IllegalArgumentException("No job listing with this id: " + id);
     }
     JobListingEntity entity = optionalEntity.get();
     entity.setPositionSummary(positionSummary);
