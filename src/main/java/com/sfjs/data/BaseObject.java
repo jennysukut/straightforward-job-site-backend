@@ -63,18 +63,6 @@ public class BaseObject {
     return this.getDeletedAt() != null;
   }
 
-  // Every entity needs a name
-  @Getter
-  @Setter
-  @Column(name = "name")
-  private String reference;
-
-  // Every entity needs a label
-  @Getter
-  @Setter
-  @Column(name = "label")
-  private String details;
-
   @Override
   public String toString() {
     try {

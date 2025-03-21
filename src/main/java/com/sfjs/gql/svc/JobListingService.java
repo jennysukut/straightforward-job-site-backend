@@ -127,7 +127,7 @@ public class JobListingService {
 //  }
 
   public Long createJobListing(
-      @Argument(name = "name")    String name, //?: string;
+      @Argument(name = "jobTitle")    String jobTitle, //?: string;
 //      @Argument(name = "businessName")    String businessName, //?: string;
       @Argument(name = "applicationLimit")    String applicationLimit, //?: string;
       // this job number will probably get replaced by an
@@ -157,7 +157,7 @@ public class JobListingService {
     entity.setBusiness(businessEntity);
 
 //    @Argument(name = "jobTitle")    String jobTitle, //?: string;
-    entity.setReference(name);
+    entity.setJobTitle(jobTitle);
 //    @Argument(name = "businessName")    String businessName, //?: string;
 //    @Argument(name = "applicationLimit")    String applicationLimit, //?: string;
     entity.setApplicationLimit(applicationLimit);
@@ -204,7 +204,7 @@ public class JobListingService {
   }
 
   public Long createJobListing(
-    @Argument(name = "name")    String name, //?: string;
+    @Argument(name = "jobTitle")    String jobTitle, //?: string;
     @Argument(name = "positionType")    String positionType, //?: string;
     DataFetchingEnvironment environment) {
 
@@ -213,7 +213,7 @@ public class JobListingService {
     JobListingEntity entity = new JobListingEntity();
     entity.setBusiness(businessEntity);
 
-    entity.setReference(name);
+    entity.setJobTitle(jobTitle);
     entity.setPositionType(positionType);
 
     entity = jobListingRepository.save(entity);

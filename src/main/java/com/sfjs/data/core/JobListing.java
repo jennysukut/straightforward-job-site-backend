@@ -13,8 +13,7 @@ public class JobListing extends BaseObject {
   // Stored separately
   // applicants?: Array<string>;
 
-  // Let's just use "name"
-  // @Getter @Setter String title; //?: string;
+   @Getter @Setter String jobTitle; //?: string;
 
   // Stored separately
   // businessName?: string;

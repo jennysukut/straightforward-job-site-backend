@@ -128,7 +128,6 @@ public class JobApplicationService {
     logger.info("Account: " + accountEntity.getEmail());
 
     FellowEntity fellowEntity = accountEntity.getFellow();
-    logger.info("Fellow: " + fellowEntity.getReference());
 
     // This should work but maybe the job listing has been deleted??
     Optional<JobListingEntity> optionalJobListing = jobListingRepository.findById(jobId);

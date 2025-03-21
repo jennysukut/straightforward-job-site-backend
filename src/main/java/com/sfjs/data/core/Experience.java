@@ -19,6 +19,8 @@ import lombok.Setter;
 @MappedSuperclass
 public class Experience extends ProfileElementData {
 
+  @Getter @Setter private String title;
   @Getter @Setter private String companyName;
   @Getter @Setter private String yearDetails;
+  @Getter @Setter private String details;
 }

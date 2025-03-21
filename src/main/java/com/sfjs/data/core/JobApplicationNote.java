@@ -9,6 +9,7 @@ import lombok.Setter;
 @MappedSuperclass
 public class JobApplicationNote extends BaseObject {
 
+  @Getter @Setter private String details;
   @Getter @Setter private boolean businessNote;
   @Getter @Setter private boolean fellowNote;
 }

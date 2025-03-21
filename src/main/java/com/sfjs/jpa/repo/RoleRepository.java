@@ -8,4 +8,6 @@ import com.sfjs.data.entity.RoleEntity;
 @Repository
 @Transactional
 public interface RoleRepository extends BaseRepository<RoleEntity> {
+
+  RoleEntity findByName(String name);
 }

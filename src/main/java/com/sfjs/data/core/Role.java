@@ -1,7 +1,7 @@
 package com.sfjs.data.core;
 
-import com.sfjs.data.BaseObject;
+import com.sfjs.data.NamedBaseObject;
 
-public class Role extends BaseObject {
+public class Role extends NamedBaseObject {
 
 }

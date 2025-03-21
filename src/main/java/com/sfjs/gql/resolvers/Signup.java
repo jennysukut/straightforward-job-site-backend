@@ -73,12 +73,6 @@ public class Signup {
       @Argument(name = "experience") List<Experience> experience,
       @Argument(name = "education") List<Education> education,
       DataFetchingEnvironment environment) throws Exception {
-    experience.stream().forEach(exp -> {
-      logger.info("Experience: title - " + exp.getReference());
-      logger.info("Experience: companyName - " + exp.getCompanyName());
-      logger.info("Experience: yearDetails - " + exp.getYearDetails());
-      logger.info("Experience: details - " + exp.getDetails());
-    });
     return signupService.saveFellowProfilePage2(experience, education, environment);
   }
 

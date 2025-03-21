@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     result.setUsername(username);
     result.setPassword(accountEntity.getPassword());
     result.setAuthorities(accountEntity.getRoles().stream().map(role -> {
-      return new SimpleGrantedAuthority("ROLE_" + role.getReference());
+      return new SimpleGrantedAuthority("ROLE_" + role.getName());
     }).collect(Collectors.toList()));
     return result;
   }

@@ -1,13 +1,13 @@
 package com.sfjs.data.core;
 
-import com.sfjs.data.BaseObject;
+import com.sfjs.data.NamedBaseObject;
 
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
 @MappedSuperclass
-public class Fellow extends BaseObject {
+public class Fellow extends NamedBaseObject {
 
   @Getter
   @Setter
