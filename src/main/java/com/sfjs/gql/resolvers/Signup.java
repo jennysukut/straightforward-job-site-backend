@@ -1,6 +1,7 @@
 package com.sfjs.gql.resolvers;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -13,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.sfjs.data.core.Education;
 import com.sfjs.data.core.Experience;
-import com.sfjs.data.core.FellowProfile;
+import com.sfjs.data.entity.FellowProfileEntity;
 import com.sfjs.gql.svc.SignupService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -22,6 +23,8 @@ import graphql.schema.DataFetchingEnvironment;
 @EnableWebMvc
 @Transactional
 public class Signup {
+
+  Logger logger = Logger.getLogger(getClass().getName());
 
   @Autowired
   private SignupService signupService;
@@ -70,6 +73,12 @@ public class Signup {
       @Argument(name = "experience") List<Experience> experience,
       @Argument(name = "education") List<Education> education,
       DataFetchingEnvironment environment) throws Exception {
+    experience.stream().forEach(exp -> {
+      logger.info("Experience: title - " + exp.getReference());
+      logger.info("Experience: companyName - " + exp.getCompanyName());
+      logger.info("Experience: yearDetails - " + exp.getYearDetails());
+      logger.info("Experience: details - " + exp.getDetails());
+    });
     return signupService.saveFellowProfilePage2(experience, education, environment);
   }
 
@@ -82,8 +91,9 @@ public class Signup {
 
   @QueryMapping(name = "fellowProfile")
   @PreAuthorize("hasRole('ROLE_FELLOW')")
-  public FellowProfile fellowProfile() {
-    return signupService.getFellowProfile();
+  public FellowProfileEntity fellowProfile() {
+    FellowProfileEntity profileEntity = signupService.getFellowProfile();
+    return profileEntity;
   }
 
 //  @MutationMapping(name = "saveBusinessProfile")

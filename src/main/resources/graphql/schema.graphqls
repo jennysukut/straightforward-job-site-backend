@@ -69,8 +69,8 @@ type Mutation {
     ): Boolean!
 
   saveFellowProfilePage2(
-    experience: [Experience!]!,
-    education: [Education!]!
+    experience: [ExperienceInput!]!,
+    education: [EducationInput!]!
     ): Boolean!
 
   createJobListing(
@@ -121,7 +121,7 @@ enum PaymentStatus {
   PENDING
 }
 
-input Experience {
+input ExperienceInput {
   id: ID
   title: String!
   companyName: String!
@@ -129,11 +129,26 @@ input Experience {
   details: String!
 }
 
-input Education {
+type Experience {
+  id: ID
+  title: String
+  companyName: String
+  yearDetails: String
+  details: String
+}
+
+input EducationInput {
   id: ID
   degree: String!
   school: String!
   fieldOfStudy: String!
+}
+
+type Education {
+  id: ID
+  degree: String
+  school: String
+  fieldOfStudy: String
 }
 
 type JobListing {
@@ -152,5 +167,8 @@ type Profile {
   location: String!,
   skills: [String!]!,
   jobTitles: [String!]!,
-  languages: [String!]!
+  languages: [String!]!,
+  experience: [Experience]!,
+  education: [Education]!
 }
+
