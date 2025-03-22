@@ -11,8 +11,6 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
 import com.sfjs.data.core.Education;
 import com.sfjs.data.core.Experience;
 import com.sfjs.data.entity.FellowProfileEntity;
@@ -21,7 +19,6 @@ import com.sfjs.gql.svc.SignupService;
 import graphql.schema.DataFetchingEnvironment;
 
 @RestController
-@EnableWebMvc
 @Transactional
 public class Signup {
 
