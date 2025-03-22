@@ -1,12 +1,9 @@
 package com.sfjs.security;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -87,7 +84,7 @@ public class AuthorizationService {
     return true;
   }
 
-  public List<String> login(String email, String password) {
+  public AccountEntity login(String email, String password) {
     // Create the authentication object
     Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -98,18 +95,12 @@ public class AuthorizationService {
       logger.info("Authentication principal username: " + userDetails.getUsername());
     }
 
-    if (authentication.isAuthenticated()) {
-      // Add the authentication object to the security context
-      SecurityContextHolder.getContext().setAuthentication(authentication);
-      // Generate a JWT token for future requests
-      String token = jwtTokenUtil.generateToken(email, authentication.getAuthorities());
-      response.setHeader("Authorization", "Bearer " + token);
-      return authentication.getAuthorities().stream().map(auth -> {
-        return auth.getAuthority();
-      }).collect(Collectors.toList());
-    } else {
-      return List.of();
-    }
+    // Add the authentication object to the security context
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    // Generate a JWT token for future requests
+    String token = jwtTokenUtil.generateToken(email, authentication.getAuthorities());
+    response.setHeader("Authorization", "Bearer " + token);
+    return accountRepository.findByEmail(email);
   }
 
   public String generateResetPasswordToken(String email) {

@@ -22,4 +22,9 @@ public class RoleEntity extends Role {
   @JsonIgnore
   @ManyToMany(mappedBy = "roles")
   private Set<AccountEntity> accounts = new HashSet<>();
+
+  @Override
+  public String toString() {
+    return this.getName();
+  }
 }
