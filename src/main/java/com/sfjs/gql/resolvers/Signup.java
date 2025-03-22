@@ -1,6 +1,7 @@
 package com.sfjs.gql.resolvers;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,10 +85,10 @@ public class Signup {
 //  }
 
   @QueryMapping(name = "fellowProfile")
-  @PreAuthorize("hasRole('ROLE_FELLOW')")
-  public FellowProfileEntity fellowProfile() {
-    FellowProfileEntity profileEntity = signupService.getFellowProfile();
-    return profileEntity;
+  public Optional<FellowProfileEntity> fellowProfile(
+      @Argument(name = "id") Long id
+      ) {
+    return signupService.getFellowProfile(id);
   }
 
 //  @MutationMapping(name = "saveBusinessProfile")

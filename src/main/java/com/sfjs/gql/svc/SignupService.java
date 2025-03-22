@@ -1,6 +1,7 @@
 package com.sfjs.gql.svc;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -428,11 +429,10 @@ public class SignupService {
 //    }
 //  }
 
-  public FellowProfileEntity getFellowProfile() {
-    AccountEntity accountEntity = authorizationService.getAccount();
-    FellowEntity fellowEntity = accountEntity.getFellow();
-    FellowProfileEntity profileEntity = fellowEntity.getProfile();
-    return profileEntity;
+  public Optional<FellowProfileEntity> getFellowProfile(Long id) {
+    return accountRepository.findById(id)
+      .map(AccountEntity::getFellow)
+      .map(FellowEntity::getProfile);
   }
 
 //  private void convertExtendedProfileEntity(FellowProfileEntity in, FellowProfileData out) {

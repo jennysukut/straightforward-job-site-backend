@@ -1,7 +1,7 @@
 type Query {
   helloWorld: String
   jobs: [JobListing!]!
-  fellowProfile: Profile
+  fellowProfile(id: ID!): Profile
 }
 
 type Mutation {
