@@ -68,7 +68,7 @@ public class JwtTokenUtil {
         .withIssuedAt(new Date())
         .withExpiresAt(new Date(System.currentTimeMillis() + expiration))
         .withJWTId(UUID.randomUUID().toString())
-        .withNotBefore(new Date(System.currentTimeMillis() + 1000L))
+        .withNotBefore(new Date(System.currentTimeMillis() - 1000L))
         .withClaim("authorities", authoritiesList)
         .sign(algorithm);
     return jwtToken;
