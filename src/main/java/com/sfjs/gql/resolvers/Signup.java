@@ -88,6 +88,16 @@ public class Signup {
     return signupService.saveFellowProfilePage3(awards, experienceLevels, accomplishments, environment);
   }
 
+  @MutationMapping(name = "saveFellowProfilePage4")
+  @PreAuthorize("hasRole('ROLE_FELLOW')")
+  public boolean saveFellowProfilePage4(
+    @Argument(name = "passions") String passions,
+    @Argument(name = "lookingFor") String lookingFor,
+    @Argument(name = "locationOptions") List<String> locationOptions,
+    DataFetchingEnvironment environment) throws Exception {
+    return signupService.saveFellowProfilePage4(passions, lookingFor, locationOptions, environment);
+  }
+
 //  @MutationMapping(name = "saveProfile")
 //  @PreAuthorize("hasRole('ROLE_FELLOW')")
 //  public FellowProfileData saveProfile(@Argument(name = "requestBody") FellowProfileData requestBody,

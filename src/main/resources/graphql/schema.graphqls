@@ -79,6 +79,12 @@ type Mutation {
     accomplishments: [AccomplishmentInput!]!
     ): Boolean!
 
+  saveFellowProfilePage4(
+    passions: String,
+    lookingFor: String,
+    locationOptions: [String!]!
+    ): Boolean!
+
   createJobListing(
     jobTitle: String!,
     positionType: String!
@@ -219,6 +225,9 @@ type Profile {
   awards: [Award!]!
   experienceLevels: [ExperienceLevel!]!
   accomplishments: [Accomplishment!]!
+  passions: String
+  lookingFor: String
+  locationOptions: [String!]!
 }
 
 type Account {

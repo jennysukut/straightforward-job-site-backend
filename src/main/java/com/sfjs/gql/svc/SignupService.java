@@ -488,6 +488,24 @@ public class SignupService {
     return true;
   }
 
+  public boolean saveFellowProfilePage4(String passions, String lookingFor, List<String> locationOptions,
+      DataFetchingEnvironment environment) {
+    AccountEntity accountEntity = authorizationService.getAccount();
+    FellowEntity fellowEntity = accountEntity.getFellow();
+    FellowProfileEntity profileEntity = fellowEntity.getProfile();
+
+    if (profileEntity == null) {
+      profileEntity = new FellowProfileEntity();
+      profileEntity.setFellow(fellowEntity);
+    }
+
+    profileEntity.setPassions(passions);
+    profileEntity.setLookingFor(lookingFor);
+    profileEntity.setLocationOptions(locationOptions);
+    profileEntity = profileRepository.save(profileEntity);
+    return true;
+  }
+
 //  private void convertExtendedProfileEntity(FellowProfileEntity in, FellowProfileData out) {
 //    if (in.getExperience() != null) {
 //      out.setExperience(in.getExperience().stream().map(data -> {
