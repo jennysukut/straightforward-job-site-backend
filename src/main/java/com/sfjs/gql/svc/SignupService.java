@@ -22,6 +22,7 @@ import com.sfjs.data.core.Experience;
 import com.sfjs.data.core.ExperienceLevel;
 import com.sfjs.data.core.Fellow;
 import com.sfjs.data.core.Hobby;
+import com.sfjs.data.core.Link;
 import com.sfjs.data.entity.AccomplishmentEntity;
 import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.AwardEntity;
@@ -33,6 +34,7 @@ import com.sfjs.data.entity.ExperienceLevelEntity;
 import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.data.entity.FellowProfileEntity;
 import com.sfjs.data.entity.HobbyEntity;
+import com.sfjs.data.entity.LinkEntity;
 import com.sfjs.data.entity.RoleEntity;
 import com.sfjs.jpa.repo.AccomplishmentRepository;
 import com.sfjs.jpa.repo.AccountRepository;
@@ -44,6 +46,7 @@ import com.sfjs.jpa.repo.ExperienceLevelRepository;
 import com.sfjs.jpa.repo.ExperienceRepository;
 import com.sfjs.jpa.repo.FellowRepository;
 import com.sfjs.jpa.repo.HobbyRepository;
+import com.sfjs.jpa.repo.LinkRepository;
 import com.sfjs.jpa.repo.ProfileRepository;
 import com.sfjs.jpa.repo.RoleRepository;
 import com.sfjs.security.AuthorizationService;
@@ -101,8 +104,8 @@ public class SignupService {
   @Autowired
   private BookOrQuoteRepository bookOrQuoteRepository;
 
-//  @Autowired
-//  private LinkRepository linkRepository;
+  @Autowired
+  private LinkRepository linkRepository;
 
   static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
 
@@ -542,6 +545,30 @@ public class SignupService {
     }).collect(Collectors.toList()));
 
     profileEntity.setPetDetails(petDetails);
+    profileRepository.save(profileEntity);
+    return true;
+  }
+
+  public boolean saveFellowProfilePage6(List<Link> links, String aboutMe, DataFetchingEnvironment environment) {
+    AccountEntity accountEntity = authorizationService.getAccount();
+    FellowEntity fellowEntity = accountEntity.getFellow();
+    final FellowProfileEntity profileEntity = fellowEntity.getProfile();
+
+    if (profileEntity == null) {
+      logger.info("No profile associated with this fellow account");
+      throw new IllegalArgumentException("No profile for this fellow account");
+    }
+
+    profileEntity.setLinks(links.stream().map( data -> {
+      LinkEntity entity = new LinkEntity();
+      entity.setLinkType(data.getLinkType());
+      entity.setLink(data.getLink());
+      entity.setProfile(profileEntity);
+      entity = linkRepository.save(entity);
+      return entity;
+    }).collect(Collectors.toList()));
+
+    profileEntity.setAboutMe(aboutMe);
     profileRepository.save(profileEntity);
     return true;
   }

@@ -19,6 +19,7 @@ import com.sfjs.data.core.Education;
 import com.sfjs.data.core.Experience;
 import com.sfjs.data.core.ExperienceLevel;
 import com.sfjs.data.core.Hobby;
+import com.sfjs.data.core.Link;
 import com.sfjs.data.entity.FellowProfileEntity;
 import com.sfjs.gql.svc.SignupService;
 
@@ -108,6 +109,15 @@ public class Signup {
     @Argument(name = "petDetails") String petDetails,
     DataFetchingEnvironment environment) throws Exception {
     return signupService.saveFellowProfilePage5(hobbies, bookOrQuote, petDetails, environment);
+  }
+
+  @MutationMapping(name = "saveFellowProfilePage6")
+  @PreAuthorize("hasRole('ROLE_FELLOW')")
+  public boolean saveFellowProfilePage6(
+    @Argument(name = "links") List<Link> links,
+    @Argument(name = "aboutMe") String aboutMe,
+    DataFetchingEnvironment environment) throws Exception {
+    return signupService.saveFellowProfilePage6(links, aboutMe, environment);
   }
 
 //  @MutationMapping(name = "saveProfile")

@@ -91,6 +91,11 @@ type Mutation {
     petDetails: String
     ): Boolean!
 
+  saveFellowProfilePage6(
+    links: [LinkInput!]!
+    aboutMe: String
+    ): Boolean!
+
   createJobListing(
     jobTitle: String!,
     positionType: String!
@@ -233,6 +238,18 @@ type BookOrQuote {
   author: String!
 }
 
+input LinkInput {
+  id: ID
+  linkType: String!
+  link: Url!
+}
+
+type Link {
+  id: ID
+  linkType: String!
+  link: Url!
+}
+
 type JobListing {
   id: ID
 }
@@ -261,6 +278,8 @@ type Profile {
   hobbies: [Hobby!]!
   bookOrQuote: [BookOrQuote!]!
   petDetails: String
+  links: [Link!]!
+  aboutMe: String
 }
 
 type Account {
