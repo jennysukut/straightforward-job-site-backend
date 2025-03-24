@@ -11,8 +11,12 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.sfjs.data.core.Accomplishment;
+import com.sfjs.data.core.Award;
 import com.sfjs.data.core.Education;
 import com.sfjs.data.core.Experience;
+import com.sfjs.data.core.ExperienceLevel;
 import com.sfjs.data.entity.FellowProfileEntity;
 import com.sfjs.gql.svc.SignupService;
 
@@ -72,6 +76,16 @@ public class Signup {
       @Argument(name = "education") List<Education> education,
       DataFetchingEnvironment environment) throws Exception {
     return signupService.saveFellowProfilePage2(experience, education, environment);
+  }
+
+  @MutationMapping(name = "saveFellowProfilePage3")
+  @PreAuthorize("hasRole('ROLE_FELLOW')")
+  public boolean saveFellowProfilePage3(
+      @Argument(name = "awards") List<Award> awards,
+      @Argument(name = "experienceLevels") List<ExperienceLevel> experienceLevels,
+      @Argument(name = "accomplishments") List<Accomplishment> accomplishments,
+      DataFetchingEnvironment environment) throws Exception {
+    return signupService.saveFellowProfilePage3(awards, experienceLevels, accomplishments, environment);
   }
 
 //  @MutationMapping(name = "saveProfile")

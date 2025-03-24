@@ -73,6 +73,12 @@ type Mutation {
     education: [EducationInput!]!
     ): Boolean!
 
+  saveFellowProfilePage3(
+    awards: [AwardInput!]!,
+    experienceLevels: [ExperienceLevelInput!]!
+    accomplishments: [AccomplishmentInput!]!
+    ): Boolean!
+
   createJobListing(
     jobTitle: String!,
     positionType: String!
@@ -151,6 +157,46 @@ type Education {
   fieldOfStudy: String
 }
 
+input AwardInput {
+  id: ID
+  awardTitle: String!
+  givenBy: String!
+  awardDetails: String!
+}
+
+type Award {
+  id: ID
+  awardTitle: String
+  givenBy: String
+  awardDetails: String
+}
+
+input ExperienceLevelInput {
+  id: ID
+  experienceLevel: String!
+  expLevelSkill: String!
+  skillYears: String!
+}
+
+type ExperienceLevel {
+  id: ID
+  experienceLevel: String
+  expLevelSkill: String
+  skillYears: String
+}
+
+input AccomplishmentInput {
+  id: ID
+  accTitle: String!
+  accDetails: String!
+}
+
+type Accomplishment {
+  id: ID
+  accTitle: String
+  accDetails: String
+}
+
 type JobListing {
   id: ID
 }
@@ -170,6 +216,9 @@ type Profile {
   languages: [String!]!,
   experience: [Experience]!,
   education: [Education]!
+  awards: [Award!]!
+  experienceLevels: [ExperienceLevel!]!
+  accomplishments: [Accomplishment!]!
 }
 
 type Account {
