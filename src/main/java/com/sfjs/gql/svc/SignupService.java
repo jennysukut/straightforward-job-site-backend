@@ -16,28 +16,34 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sfjs.data.core.Accomplishment;
 import com.sfjs.data.core.Award;
+import com.sfjs.data.core.BookOrQuote;
 import com.sfjs.data.core.Education;
 import com.sfjs.data.core.Experience;
 import com.sfjs.data.core.ExperienceLevel;
 import com.sfjs.data.core.Fellow;
+import com.sfjs.data.core.Hobby;
 import com.sfjs.data.entity.AccomplishmentEntity;
 import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.AwardEntity;
+import com.sfjs.data.entity.BookOrQuoteEntity;
 import com.sfjs.data.entity.BusinessEntity;
 import com.sfjs.data.entity.EducationEntity;
 import com.sfjs.data.entity.ExperienceEntity;
 import com.sfjs.data.entity.ExperienceLevelEntity;
 import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.data.entity.FellowProfileEntity;
+import com.sfjs.data.entity.HobbyEntity;
 import com.sfjs.data.entity.RoleEntity;
 import com.sfjs.jpa.repo.AccomplishmentRepository;
 import com.sfjs.jpa.repo.AccountRepository;
 import com.sfjs.jpa.repo.AwardRepository;
+import com.sfjs.jpa.repo.BookOrQuoteRepository;
 import com.sfjs.jpa.repo.BusinessRepository;
 import com.sfjs.jpa.repo.EducationRepository;
 import com.sfjs.jpa.repo.ExperienceLevelRepository;
 import com.sfjs.jpa.repo.ExperienceRepository;
 import com.sfjs.jpa.repo.FellowRepository;
+import com.sfjs.jpa.repo.HobbyRepository;
 import com.sfjs.jpa.repo.ProfileRepository;
 import com.sfjs.jpa.repo.RoleRepository;
 import com.sfjs.security.AuthorizationService;
@@ -89,11 +95,11 @@ public class SignupService {
   @Autowired
   private AccomplishmentRepository accomplishmentRepository;
 
-//  @Autowired
-//  private HobbyRepository hobbyRepository;
+  @Autowired
+  private HobbyRepository hobbyRepository;
 
-//  @Autowired
-//  private BookOrQuoteRepository bookOrQuoteRepository;
+  @Autowired
+  private BookOrQuoteRepository bookOrQuoteRepository;
 
 //  @Autowired
 //  private LinkRepository linkRepository;
@@ -503,6 +509,40 @@ public class SignupService {
     profileEntity.setLookingFor(lookingFor);
     profileEntity.setLocationOptions(locationOptions);
     profileEntity = profileRepository.save(profileEntity);
+    return true;
+  }
+
+  public boolean saveFellowProfilePage5(List<Hobby> hobbies, List<BookOrQuote> bookOrQuote, String petDetails,
+      DataFetchingEnvironment environment) {
+    AccountEntity accountEntity = authorizationService.getAccount();
+    FellowEntity fellowEntity = accountEntity.getFellow();
+    final FellowProfileEntity profileEntity = fellowEntity.getProfile();
+
+    if (profileEntity == null) {
+      logger.info("No profile associated with this fellow account");
+      throw new IllegalArgumentException("No profile for this fellow account");
+    }
+
+    profileEntity.setHobbies(hobbies.stream().map( data -> {
+      HobbyEntity entity = new HobbyEntity();
+      entity.setHobbyTitle(data.getHobbyTitle());
+      entity.setHowLong(data.getHowLong());
+      entity.setProfile(profileEntity);
+      entity = hobbyRepository.save(entity);
+      return entity;
+    }).collect(Collectors.toList()));
+
+    profileEntity.setBookOrQuote(bookOrQuote.stream().map( data -> {
+      BookOrQuoteEntity entity = new BookOrQuoteEntity();
+      entity.setBookOrQuote(data.getBookOrQuote());
+      entity.setAuthor(data.getAuthor());
+      entity.setProfile(profileEntity);
+      entity = bookOrQuoteRepository.save(entity);
+      return entity;
+    }).collect(Collectors.toList()));
+
+    profileEntity.setPetDetails(petDetails);
+    profileRepository.save(profileEntity);
     return true;
   }
 

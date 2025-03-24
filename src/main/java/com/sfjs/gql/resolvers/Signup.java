@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sfjs.data.core.Accomplishment;
 import com.sfjs.data.core.Award;
+import com.sfjs.data.core.BookOrQuote;
 import com.sfjs.data.core.Education;
 import com.sfjs.data.core.Experience;
 import com.sfjs.data.core.ExperienceLevel;
+import com.sfjs.data.core.Hobby;
 import com.sfjs.data.entity.FellowProfileEntity;
 import com.sfjs.gql.svc.SignupService;
 
@@ -96,6 +98,16 @@ public class Signup {
     @Argument(name = "locationOptions") List<String> locationOptions,
     DataFetchingEnvironment environment) throws Exception {
     return signupService.saveFellowProfilePage4(passions, lookingFor, locationOptions, environment);
+  }
+
+  @MutationMapping(name = "saveFellowProfilePage5")
+  @PreAuthorize("hasRole('ROLE_FELLOW')")
+  public boolean saveFellowProfilePage5(
+    @Argument(name = "hobbies") List<Hobby> hobbies,
+    @Argument(name = "bookOrQuote") List<BookOrQuote> bookOrQuote,
+    @Argument(name = "petDetails") String petDetails,
+    DataFetchingEnvironment environment) throws Exception {
+    return signupService.saveFellowProfilePage5(hobbies, bookOrQuote, petDetails, environment);
   }
 
 //  @MutationMapping(name = "saveProfile")

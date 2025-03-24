@@ -85,6 +85,12 @@ type Mutation {
     locationOptions: [String!]!
     ): Boolean!
 
+  saveFellowProfilePage5(
+    hobbies: [HobbyInput!]!
+    bookOrQuote: [BookOrQuoteInput!]!
+    petDetails: String
+    ): Boolean!
+
   createJobListing(
     jobTitle: String!,
     positionType: String!
@@ -203,6 +209,30 @@ type Accomplishment {
   accDetails: String
 }
 
+input HobbyInput {
+  id: ID
+  hobbyTitle: String!
+  howLong: String
+}
+
+type Hobby {
+  id: ID
+  hobbyTitle: String!
+  howLong: String
+}
+
+input BookOrQuoteInput {
+  id: ID
+  bookOrQuote: String!
+  author: String!
+}
+
+type BookOrQuote {
+  id: ID
+  bookOrQuote: String!
+  author: String!
+}
+
 type JobListing {
   id: ID
 }
@@ -228,6 +258,9 @@ type Profile {
   passions: String
   lookingFor: String
   locationOptions: [String!]!
+  hobbies: [Hobby!]!
+  bookOrQuote: [BookOrQuote!]!
+  petDetails: String
 }
 
 type Account {

@@ -3,6 +3,8 @@ package com.sfjs.data.core;
 import com.sfjs.data.entity.ProfileElementData;
 
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Contains fields that can be shared between
@@ -17,4 +19,6 @@ import jakarta.persistence.MappedSuperclass;
 @MappedSuperclass
 public class Hobby extends ProfileElementData {
 
+  @Getter @Setter private String hobbyTitle;
+  @Getter @Setter private String howLong;
 }
