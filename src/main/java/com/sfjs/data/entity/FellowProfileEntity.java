@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sfjs.data.core.FellowProfile;
+import com.sfjs.data.core.FellowProfileWithName;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
@@ -24,7 +24,7 @@ import lombok.Setter;
  */
 @Entity(name = "profile")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class FellowProfileEntity extends FellowProfile {
+public class FellowProfileEntity extends FellowProfileWithName {
 
   static Logger logger = Logger.getLogger(FellowProfileEntity.class.getName());
 

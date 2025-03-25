@@ -262,25 +262,27 @@ input JobInterviewAppointmentInput {
 }
 
 type Profile {
-  smallBio: String!,
-  country: String!,
-  location: String!,
-  skills: [String!]!,
-  jobTitles: [String!]!,
-  languages: [String!]!,
-  experience: [Experience]!,
-  education: [Education]!
-  awards: [Award!]!
-  experienceLevels: [ExperienceLevel!]!
-  accomplishments: [Accomplishment!]!
+  smallBio: String
+  country: String
+  location: String
+  skills: [String!]
+  jobTitles: [String!]
+  avatar: String
+  languages: [String!]
+  experience: [Experience]
+  education: [Education]
+  awards: [Award!]
+  experienceLevels: [ExperienceLevel!]
+  accomplishments: [Accomplishment!]
   passions: String
   lookingFor: String
-  locationOptions: [String!]!
-  hobbies: [Hobby!]!
-  bookOrQuote: [BookOrQuote!]!
+  locationOptions: [String!]
+  hobbies: [Hobby!]
+  bookOrQuote: [BookOrQuote!]
   petDetails: String
-  links: [Link!]!
+  links: [Link!]
   aboutMe: String
+  name: String
 }
 
 type Account {

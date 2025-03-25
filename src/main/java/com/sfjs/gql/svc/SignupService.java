@@ -450,7 +450,11 @@ public class SignupService {
   public Optional<FellowProfileEntity> getFellowProfile(Long id) {
     return accountRepository.findById(id)
       .map(AccountEntity::getFellow)
-      .map(FellowEntity::getProfile);
+      .map(FellowEntity::getProfile)
+      .map(profile -> {
+        profile.setName(profile.getFellow().getName());
+        return profile;
+      });
   }
 
   public boolean saveFellowProfilePage3(List<Award> awards, List<ExperienceLevel> experienceLevels,
