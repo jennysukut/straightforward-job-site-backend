@@ -227,7 +227,7 @@ public class SignupService {
   }
 
   public boolean saveFellowProfilePage1(String smallBio, String country, String location, List<String> skills,
-      List<String> jobTitles, List<String> languages, DataFetchingEnvironment environment) {
+      List<String> jobTitles, String avatar, List<String> languages, DataFetchingEnvironment environment) {
     AccountEntity accountEntity = authorizationService.getAccount();
     FellowEntity fellowEntity = accountEntity.getFellow();
     FellowProfileEntity profileEntity = fellowEntity.getProfile();
@@ -242,7 +242,7 @@ public class SignupService {
     profileEntity.setLocation(location);
     profileEntity.setSkills(skills);
     profileEntity.setJobTitles(jobTitles);
-//    profileEntity.setAvatar(avatar);
+    profileEntity.setAvatar(avatar);
     profileEntity.setLanguages(languages);
     profileEntity = profileRepository.save(profileEntity);
     return true;

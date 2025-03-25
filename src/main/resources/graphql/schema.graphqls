@@ -65,6 +65,7 @@ type Mutation {
     location: String!,
     skills: [String!]!,
     jobTitles: [String!]!,
+    avatar: String,
     languages: [String!]!
     ): Boolean!
 

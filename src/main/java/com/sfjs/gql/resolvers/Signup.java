@@ -67,9 +67,10 @@ public class Signup {
       @Argument(name = "location") String location,
       @Argument(name = "skills") List<String> skills,
       @Argument(name = "jobTitles") List<String> jobTitles,
+      @Argument(name = "avatar") String avatar,
       @Argument(name = "languages") List<String> languages,
       DataFetchingEnvironment environment) throws Exception {
-    return signupService.saveFellowProfilePage1(smallBio, country, location, skills, jobTitles, languages, environment);
+    return signupService.saveFellowProfilePage1(smallBio, country, location, skills, jobTitles, avatar, languages, environment);
   }
 
   @MutationMapping(name = "saveFellowProfilePage2")
