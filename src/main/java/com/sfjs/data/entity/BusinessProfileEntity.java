@@ -1,7 +1,7 @@
 package com.sfjs.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sfjs.data.core.BusinessProfile;
+import com.sfjs.data.core.BusinessProfileWithName;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
@@ -20,7 +20,7 @@ import lombok.Setter;
  */
 @Entity(name = "business_profile")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class BusinessProfileEntity extends BusinessProfile {
+public class BusinessProfileEntity extends BusinessProfileWithName {
 
   @Getter
   @Setter

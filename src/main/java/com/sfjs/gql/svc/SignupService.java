@@ -1,5 +1,6 @@
 package com.sfjs.gql.svc;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,6 +29,7 @@ import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.AwardEntity;
 import com.sfjs.data.entity.BookOrQuoteEntity;
 import com.sfjs.data.entity.BusinessEntity;
+import com.sfjs.data.entity.BusinessProfileEntity;
 import com.sfjs.data.entity.EducationEntity;
 import com.sfjs.data.entity.ExperienceEntity;
 import com.sfjs.data.entity.ExperienceLevelEntity;
@@ -40,6 +42,7 @@ import com.sfjs.jpa.repo.AccomplishmentRepository;
 import com.sfjs.jpa.repo.AccountRepository;
 import com.sfjs.jpa.repo.AwardRepository;
 import com.sfjs.jpa.repo.BookOrQuoteRepository;
+import com.sfjs.jpa.repo.BusinessProfileRepository;
 import com.sfjs.jpa.repo.BusinessRepository;
 import com.sfjs.jpa.repo.EducationRepository;
 import com.sfjs.jpa.repo.ExperienceLevelRepository;
@@ -86,8 +89,8 @@ public class SignupService {
   @Autowired
   private ProfileRepository profileRepository;
 
-//  @Autowired
-//  private BusinessProfileRepository businessProfileRepository;
+  @Autowired
+  private BusinessProfileRepository businessProfileRepository;
 
   @Autowired
   private AwardRepository awardRepository;
@@ -575,6 +578,54 @@ public class SignupService {
     profileEntity.setAboutMe(aboutMe);
     profileRepository.save(profileEntity);
     return true;
+  }
+
+  public boolean saveBusinessProfilePage1(String smallBio, String country, String location, URL website, String avatar,
+      DataFetchingEnvironment environment) {
+    AccountEntity accountEntity = authorizationService.getAccount();
+    BusinessEntity businessEntity = accountEntity.getBusiness();
+    BusinessProfileEntity businessProfileEntity = businessEntity.getBusinessProfile();
+
+    if (businessProfileEntity == null) {
+      businessProfileEntity = new BusinessProfileEntity();
+      businessProfileEntity.setBusiness(businessEntity);
+    }
+
+    businessProfileEntity.setSmallBio(smallBio);
+    businessProfileEntity.setCountry(country);
+    businessProfileEntity.setLocation(location);
+    businessProfileEntity.setWebsite(website);
+    businessProfileEntity.setAvatar(avatar);
+    businessProfileRepository.save(businessProfileEntity);
+    return true;
+  }
+
+  public boolean saveBusinessProfilePage2(String businessField, String missionVision, String moreAboutBusiness,
+      DataFetchingEnvironment environment) {
+    AccountEntity accountEntity = authorizationService.getAccount();
+    BusinessEntity businessEntity = accountEntity.getBusiness();
+    final BusinessProfileEntity businessProfileEntity = businessEntity.getBusinessProfile();
+
+    if (businessProfileEntity == null) {
+      logger.info("No profile associated with this business account");
+      throw new IllegalArgumentException("No profile for this business account");
+    }
+
+    businessProfileEntity.setBusinessField(businessField);
+    businessProfileEntity.setMissionVision(missionVision);
+    businessProfileEntity.setMoreAboutBusiness(moreAboutBusiness);
+    businessProfileRepository.save(businessProfileEntity);
+    return true;
+  }
+
+  public Optional<BusinessProfileEntity> getBusinessProfile(Long id) {
+    return accountRepository.findById(id)
+      .map(AccountEntity::getBusiness)
+      .map(BusinessEntity::getBusinessProfile)
+      .map(profile -> {
+        profile.setName(profile.getBusiness().getName());
+        return profile;
+      });
   }
 
 //  private void convertExtendedProfileEntity(FellowProfileEntity in, FellowProfileData out) {

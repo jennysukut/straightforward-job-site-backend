@@ -1,5 +1,6 @@
 package com.sfjs.gql.resolvers;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -20,6 +21,7 @@ import com.sfjs.data.core.Experience;
 import com.sfjs.data.core.ExperienceLevel;
 import com.sfjs.data.core.Hobby;
 import com.sfjs.data.core.Link;
+import com.sfjs.data.entity.BusinessProfileEntity;
 import com.sfjs.data.entity.FellowProfileEntity;
 import com.sfjs.gql.svc.SignupService;
 
@@ -135,11 +137,34 @@ public class Signup {
     return signupService.getFellowProfile(id);
   }
 
-//  @MutationMapping(name = "saveBusinessProfile")
-//  @PreAuthorize("hasRole('ROLE_BUSINESS')")
-//  public BusinessProfile saveBusinessProfile(@Argument(name = "requestBody") BusinessProfile requestBody,
-//      DataFetchingEnvironment environment) throws Exception {
-//    return signupService.saveBusinessProfile(requestBody, environment);
-//  }
+  @MutationMapping(name = "saveBusinessProfilePage1")
+  @PreAuthorize("hasRole('ROLE_BUSINESS')")
+  public boolean saveBusinessProfilePage1(
+      @Argument(name = "smallBio") String smallBio,
+      @Argument(name = "country") String country,
+      @Argument(name = "location") String location,
+      @Argument(name = "website") URL website,
+      @Argument(name = "avatar") String avatar,
+      DataFetchingEnvironment environment) throws Exception {
+    return signupService.saveBusinessProfilePage1(smallBio, country, location, website, avatar, environment);
+  }
+
+  @MutationMapping(name = "saveBusinessProfilePage2")
+  @PreAuthorize("hasRole('ROLE_BUSINESS')")
+  public boolean saveBusinessProfilePage2(
+      @Argument(name = "businessField") String businessField,
+      @Argument(name = "missionVision") String missionVision,
+      @Argument(name = "moreAboutBusiness") String moreAboutBusiness,
+      DataFetchingEnvironment environment) throws Exception {
+    return signupService.saveBusinessProfilePage2(businessField, missionVision, moreAboutBusiness, environment);
+  }
+
+  @QueryMapping(name = "businessProfile")
+  public Optional<BusinessProfileEntity> businessProfile(
+      @Argument(name = "id") Long id
+      ) {
+    return signupService.getBusinessProfile(id);
+  }
+
 
 }

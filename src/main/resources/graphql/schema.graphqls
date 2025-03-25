@@ -2,6 +2,7 @@ type Query {
   helloWorld: String
   jobs: [JobListing!]!
   fellowProfile(id: ID!): Profile
+  businessProfile(id: ID!): BusinessProfile
 }
 
 type Mutation {
@@ -126,6 +127,20 @@ type Mutation {
   saveJobListing(
     jobId: ID!
   ): String
+
+  saveBusinessProfilePage1(
+    smallBio: String!,
+    country: String!,
+    location: String!,
+    website: Url!
+    avatar: String,
+  ): Boolean!
+
+  saveBusinessProfilePage2(
+    businessField: String!,
+    missionVision: String!,
+    moreAboutBusiness: String!,
+  ): Boolean!
 }
 
 scalar Long
@@ -288,4 +303,15 @@ type Profile {
 type Account {
   id: ID!,
   roles: [String!]!
+}
+
+type BusinessProfile {
+  smallBio: String
+  country: String
+  location: String
+  website: Url
+  avatar: String
+  businessField: String
+  missionVision: String
+  moreAboutBusiness: String
 }
