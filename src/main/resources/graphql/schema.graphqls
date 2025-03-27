@@ -109,6 +109,17 @@ type Mutation {
     nonNegParams: [String!]!
     ): ID!
 
+  addJobListingDetailsStep2(
+    id: ID!,
+    payscaleMin: Float!,
+    payscaleMax: Float!,
+    payOption: String!,
+    locationOption: String!
+    idealCandidate: String!,
+    daysInOffice: String!,
+    daysRemote: String!
+    ): ID!
+
   applyToJob(
     jobId: ID!,
     message: String!

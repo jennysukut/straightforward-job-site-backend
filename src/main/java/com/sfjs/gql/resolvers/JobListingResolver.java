@@ -55,6 +55,21 @@ public class JobListingResolver {
     return jobListingService.addJobListingDetailsStep1(id, positionSummary, nonNegParams, environment);
   }
 
+  @MutationMapping(name = "addJobListingDetailsStep2")
+  @PreAuthorize("hasRole('ROLE_BUSINESS')")
+  public Long addJobListingDetailsStep2(
+      @Argument(name = "id") Long id,
+      @Argument(name = "payscaleMin") float payscaleMin,
+      @Argument(name = "payscaleMax") float payscaleMax,
+      @Argument(name = "payOption") String payOption,
+      @Argument(name = "locationOption") String locationOption,
+      @Argument(name = "idealCandidate") String idealCandidate,
+      @Argument(name = "daysInOffice") String daysInOffice,
+      @Argument(name = "daysRemote") String daysRemote,
+      DataFetchingEnvironment environment) throws Exception {
+    return jobListingService.addJobListingDetailsStep2(id, payscaleMin, payscaleMax, payOption, locationOption, idealCandidate, daysInOffice, daysRemote, environment);
+  }
+
 ////      @Argument(name = "businessName")    String businessName, //?: string;
 //      @Argument(name = "applicationLimit")    String applicationLimit, //?: string;
 //      // this job number will probably get replaced by an

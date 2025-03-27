@@ -238,6 +238,34 @@ public class JobListingService {
     return entity.getId();
   }
 
+  public Long addJobListingDetailsStep2(
+      @Argument(name = "id") Long id,
+      @Argument(name = "payscaleMin") float payscaleMin,
+      @Argument(name = "payscaleMax") float payscaleMax,
+      @Argument(name = "payOption") String payOption,
+      @Argument(name = "locationOption") String locationOption,
+      @Argument(name = "idealCandidate") String idealCandidate,
+      @Argument(name = "daysInOffice") String daysInOffice,
+      @Argument(name = "daysRemote") String daysRemote,
+      DataFetchingEnvironment environment) {
+    Optional<JobListingEntity> optionalEntity = jobListingRepository.findById(id);
+
+    if (optionalEntity.isEmpty()) {
+      logger.info("No job listing with this id: " + id);
+      throw new IllegalArgumentException("No job listing with this id: " + id);
+    }
+    JobListingEntity entity = optionalEntity.get();
+    entity.setPayscaleMin(payscaleMin);
+    entity.setPayscaleMax(payscaleMax);
+    entity.setPayOption(payOption);
+    entity.setLocationOption(locationOption);
+    entity.setIdealCandidate(idealCandidate);
+    entity.setDaysInOffice(daysInOffice);
+    entity.setDaysRemote(daysRemote);
+    jobListingRepository.save(entity);
+    return entity.getId();
+  }
+
 //  private <E extends BaseEntity, D extends JobListingElementData> E convertJobListingElementData(D data,
 //      Class<E> entityType, BaseRepository<E> repository) {
 //    try {
