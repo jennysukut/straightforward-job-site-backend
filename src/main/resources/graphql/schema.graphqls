@@ -3,6 +3,7 @@ type Query {
   jobs: [JobListing!]!
   fellowProfile(id: ID!): Profile
   businessProfile(id: ID!): BusinessProfile
+  job(id: ID!): JobListing
 }
 
 type Mutation {
@@ -123,7 +124,7 @@ type Mutation {
   addJobListingDetailsStep3(
     id: ID!,
     experienceLevel: [String!]!,
-    preferredSkils: [String!]!,
+    preferredSkills: [String!]!,
     moreAboutPosition: String,
   ): ID!
 
@@ -296,11 +297,35 @@ type Link {
 }
 
 type JobListing {
-  id: ID
+  id: ID!
+  jobTitle: String!,
+  positionType: String!
+  positionSummary: String!,
+  nonNegParams: [String!]!
+  payscaleMin: Float!,
+  payscaleMax: Float!,
+  payOption: String!,
+  locationOption: String!
+  idealCandidate: String!,
+  daysInOffice: String!,
+  daysRemote: String!
+  experienceLevel: [String!]!,
+  preferredSkills: [String!]!,
+  moreAboutPosition: String,
+  responsibilities: [String!]!,
+  perks: [String!]!
+  interviewProcess: [InterviewProcess!]!
 }
 
-input InterviewProcessInput{
+input InterviewProcessInput {
   id: ID
+  stage: String!
+  step: String!
+  details: String!
+}
+
+type InterviewProcess {
+  id: ID!
   stage: String!
   step: String!
   details: String!

@@ -1,6 +1,7 @@
 package com.sfjs.gql.resolvers;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sfjs.data.core.InterviewProcess;
 import com.sfjs.data.core.JobListing;
+import com.sfjs.data.entity.JobListingEntity;
 import com.sfjs.gql.svc.JobListingService;
 import com.sfjs.jpa.repo.JobListingRepository;
 
@@ -35,6 +37,13 @@ public class JobListingResolver {
   public List<JobListing> jobs() {
     return jobListingRepository.findAll().stream().map(entity -> entity)
         .collect(Collectors.toList());
+  }
+
+  @QueryMapping(name = "job")
+  public Optional<JobListingEntity> job(
+    @Argument(name = "id") Long id,
+    DataFetchingEnvironment environment) throws Exception {
+    return jobListingRepository.findById(id);
   }
 
   @MutationMapping(name = "createJobListing")
