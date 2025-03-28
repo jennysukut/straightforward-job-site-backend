@@ -137,6 +137,11 @@ type Mutation {
     id: ID!,
     ): ID!
 
+  addJobListingDetailsStep5(
+    id: ID!,
+    interviewProcess: [InterviewProcessInput!]!
+    ): ID!
+
   applyToJob(
     jobId: ID!,
     message: String!
@@ -296,6 +301,13 @@ type Link {
 
 type JobListing {
   id: ID
+}
+
+input InterviewProcessInput {
+  id: ID
+  stage: String!
+  step: String!
+  details: String!
 }
 
 input JobInterviewAppointmentInput {
