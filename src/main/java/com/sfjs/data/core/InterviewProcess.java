@@ -20,4 +20,6 @@ import lombok.Setter;
 public class InterviewProcess extends JobListingElementData {
 
   @Getter @Setter private String stage;
+  @Getter @Setter private String step;
+  @Getter @Setter private String details;
 }

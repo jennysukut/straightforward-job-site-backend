@@ -3,6 +3,7 @@ package com.sfjs.gql.svc;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -12,9 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.sfjs.data.core.InterviewProcess;
 import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.BusinessEntity;
+import com.sfjs.data.entity.InterviewProcessEntity;
 import com.sfjs.data.entity.JobListingEntity;
+import com.sfjs.jpa.repo.InterviewProcessRepository;
 import com.sfjs.jpa.repo.JobListingRepository;
 import com.sfjs.security.AuthorizationService;
 
@@ -32,8 +36,8 @@ public class JobListingService {
   @Autowired
   private JobListingRepository jobListingRepository;
 
-//  @Autowired
-//  private InterviewProcessRepository interviewProcessRepository;
+  @Autowired
+  private InterviewProcessRepository interviewProcessRepository;
 
   static ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();
 
@@ -265,6 +269,69 @@ public class JobListingService {
     jobListingRepository.save(entity);
     return entity.getId();
   }
+
+  public Long addJobListingDetailsStep3(
+      @Argument(name = "id") Long id,
+      @Argument(name = "experienceLevel") List<String> experienceLevel,
+      @Argument(name = "preferredSkills") List<String> preferredSkills,
+      @Argument(name = "moreAboutPosition") String moreAboutPosition,
+      DataFetchingEnvironment environment) {
+    Optional<JobListingEntity> optionalEntity = jobListingRepository.findById(id);
+
+    if (optionalEntity.isEmpty()) {
+      logger.info("No job listing with this id: " + id);
+      throw new IllegalArgumentException("No job listing with this id: " + id);
+    }
+    JobListingEntity entity = optionalEntity.get();
+    entity.setExperienceLevel(experienceLevel);
+    entity.setPreferredSkills(preferredSkills);
+    entity.setMoreAboutPosition(moreAboutPosition);
+    jobListingRepository.save(entity);
+    return entity.getId();
+  }
+
+  public Long addJobListingDetailsStep4(
+      @Argument(name = "id") Long id,
+      @Argument(name = "responsibilities") List<String> responsibilities,
+      @Argument(name = "perks") List<String> perks,
+      DataFetchingEnvironment environment) {
+    Optional<JobListingEntity> optionalEntity = jobListingRepository.findById(id);
+
+    if (optionalEntity.isEmpty()) {
+      logger.info("No job listing with this id: " + id);
+      throw new IllegalArgumentException("No job listing with this id: " + id);
+    }
+    JobListingEntity entity = optionalEntity.get();
+    entity.setResponsibilities(responsibilities);
+    entity.setPerks(perks);
+    jobListingRepository.save(entity);
+    return entity.getId();
+  }
+
+  public Long addJobListingDetailsStep5(
+      @Argument(name = "id") Long id,
+      @Argument(name = "interviewProcess") List<InterviewProcess> interviewProcess,
+      DataFetchingEnvironment environment) {
+    Optional<JobListingEntity> optionalEntity = jobListingRepository.findById(id);
+
+    if (optionalEntity.isEmpty()) {
+      logger.info("No job listing with this id: " + id);
+      throw new IllegalArgumentException("No job listing with this id: " + id);
+    }
+    JobListingEntity jobListingEntity = optionalEntity.get();
+    jobListingEntity.setInterviewProcess(interviewProcess.stream().map(data -> {
+      InterviewProcessEntity entity = new InterviewProcessEntity();
+      entity.setStage(data.getStage());
+      entity.setStep(data.getStep());
+      entity.setDetails(data.getDetails());
+      entity.setJobListing(jobListingEntity);
+      entity = interviewProcessRepository.save(entity);
+      return entity;
+    }).collect(Collectors.toList()));
+    jobListingRepository.save(jobListingEntity);
+    return jobListingEntity.getId();
+  }
+
 
 //  private <E extends BaseEntity, D extends JobListingElementData> E convertJobListingElementData(D data,
 //      Class<E> entityType, BaseRepository<E> repository) {

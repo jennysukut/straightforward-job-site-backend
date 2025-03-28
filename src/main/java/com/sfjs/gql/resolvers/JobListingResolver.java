@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sfjs.data.core.InterviewProcess;
 import com.sfjs.data.core.JobListing;
 import com.sfjs.gql.svc.JobListingService;
 import com.sfjs.jpa.repo.JobListingRepository;
@@ -68,6 +69,36 @@ public class JobListingResolver {
       @Argument(name = "daysRemote") String daysRemote,
       DataFetchingEnvironment environment) throws Exception {
     return jobListingService.addJobListingDetailsStep2(id, payscaleMin, payscaleMax, payOption, locationOption, idealCandidate, daysInOffice, daysRemote, environment);
+  }
+
+  @MutationMapping(name = "addJobListingDetailsStep3")
+  @PreAuthorize("hasRole('ROLE_BUSINESS')")
+  public Long addJobListingDetailsStep3(
+      @Argument(name = "id") Long id,
+      @Argument(name = "experienceLevel") List<String> experienceLevel,
+      @Argument(name = "preferredSkills") List<String> preferredSkills,
+      @Argument(name = "moreAboutPosition") String moreAboutPosition,
+      DataFetchingEnvironment environment) throws Exception {
+    return jobListingService.addJobListingDetailsStep3(id, experienceLevel, preferredSkills, moreAboutPosition, environment);
+  }
+
+  @MutationMapping(name = "addJobListingDetailsStep4")
+  @PreAuthorize("hasRole('ROLE_BUSINESS')")
+  public Long addJobListingDetailsStep4(
+      @Argument(name = "id") Long id,
+      @Argument(name = "responsibilities") List<String> responsibilities,
+      @Argument(name = "perks") List<String> perks,
+      DataFetchingEnvironment environment) throws Exception {
+    return jobListingService.addJobListingDetailsStep4(id, responsibilities, perks, environment);
+  }
+
+  @MutationMapping(name = "addJobListingDetailsStep5")
+  @PreAuthorize("hasRole('ROLE_BUSINESS')")
+  public Long addJobListingDetailsStep5(
+      @Argument(name = "id") Long id,
+      @Argument(name = "interviewProcess") List<InterviewProcess> interviewProcess,
+      DataFetchingEnvironment environment) throws Exception {
+    return jobListingService.addJobListingDetailsStep5(id, interviewProcess, environment);
   }
 
 ////      @Argument(name = "businessName")    String businessName, //?: string;

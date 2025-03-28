@@ -120,6 +120,23 @@ type Mutation {
     daysRemote: String!
     ): ID!
 
+  addJobListingDetailsStep3(
+    id: ID!,
+    experienceLevel: [String!]!,
+    preferredSkills: [String!]!,
+    moreAboutPosition: String,
+    ): ID!
+
+  addJobListingDetailsStep4(
+    id: ID!,
+    responsibilities: [String!]!,
+    perks: [String!]!,
+    ): ID!
+
+  addJobListingDetailsStep4(
+    id: ID!,
+    ): ID!
+
   applyToJob(
     jobId: ID!,
     message: String!
