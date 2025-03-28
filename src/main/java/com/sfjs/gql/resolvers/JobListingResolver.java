@@ -33,14 +33,14 @@ public class JobListingResolver {
   @Autowired
   private JobListingRepository jobListingRepository;
 
-  @QueryMapping(name = "jobs")
-  public List<JobListing> jobs() {
+  @QueryMapping(name = "jobListings")
+  public List<JobListing> jobListings() {
     return jobListingRepository.findAll().stream().map(entity -> entity)
         .collect(Collectors.toList());
   }
 
-  @QueryMapping(name = "job")
-  public Optional<JobListingEntity> job(
+  @QueryMapping(name = "jobListing")
+  public Optional<JobListingEntity> jobListing(
     @Argument(name = "id") Long id,
     DataFetchingEnvironment environment) throws Exception {
     return jobListingRepository.findById(id);
