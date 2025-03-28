@@ -107,7 +107,7 @@ type Mutation {
     id: ID!,
     positionSummary: String!,
     nonNegParams: [String!]!
-    ): ID!
+  ): ID!
 
   addJobListingDetailsStep2(
     id: ID!,
@@ -118,29 +118,25 @@ type Mutation {
     idealCandidate: String!,
     daysInOffice: String!,
     daysRemote: String!
-    ): ID!
+  ): ID!
 
   addJobListingDetailsStep3(
     id: ID!,
-    experienceLevel: [String!]!,
-    preferredSkills: [String!]!,
-    moreAboutPosition: String,
-    ): ID!
+    experienceLevel: [String!]!,
+    preferredSkils: [String!]!,
+    moreAboutPosition: String,
+  ): ID!
 
   addJobListingDetailsStep4(
     id: ID!,
-    responsibilities: [String!]!,
-    perks: [String!]!,
-    ): ID!
-
-  addJobListingDetailsStep4(
-    id: ID!,
-    ): ID!
+    responsibilities: [String!]!,
+    perks: [String!]!
+  ): ID!
 
   addJobListingDetailsStep5(
     id: ID!,
     interviewProcess: [InterviewProcessInput!]!
-    ): ID!
+  ): ID!
 
   applyToJob(
     jobId: ID!,
@@ -303,7 +299,7 @@ type JobListing {
   id: ID
 }
 
-input InterviewProcessInput {
+input InterviewProcessInput{
   id: ID
   stage: String!
   step: String!
