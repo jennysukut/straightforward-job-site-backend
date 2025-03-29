@@ -130,7 +130,7 @@ type Mutation {
 
   addJobListingDetailsStep4(
     id: ID!,
-    responsibilities: [String!]!,
+    responsibilities: [ResponsibilityInput!]!,
     perks: [String!]!
   ): ID!
 
@@ -375,4 +375,9 @@ type BusinessProfile {
   businessField: String
   missionVision: String
   moreAboutBusiness: String
+}
+
+input ResponsibilityInput {
+  id: ID,
+  responsibility: String
 }

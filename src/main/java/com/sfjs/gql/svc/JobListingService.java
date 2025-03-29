@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sfjs.data.core.InterviewProcess;
+import com.sfjs.data.core.Responsibility;
 import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.BusinessEntity;
 import com.sfjs.data.entity.InterviewProcessEntity;
@@ -292,7 +293,7 @@ public class JobListingService {
 
   public Long addJobListingDetailsStep4(
       @Argument(name = "id") Long id,
-      @Argument(name = "responsibilities") List<String> responsibilities,
+      @Argument(name = "responsibilities") List<Responsibility> responsibilities,
       @Argument(name = "perks") List<String> perks,
       DataFetchingEnvironment environment) {
     Optional<JobListingEntity> optionalEntity = jobListingRepository.findById(id);
@@ -302,7 +303,9 @@ public class JobListingService {
       throw new IllegalArgumentException("No job listing with this id: " + id);
     }
     JobListingEntity entity = optionalEntity.get();
-    entity.setResponsibilities(responsibilities);
+    entity.setResponsibilities(responsibilities.stream().map(item -> {
+      return item.getResponsibility();
+    }).collect(Collectors.toList()));
     entity.setPerks(perks);
     jobListingRepository.save(entity);
     return entity.getId();
