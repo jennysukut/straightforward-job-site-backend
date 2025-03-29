@@ -117,8 +117,8 @@ type Mutation {
     payOption: String!,
     locationOption: String!
     idealCandidate: String!,
-    daysInOffice: String!,
-    daysRemote: String!
+    daysInOffice: String,
+    daysRemote: String
   ): ID!
 
   addJobListingDetailsStep3(
