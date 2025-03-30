@@ -315,6 +315,13 @@ type JobListing {
   responsibilities: [String!]!,
   perks: [String!]!
   interviewProcess: [InterviewProcess!]!
+  business: Business!
+}
+
+type Business {
+  id: ID!
+  name: String!
+  businessProfile: BusinessProfile
 }
 
 input InterviewProcessInput {

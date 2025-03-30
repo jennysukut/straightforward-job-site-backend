@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sfjs.data.core.InterviewProcess;
-import com.sfjs.data.core.JobListing;
 import com.sfjs.data.core.Responsibility;
 import com.sfjs.data.entity.JobListingEntity;
 import com.sfjs.gql.svc.JobListingService;
@@ -35,7 +34,7 @@ public class JobListingResolver {
   private JobListingRepository jobListingRepository;
 
   @QueryMapping(name = "jobListings")
-  public List<JobListing> jobListings() {
+  public List<JobListingEntity> jobListings() {
     return jobListingRepository.findAll().stream().map(entity -> entity)
         .collect(Collectors.toList());
   }
