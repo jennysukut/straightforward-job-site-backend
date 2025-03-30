@@ -36,20 +36,15 @@ public class JobListingResolver {
 
   @QueryMapping(name = "jobListings")
   public List<JobListing> jobListings() {
-    return jobListingRepository.findAll().stream().map(entity -> {
-      entity.setBusinessName(entity.getBusiness().getName());
-      return entity;
-    }).collect(Collectors.toList());
+    return jobListingRepository.findAll().stream().map(entity -> entity)
+        .collect(Collectors.toList());
   }
 
   @QueryMapping(name = "jobListing")
   public Optional<JobListingEntity> jobListing(
     @Argument(name = "id") Long id,
     DataFetchingEnvironment environment) throws Exception {
-    return jobListingRepository.findById(id).map(entity -> {
-      entity.setBusinessName(entity.getBusiness().getName());
-      return entity;
-    });
+    return jobListingRepository.findById(id);
   }
 
   @MutationMapping(name = "createJobListing")

@@ -313,9 +313,8 @@ type JobListing {
   preferredSkills: [String!]!,
   moreAboutPosition: String,
   responsibilities: [String!]!,
-  perks: [String!]!,
-  interviewProcess: [InterviewProcess!]!,
-  businessName: String!
+  perks: [String!]!
+  interviewProcess: [InterviewProcess!]!
 }
 
 input InterviewProcessInput {
