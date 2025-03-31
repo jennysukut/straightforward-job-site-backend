@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sfjs.data.core.JobListing;
-
+import com.sfjs.data.core.DecoratedJobListing;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
@@ -27,7 +26,7 @@ import lombok.Setter;
  */
 @Entity(name = "job_listing")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class JobListingEntity extends JobListing {
+public class JobListingEntity extends DecoratedJobListing {
 
   //@Getter @Setter HybridDetailsData hybridDetails; //?: any;
 

@@ -325,6 +325,7 @@ type JobListing {
   perks: [String!]!
   interviewProcess: [InterviewProcess!]!
   business: Business!
+  saved: Boolean!
 }
 
 type Business {

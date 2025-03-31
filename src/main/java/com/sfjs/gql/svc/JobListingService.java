@@ -392,7 +392,12 @@ public class JobListingService {
     });
 
     // Execute the query with the final specification
-    return jobListingRepository.findAll(specRef.get());
+    return jobListingRepository.findAll(specRef.get()).stream().map( jobListing -> {
+      jobListing.setSaved(jobListing.getFellows().stream().anyMatch(fellow -> {
+        return fellow.getId() == fellowEntity.getId();
+      }));
+      return jobListing;
+    }).collect(Collectors.toList());
   }
 
 //  private <E extends BaseEntity, D extends JobListingElementData> E convertJobListingElementData(D data,
