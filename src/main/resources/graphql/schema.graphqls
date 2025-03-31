@@ -1,6 +1,15 @@
 type Query {
   helloWorld: String
-  jobListings: [JobListing!]!
+
+  jobListings(
+    businessId: ID
+    isSaved: Boolean
+    experienceLevel: [String!]
+    locationOption: [String!]
+    positionType: [String!]
+    country: String
+  ): [JobListing!]!
+
   fellowProfile(id: ID!): Profile
   businessProfile(id: ID!): BusinessProfile
   jobListing(id: ID!): JobListing

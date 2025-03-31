@@ -3,8 +3,6 @@ package com.sfjs.gql.resolvers;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -34,9 +32,24 @@ public class JobListingResolver {
   private JobListingRepository jobListingRepository;
 
   @QueryMapping(name = "jobListings")
-  public List<JobListingEntity> jobListings() {
-    return jobListingRepository.findAll().stream().map(entity -> entity)
-        .collect(Collectors.toList());
+  public List<JobListingEntity> jobListings(
+      @Argument(name = "businessId") Optional<Long> businessId,
+      @Argument(name = "isSaved") Optional<Boolean> isSaved,
+      @Argument(name = "experienceLevel") Optional<List<String>> experienceLevel,
+      @Argument(name = "locationOption") Optional<List<String>> locationOption,
+      @Argument(name = "positionType") Optional<List<String>> positionType,
+      @Argument(name = "country") Optional<String> country,
+      DataFetchingEnvironment environment) throws Exception {
+
+    logger.info("jobListings");
+    logger.info("businessId: " + businessId);
+    logger.info("isSaved: " + isSaved);
+    logger.info("experienceLevel: " + businessId);
+    logger.info("locationOption: " + locationOption);
+    logger.info("positionType: " + positionType);
+    logger.info("country: " + country);
+
+    return jobListingService.jobListing(businessId, isSaved, experienceLevel, locationOption, positionType, country, environment);
   }
 
   @QueryMapping(name = "jobListing")
