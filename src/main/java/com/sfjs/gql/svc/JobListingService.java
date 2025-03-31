@@ -364,6 +364,9 @@ public class JobListingService {
       if (isSavedValue) {
         specRef.set(specRef.get()
             .and((root, query, criteriaBuilder) -> criteriaBuilder.isMember(fellowEntity, root.get("fellows"))));
+      } else {
+        specRef.set(specRef.get()
+            .and((root, query, criteriaBuilder) -> criteriaBuilder.isNotMember(fellowEntity, root.get("fellows"))));
       }
     });
 

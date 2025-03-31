@@ -129,26 +129,32 @@ public class JobApplicationService {
 
     FellowEntity fellowEntity = accountEntity.getFellow();
 
-    // This should work but maybe the job listing has been deleted??
-    Optional<JobListingEntity> optionalJobListing = jobListingRepository.findById(jobId);
-    if (optionalJobListing.isEmpty()) {
-      throw new IllegalArgumentException("Job does not exist: " + jobId);
-    }
-    JobListingEntity jobListingEntity = optionalJobListing.get();
-    logger.info("Job Listing: " + jobListingEntity);
-
     Set<JobListingEntity> savedJobs = fellowEntity.getSavedJobs();
     logger.info("Saved jobs: " + savedJobs);
 
-    savedJobs.add(jobListingEntity);
-    logger.info("Saved jobs again: " + savedJobs);
-
-    fellowEntity.setSavedJobs(savedJobs);
-    fellowRepository.save(fellowEntity);
+    savedJobs.stream().filter(item -> item.getId() == jobId)
+    .findFirst()
+    .ifPresentOrElse(jobListingEntity -> {
+      // Warning: modifying savedJobs is okay here because filter
+      // and findFirst have already completed
+      boolean result = savedJobs.removeIf(item -> item.getId() == jobId);
+      if (result) {
+        fellowEntity.setSavedJobs(savedJobs);
+        fellowRepository.save(fellowEntity);
+      }
+    }, () -> {
+      Optional<JobListingEntity> optionalJobListing = jobListingRepository.findById(jobId);
+      optionalJobListing.ifPresentOrElse(jobListingEntity -> {
+        savedJobs.add(jobListingEntity);
+        fellowEntity.setSavedJobs(savedJobs);
+        fellowRepository.save(fellowEntity);
+      }, () -> {
+        throw new IllegalArgumentException("Job does not exist: " + jobId);
+      });
+    });
 
     return fellowEntity.getSavedJobs().stream().map(savedJob -> {
       return savedJob.getId();
     }).collect(Collectors.toList());
   }
-
 }
