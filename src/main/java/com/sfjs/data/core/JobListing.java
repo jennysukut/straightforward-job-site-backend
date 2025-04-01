@@ -24,7 +24,7 @@ public class JobListing extends BaseObject {
   // Stored separately
   // applications?: Array<string>;
 
-  @Getter @Setter String applicationLimit; //?: string;
+  @Getter @Setter Integer applicationLimit; //?: string;
 
   // Every entity has an id
   // jobId?: string;

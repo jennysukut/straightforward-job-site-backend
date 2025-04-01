@@ -152,7 +152,7 @@ type Mutation {
 
   createJobListingRound(
     id: ID!,
-    applicationLimit: String
+    applicationLimit: Int
     roundNumber: Int
   ): JobListing
 

@@ -137,7 +137,7 @@ public class JobListingService {
   public Long createJobListing(
       @Argument(name = "jobTitle")    String jobTitle, //?: string;
 //      @Argument(name = "businessName")    String businessName, //?: string;
-      @Argument(name = "applicationLimit")    String applicationLimit, //?: string;
+      @Argument(name = "applicationLimit")    Integer applicationLimit, //?: string;
       // this job number will probably get replaced by an
       // auto-generated id made by sending details to the server?
 //      @Argument(name = "jobNumber")    Long jobNumber, //?: number;

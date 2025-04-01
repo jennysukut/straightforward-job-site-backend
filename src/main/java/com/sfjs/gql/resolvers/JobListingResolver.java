@@ -128,7 +128,7 @@ public class JobListingResolver {
   @PreAuthorize("hasRole('ROLE_BUSINESS')")
   public Optional<JobListing> createJobListingRound(
       @Argument(name = "id") Long id,
-      @Argument(name = "applicationLimit") String applicationLimit,
+      @Argument(name = "applicationLimit") Integer applicationLimit,
       @Argument(name = "roundNumber") Integer roundNumber,
       DataFetchingEnvironment environment) throws Exception {
     return jobListingRepository.findById(id).map(entity -> {
