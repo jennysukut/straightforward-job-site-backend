@@ -1,6 +1,8 @@
 package com.sfjs.gql.svc;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -8,6 +10,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -626,6 +629,25 @@ public class SignupService {
         profile.setName(profile.getBusiness().getName());
         return profile;
       });
+  }
+
+  public Optional<FellowEntity> getFellow(
+      @Argument(name = "id") Long id,
+      DataFetchingEnvironment environment) throws Exception {
+    LocalDate today = LocalDate.now();
+    LocalDateTime startOfToday = today.atStartOfDay(); // Start of today (00:00:00)
+    return fellowRepository.findById(id).map(fellowEntity -> {
+      fellowEntity.setDailyApplications(fellowEntity.getJobApplications().stream().filter( app -> {
+        return app.getCreatedAt().isAfter(startOfToday);
+      }).collect(Collectors.toList()));
+      return fellowEntity;
+    });
+  }
+
+  public Optional<BusinessEntity> getBusiness(
+      @Argument(name = "id") Long id,
+      DataFetchingEnvironment environment) throws Exception {
+    return businessRepository.findById(id);
   }
 
 //  private void convertExtendedProfileEntity(FellowProfileEntity in, FellowProfileData out) {

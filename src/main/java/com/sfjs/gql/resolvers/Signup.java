@@ -21,7 +21,9 @@ import com.sfjs.data.core.Experience;
 import com.sfjs.data.core.ExperienceLevel;
 import com.sfjs.data.core.Hobby;
 import com.sfjs.data.core.Link;
+import com.sfjs.data.entity.BusinessEntity;
 import com.sfjs.data.entity.BusinessProfileEntity;
+import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.data.entity.FellowProfileEntity;
 import com.sfjs.gql.svc.SignupService;
 
@@ -135,6 +137,20 @@ public class Signup {
       @Argument(name = "id") Long id
       ) {
     return signupService.getFellowProfile(id);
+  }
+
+  @QueryMapping(name = "fellow")
+  public Optional<FellowEntity> fellow(
+      @Argument(name = "id") Long id,
+      DataFetchingEnvironment environment) throws Exception {
+    return signupService.getFellow(id, environment);
+  }
+
+  @QueryMapping(name = "business")
+  public Optional<BusinessEntity> business(
+      @Argument(name = "id") Long id,
+      DataFetchingEnvironment environment) throws Exception {
+    return signupService.getBusiness(id, environment);
   }
 
   @MutationMapping(name = "saveBusinessProfilePage1")

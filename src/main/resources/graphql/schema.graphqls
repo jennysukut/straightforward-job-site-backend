@@ -13,6 +13,8 @@ type Query {
   fellowProfile(id: ID!): Profile
   businessProfile(id: ID!): BusinessProfile
   jobListing(id: ID!): JobListing
+  business(id: ID!): Business
+  fellow(id: ID!): Fellow
 }
 
 type Mutation {
@@ -332,6 +334,21 @@ type Business {
   id: ID!
   name: String!
   businessProfile: BusinessProfile
+}
+
+type Fellow {
+  id: ID!
+  name: String!
+  profile: Profile
+  savedJobs: [JobListing!]!
+  jobApplications: [JobApplication!]!
+  dailyApplications: [JobApplication!]!
+}
+
+type JobApplication {
+  id: ID!
+  message: String
+  status: String
 }
 
 input InterviewProcessInput {

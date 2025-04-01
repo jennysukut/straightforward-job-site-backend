@@ -16,6 +16,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,6 +46,12 @@ public class FellowEntity extends Fellow {
   @JsonIgnore
   @OneToMany(mappedBy = "fellow")
   private List<JobApplicationEntity> jobApplications = new ArrayList<>();
+
+  @Getter
+  @Setter
+  @JsonIgnore
+  @Transient
+  private List<JobApplicationEntity> dailyApplications = new ArrayList<>();
 
   @Getter
   @Setter
