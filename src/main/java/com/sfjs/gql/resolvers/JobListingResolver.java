@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sfjs.data.core.InterviewProcess;
+import com.sfjs.data.core.JobListing;
 import com.sfjs.data.core.Responsibility;
 import com.sfjs.data.entity.JobListingEntity;
 import com.sfjs.gql.svc.JobListingService;
@@ -121,6 +122,20 @@ public class JobListingResolver {
       @Argument(name = "interviewProcess") List<InterviewProcess> interviewProcess,
       DataFetchingEnvironment environment) throws Exception {
     return jobListingService.addJobListingDetailsStep5(id, interviewProcess, environment);
+  }
+
+  @MutationMapping(name = "createJobListingRound")
+  @PreAuthorize("hasRole('ROLE_BUSINESS')")
+  public Optional<JobListing> createJobListingRound(
+      @Argument(name = "id") Long id,
+      @Argument(name = "applicationLimit") String applicationLimit,
+      @Argument(name = "roundNumber") Integer roundNumber,
+      DataFetchingEnvironment environment) throws Exception {
+    return jobListingRepository.findById(id).map(entity -> {
+      entity.setApplicationLimit(applicationLimit);
+      entity.setRoundNumber(roundNumber);
+      return jobListingRepository.save(entity);
+    });
   }
 
 ////      @Argument(name = "businessName")    String businessName, //?: string;

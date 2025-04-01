@@ -150,6 +150,12 @@ type Mutation {
     interviewProcess: [InterviewProcessInput!]!
   ): ID!
 
+  createJobListingRound(
+    id: ID!,
+    applicationLimit: String
+    roundNumber: Int
+  ): JobListing
+
   applyToJob(
     jobId: ID!,
     message: String!
