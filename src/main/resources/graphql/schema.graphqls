@@ -10,8 +10,8 @@ type Query {
     country: String
   ): [JobListing!]!
 
-  fellowProfile(id: ID!): Profile
-  businessProfile(id: ID!): BusinessProfile
+  fellowProfile(id: ID!): Profile @deprecated(reason: "Use fellow instead.")
+  businessProfile(id: ID!): BusinessProfile @deprecated(reason: "Use business instead.")
   jobListing(id: ID!): JobListing
   business(id: ID!): Business
   fellow(id: ID!): Fellow
