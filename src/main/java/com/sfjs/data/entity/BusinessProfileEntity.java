@@ -1,13 +1,14 @@
 package com.sfjs.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sfjs.data.core.BusinessProfileWithName;
+import com.sfjs.data.core.BusinessProfile;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +21,12 @@ import lombok.Setter;
  */
 @Entity(name = "business_profile")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class BusinessProfileEntity extends BusinessProfileWithName {
+public class BusinessProfileEntity extends BusinessProfile {
+
+  @Getter
+  @Setter
+  @Transient
+  private String name;
 
   @Getter
   @Setter
