@@ -27,5 +27,5 @@ public class Fellow extends NamedBaseObject {
 
   @Getter
   @Setter
-  private Boolean betaTester;
+  private boolean betaTester;
 }

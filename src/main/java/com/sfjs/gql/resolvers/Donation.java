@@ -1,5 +1,6 @@
 package com.sfjs.gql.resolvers;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,9 @@ public class Donation {
       @Argument(name = "email") String email,
       @Argument(name = "password") String password,
       @Argument(name = "name") String name,
-      @Argument(name = "isBetaTester") boolean isBetaTester,
+      @Argument(name = "isBetaTester") Optional<Boolean> isBetaTester,
       @Argument(name = "contactName") String contactName,
-      @Argument(name = "isEarlySignup") boolean isEarlySignup,
+      @Argument(name = "isEarlySignup") Optional<Boolean> isEarlySignup,
       @Argument(name = "referral") String referral,
       @Argument(name = "amount") String amount,
       @Argument(name = "currency") String currency,
@@ -45,11 +46,11 @@ public class Donation {
       @Argument(name="email") String email,
       @Argument(name="password") String password,
       @Argument(name="name") String name,
-      @Argument(name="isBetaTester") boolean isBetaTester,
-      @Argument(name="isCollaborator") boolean isCollaborator,
+      @Argument(name="isBetaTester") Optional<Boolean> isBetaTester,
+      @Argument(name="isCollaborator") Optional<Boolean> isCollaborator,
       @Argument(name="message") String message,
       @Argument(name="referralCode") String referralCode,
-      @Argument(name="isReferralPartner") boolean isReferralPartner,
+      @Argument(name="isReferralPartner") Optional<Boolean> isReferralPartner,
       @Argument(name = "amount")String amount,
       @Argument(name = "currency")String currency,
       @Argument(name = "paymentType")String paymentType) {

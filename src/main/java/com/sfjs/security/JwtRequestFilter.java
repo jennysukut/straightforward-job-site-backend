@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.jpa.repo.AccountRepository;
 
 import jakarta.servlet.FilterChain;
@@ -76,15 +75,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     if (isValid) {
       // get the email and authorities
       String email = jwtTokenUtil.getSubjectFromToken(jwtToken);
-      AccountEntity accountEntity = accountRepository.findByEmail(email);
-      if (accountEntity != null) {
+      accountRepository.findByEmail(email).ifPresent(accountEntity -> {
+//      if (accountEntity != null) {
         Collection<? extends GrantedAuthority> authorities = accountEntity.getRoles().stream()
             .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName())).collect(Collectors.toList());
         // Create the authentication object
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, null, authorities);
         token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(token);
-      }
+      });
     }
 
     // Move on to next filter

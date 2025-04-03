@@ -18,8 +18,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sfjs.data.core.ClientCheckoutData;
 import com.sfjs.data.core.PaymentStatus;
-import com.sfjs.data.entity.BusinessEntity;
-import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.data.entity.NumericMetricEntity;
 import com.sfjs.data.entity.PaymentEntity;
 import com.sfjs.jpa.repo.BusinessRepository;
@@ -47,8 +45,8 @@ public class CheckoutService {
 //  @Autowired
 //  FellowService fellowService;
 
-  @Autowired
-  SignupService signupService;
+//  @Autowired
+//  SignupService signupService;
 
   @Autowired
   FellowRepository fellowRepository;
@@ -60,13 +58,19 @@ public class CheckoutService {
   BusinessRepository businessRepository;
 
   @Autowired
+  private BusinessService businessService;
+
+  @Autowired
+  private FellowService fellowService;
+
+  @Autowired
   NumericMetricRepository numericMetricRepository;
 
   Logger logger = Logger.getLogger(getClass().getName());
 
   public Mono<ClientCheckoutData> acceptBusinessDonation(
       String email, String password, String name,
-      Boolean isBetaTester, String contactName, Boolean isEarlySignup, String referral,
+      Optional<Boolean> isBetaTester, String contactName, Optional<Boolean> isEarlySignup, String referral,
       String amount, String currency, String paymentType) {
 
     logger.info("Implicit business signup");
@@ -75,7 +79,24 @@ public class CheckoutService {
 //    business.setEmail(donation.getEmail());
 //    business.setContactName(donation.getContactName());
 //    business.setReferral(donation.getReferral());
-    Long businessId = signupService.signupBusiness(email, password, name, isBetaTester, contactName, isEarlySignup, referral);
+    return businessService.businessSignup(email, password, name, isBetaTester, contactName, isEarlySignup, referral)
+      .map(businessEntity -> {
+        return helcimService.initializeCheckout(amount, currency, paymentType).flatMap(helcimResponse -> {
+          logger.info("Helcim response: " + helcimResponse);
+          // Save a field to the database
+          return Mono.fromCallable(() -> {
+            PaymentEntity paymentEntity = createPaymentEntity(amount, currency, paymentType, helcimResponse.getCheckoutToken());
+//            Optional<BusinessEntity> businessEntity = businessRepository.findById(businessId);
+            paymentEntity.setBusiness(businessEntity);
+            PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
+            ClientCheckoutData clientCheckoutData = new ClientCheckoutData();
+            clientCheckoutData.setId(savedPaymentEntity.getId());
+            clientCheckoutData.setStatus(savedPaymentEntity.getStatus());
+            clientCheckoutData.setCheckoutToken(helcimResponse.getCheckoutToken());
+            return clientCheckoutData;
+          });
+        });
+      }).orElseThrow(() -> new InternalError());
 //    business.setId(businessId);
 
 //    PaymentInput payment = new PaymentInput();
@@ -86,21 +107,6 @@ public class CheckoutService {
 //    payment.setPaymentType("purchase");
 //    payment.setBusinessName(donation.getBusinessName());
 
-    return helcimService.initializeCheckout(amount, currency, paymentType).flatMap(helcimResponse -> {
-      logger.info("Helcim response: " + helcimResponse);
-      // Save a field to the database
-      return Mono.fromCallable(() -> {
-        PaymentEntity paymentEntity = createPaymentEntity(amount, currency, paymentType, helcimResponse.getCheckoutToken());
-        Optional<BusinessEntity> businessEntity = businessRepository.findById(businessId);
-        paymentEntity.setBusiness(businessEntity.get());
-        PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
-        ClientCheckoutData clientCheckoutData = new ClientCheckoutData();
-        clientCheckoutData.setId(savedPaymentEntity.getId());
-        clientCheckoutData.setStatus(savedPaymentEntity.getStatus());
-        clientCheckoutData.setCheckoutToken(helcimResponse.getCheckoutToken());
-        return clientCheckoutData;
-      });
-    });
   }
 
   private PaymentEntity createPaymentEntity(String amount, String currency, String paymentType, String secretToken) {
@@ -135,14 +141,15 @@ public class CheckoutService {
 
   public Mono<ClientCheckoutData> acceptFellowDonation(
       String email, String password, String name,
-      Boolean isBetaTester, boolean isCollaborator, String message, String referralCode, boolean isReferralPartner,
+      Optional<Boolean> isBetaTester, Optional<Boolean> isCollaborator, String message, String referralCode, Optional<Boolean> isReferralPartner,
       String amount, String currency, String paymentType) {
 
     logger.info("Implicit fellow signup");
 //    FellowInput fellow = new FellowInput();
 //    fellow.setName(donation.getName());
 //    fellow.setEmail(donation.getEmail());
-    Long fellowId = signupService.signupFellow(email, password, name, isBetaTester, isCollaborator, message, referralCode, isReferralPartner);
+    return fellowService.fellowSignup(email, password, name, isBetaTester, isCollaborator, message, referralCode, isReferralPartner)
+        .map(fellowEntity -> {
 //    fellow.setId(fellowId);
 
 //    PaymentInput payment = new PaymentInput();
@@ -153,23 +160,22 @@ public class CheckoutService {
 //    payment.setPaymentType("purchase");
 //    payment.setFellowName(donation.getName());
 
-    return helcimService.initializeCheckout(amount, currency, paymentType).flatMap(response -> {
-      logger.info("Response: " + response);
+    return helcimService.initializeCheckout(amount, currency, paymentType).flatMap(helcimResponse -> {
+      logger.info("Response: " + helcimResponse);
       // Save a field to the database
       return Mono.fromCallable(() -> {
-        PaymentEntity paymentEntity = createPaymentEntity(amount, currency, paymentType, response.getCheckoutToken());
-        Optional<FellowEntity> fellowEntity = fellowRepository.findById(fellowId);
-        paymentEntity.setFellow(fellowEntity.get());
+        PaymentEntity paymentEntity = createPaymentEntity(amount, currency, paymentType, helcimResponse.getCheckoutToken());
+//        Optional<FellowEntity> fellowEntity = fellowRepository.findById(fellowId);
+        paymentEntity.setFellow(fellowEntity);
         PaymentEntity savedPaymentEntity = paymentRepository.save(paymentEntity);
-        ClientCheckoutData paymentResponse = new ClientCheckoutData();
-        paymentResponse.setId(savedPaymentEntity.getId());
-        paymentResponse.setStatus(savedPaymentEntity.getStatus());
-        return paymentResponse;
-      }).map(anotherPayment -> {
-        anotherPayment.setCheckoutToken(response.getCheckoutToken());
-        return anotherPayment;
+        ClientCheckoutData clientCheckoutData = new ClientCheckoutData();
+        clientCheckoutData.setId(savedPaymentEntity.getId());
+        clientCheckoutData.setStatus(savedPaymentEntity.getStatus());
+        clientCheckoutData.setCheckoutToken(helcimResponse.getCheckoutToken());
+        return clientCheckoutData;
       });
     });
+  }).orElseThrow(() -> new InternalError());
   }
 
   public PaymentStatus completePayment(String cleanedJsonEncodedData, String hash, Long paymentId) throws JsonProcessingException {

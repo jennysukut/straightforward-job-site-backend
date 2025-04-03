@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sfjs.data.core.InterviewAppointment;
-import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.BusinessEntity;
 import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.data.entity.InterviewAppointmentEntity;
@@ -57,46 +56,49 @@ public class JobApplicationService {
       @Argument(name = "message") String message, // ?: string;
       DataFetchingEnvironment environment) throws Exception {
 
-    // This should work because the mutation requires a fellow role
-    AccountEntity accountEntity = authorizationService.getAccount();
-    FellowEntity fellowEntity = accountEntity.getFellow();
-
-    // This should work but maybe the job listing has been deleted??
-    Optional<JobListingEntity> optionalJobListing = jobListingRepository.findById(jobId);
-    if (optionalJobListing.isEmpty()) {
-      throw new IllegalArgumentException("Job does not exist: " + jobId);
-    }
-    JobListingEntity jobListing = optionalJobListing.get();
-    JobApplicationEntity entity = new JobApplicationEntity();
-    entity.setFellow(fellowEntity);
-    entity.setMessage(message);
-    entity.setStatus("submitted");
-    entity.setJobListing(jobListing);
-    return jobApplicationRepository.save(entity).getId();
+    return jobListingRepository.findById(jobId)
+      .map(jobListing -> {
+        return authorizationService.getAccount().map(accountEntity -> {
+          FellowEntity fellowEntity = accountEntity.getFellow();
+          JobApplicationEntity entity = new JobApplicationEntity();
+          entity.setFellow(fellowEntity);
+          entity.setMessage(message);
+          entity.setStatus("submitted");
+          entity.setJobListing(jobListing);
+          return jobApplicationRepository.save(entity).getId();
+        }).orElseThrow(() -> {
+          return new IllegalArgumentException("Fellow is not logged in");
+        });
+      }).orElseThrow(() -> {
+        return new IllegalArgumentException("Job does not exist: " + jobId);
+      });
   }
 
   public List<Long> keepNotes(@Argument(name = "jobApplicationId") Long jobApplicationId,
       @Argument(name = "notes") List<String> notes, DataFetchingEnvironment environment) throws Exception {
 
-    Optional<JobApplicationEntity> optionalEntity = jobApplicationRepository.findById(jobApplicationId);
-    if (optionalEntity.isEmpty()) {
-      throw new IllegalArgumentException("Job application does not exist: " + jobApplicationId);
-    }
+    return jobApplicationRepository.findById(jobApplicationId)
+      .map(entity -> {
+        return authorizationService.getAccount()
+          .map(accountEntity -> {
+            FellowEntity fellowEntity = accountEntity.getFellow();
+            BusinessEntity businessEntity = accountEntity.getBusiness();
 
-    JobApplicationEntity entity = optionalEntity.get();
-    AccountEntity accountEntity = authorizationService.getAccount();
-    FellowEntity fellowEntity = accountEntity.getFellow();
-    BusinessEntity businessEntity = accountEntity.getBusiness();
-
-    return notes.stream().map(note -> {
-      JobApplicationNoteEntity noteEntity = new JobApplicationNoteEntity();
-      noteEntity.setBusinessNote(businessEntity != null);
-      noteEntity.setFellowNote(fellowEntity != null);
-      noteEntity.setDetails(note);
-      noteEntity.setApplication(entity);
-      noteEntity = jobApplicationNoteRepository.save(noteEntity);
-      return noteEntity.getId();
-    }).collect(Collectors.toList());
+            return notes.stream().map(note -> {
+              JobApplicationNoteEntity noteEntity = new JobApplicationNoteEntity();
+              noteEntity.setBusinessNote(businessEntity != null);
+              noteEntity.setFellowNote(fellowEntity != null);
+              noteEntity.setDetails(note);
+              noteEntity.setApplication(entity);
+              noteEntity = jobApplicationNoteRepository.save(noteEntity);
+              return noteEntity.getId();
+            }).collect(Collectors.toList());
+          }).orElseThrow(() -> {
+            return new IllegalArgumentException("Fellow is not logged in");
+          });
+      }).orElseThrow(() -> {
+        return new IllegalArgumentException("Job application does not exist: " + jobApplicationId);
+      });
   }
 
   public List<Long> scheduleAppointments(@Argument(name = "jobApplicationId") Long jobApplicationId,
@@ -124,37 +126,39 @@ public class JobApplicationService {
     logger.info("Enter saveJobListing");
 
     // This should work because the mutation requires a fellow role
-    AccountEntity accountEntity = authorizationService.getAccount();
-    logger.info("Account: " + accountEntity.getEmail());
+    return authorizationService.getAccount()
+        .map(accountEntity -> {
+          logger.info("Account: " + accountEntity.getEmail());
+          FellowEntity fellowEntity = accountEntity.getFellow();
+          Set<JobListingEntity> savedJobs = fellowEntity.getSavedJobs();
+          logger.info("Saved jobs: " + savedJobs);
 
-    FellowEntity fellowEntity = accountEntity.getFellow();
+          savedJobs.stream().filter(item -> item.getId() == jobId)
+          .findFirst()
+          .ifPresentOrElse(jobListingEntity -> {
+            // Warning: modifying savedJobs is okay here because filter
+            // and findFirst have already completed
+            boolean result = savedJobs.removeIf(item -> item.getId() == jobId);
+            if (result) {
+              fellowEntity.setSavedJobs(savedJobs);
+              fellowRepository.save(fellowEntity);
+            }
+          }, () -> {
+            Optional<JobListingEntity> optionalJobListing = jobListingRepository.findById(jobId);
+            optionalJobListing.ifPresentOrElse(jobListingEntity -> {
+              savedJobs.add(jobListingEntity);
+              fellowEntity.setSavedJobs(savedJobs);
+              fellowRepository.save(fellowEntity);
+            }, () -> {
+              throw new IllegalArgumentException("Job does not exist: " + jobId);
+            });
+          });
 
-    Set<JobListingEntity> savedJobs = fellowEntity.getSavedJobs();
-    logger.info("Saved jobs: " + savedJobs);
-
-    savedJobs.stream().filter(item -> item.getId() == jobId)
-    .findFirst()
-    .ifPresentOrElse(jobListingEntity -> {
-      // Warning: modifying savedJobs is okay here because filter
-      // and findFirst have already completed
-      boolean result = savedJobs.removeIf(item -> item.getId() == jobId);
-      if (result) {
-        fellowEntity.setSavedJobs(savedJobs);
-        fellowRepository.save(fellowEntity);
-      }
-    }, () -> {
-      Optional<JobListingEntity> optionalJobListing = jobListingRepository.findById(jobId);
-      optionalJobListing.ifPresentOrElse(jobListingEntity -> {
-        savedJobs.add(jobListingEntity);
-        fellowEntity.setSavedJobs(savedJobs);
-        fellowRepository.save(fellowEntity);
-      }, () -> {
-        throw new IllegalArgumentException("Job does not exist: " + jobId);
-      });
-    });
-
-    return fellowEntity.getSavedJobs().stream().map(savedJob -> {
-      return savedJob.getId();
-    }).collect(Collectors.toList());
+          return fellowEntity.getSavedJobs().stream().map(savedJob -> {
+            return savedJob.getId();
+          }).collect(Collectors.toList());
+        }).orElseThrow(() -> {
+          return new IllegalArgumentException("Fellow is not logged in");
+        });
   }
 }

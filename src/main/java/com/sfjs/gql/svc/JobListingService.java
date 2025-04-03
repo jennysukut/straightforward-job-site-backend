@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sfjs.data.core.InterviewProcess;
 import com.sfjs.data.core.Responsibility;
-import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.BusinessEntity;
 import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.data.entity.InterviewProcessEntity;
@@ -135,97 +134,21 @@ public class JobListingService {
 //  }
 
   public Long createJobListing(
-      @Argument(name = "jobTitle")    String jobTitle, //?: string;
-//      @Argument(name = "businessName")    String businessName, //?: string;
-      @Argument(name = "applicationLimit")    Integer applicationLimit, //?: string;
-      // this job number will probably get replaced by an
-      // auto-generated id made by sending details to the server?
-//      @Argument(name = "jobNumber")    Long jobNumber, //?: number;
-      @Argument(name = "positionType")    String positionType, //?: string;
-      @Argument(name = "positionSummary")    String positionSummary, //?: string;
-      @Argument(name = "nonNegParams")    List<String> nonNegParams, //?: Array<string>;
-//         PayDetailsData payDetails, //?: any;
-      @Argument(name = "locationOption")    String locationOption, //?: string;
-      @Argument(name = "idealCandidate")    String idealCandidate, //?: string;
-//         HybridDetailsData hybridDetails, //?: any;
-      @Argument(name = "experienceLevel")    List<String> experienceLevel, //?: any;
-      @Argument(name = "preferredSkills")    List<String> preferredSkills, //?: Array<string>;
-      @Argument(name = "moreAboutPosition")    String moreAboutPosition, //?: string;
-      @Argument(name = "responsibilities")    List<String> responsibilities, //?: any;
-      @Argument(name = "perks")    List<String> perks, //?: Array<string>;
-//         List<InterviewProcessData> interviewProcess, //?: Array<any>;
-      @Argument(name = "location")    String location, //?: string;
-      @Argument(name = "country")    String country, //?: string;
-      @Argument(name = "roundNumber")    Integer roundNumber,
-      DataFetchingEnvironment environment) throws Exception {
-    // Create new entity
-    AccountEntity accountEntity = authorizationService.getAccount();
-    BusinessEntity businessEntity = accountEntity.getBusiness();
-    JobListingEntity entity = new JobListingEntity();
-    entity.setBusiness(businessEntity);
-
-//    @Argument(name = "jobTitle")    String jobTitle, //?: string;
-    entity.setJobTitle(jobTitle);
-//    @Argument(name = "businessName")    String businessName, //?: string;
-//    @Argument(name = "applicationLimit")    String applicationLimit, //?: string;
-    entity.setApplicationLimit(applicationLimit);
-    // this job number will probably get replaced by an
-    // auto-generated id made by sending details to the server?
-//    @Argument(name = "jobNumber")    Long jobNumber, //?: number;
-//    @Argument(name = "positionType")    String positionType, //?: string;
-    entity.setPositionType(positionType);
-//    @Argument(name = "positionSummary")    String positionSummary, //?: string;
-    entity.setPositionSummary(positionSummary);
-//    @Argument(name = "nonNegParams")    List<String> nonNegParams, //?: Array<string>;
-    entity.setNonNegParams(nonNegParams);
-//       PayDetailsData payDetails, //?: any;
-//    @Argument(name = "locationOption")    String locationOption, //?: string;
-    entity.setLocationOption(locationOption);
-//    @Argument(name = "idealCandidate")    String idealCandidate, //?: string;
-    entity.setIdealCandidate(idealCandidate);
-//       HybridDetailsData hybridDetails, //?: any;
-//    @Argument(name = "experienceLevel")    List<String> experienceLevel, //?: any;
-    entity.setExperienceLevel(experienceLevel);
-//    @Argument(name = "preferredSkills")    List<String> preferredSkills, //?: Array<string>;
-    entity.setPreferredSkills(preferredSkills);
-//    @Argument(name = "moreAboutPosition")    String moreAboutPosition, //?: string;
-    entity.setMoreAboutPosition(moreAboutPosition);
-//    @Argument(name = "responsibilities")    List<String> responsibilities, //?: any;
-    entity.setResponsibilities(responsibilities);
-//    @Argument(name = "perks")    List<String> perks, //?: Array<string>;
-    entity.setPerks(perks);
-//       List<InterviewProcessData> interviewProcess, //?: Array<any>;
-//    @Argument(name = "location")    String location, //?: string;
-//    entity.setLocation(location);
-//    @Argument(name = "country")    String country, //?: string;
-//    entity.setCountry(country);
-//    @Argument(name = "roundNumber")    Integer roundNumber,
-    entity.setRoundNumber(roundNumber);
-    
-    entity = jobListingRepository.save(entity);
-
-//    BaseJobListingData data = new BaseJobListingData();
-//    assignFields(entity, data);
-//    requestBody.setJobNumber(entity.getId());
-//    requestBody.setBusinessName(businessEntity.getName());
-    return entity.getId();
-  }
-
-  public Long createJobListing(
     @Argument(name = "jobTitle")    String jobTitle, //?: string;
     @Argument(name = "positionType")    String positionType, //?: string;
     DataFetchingEnvironment environment) {
 
-    AccountEntity accountEntity = authorizationService.getAccount();
-    BusinessEntity businessEntity = accountEntity.getBusiness();
-    JobListingEntity entity = new JobListingEntity();
-    entity.setBusiness(businessEntity);
-
-    entity.setJobTitle(jobTitle);
-    entity.setPositionType(positionType);
-
-    entity = jobListingRepository.save(entity);
-    return entity.getId();
+    return authorizationService.getAccount().map(accountEntity -> {
+      BusinessEntity businessEntity = accountEntity.getBusiness();
+      JobListingEntity entity = new JobListingEntity();
+      entity.setBusiness(businessEntity);
+      entity.setJobTitle(jobTitle);
+      entity.setPositionType(positionType);
+      entity = jobListingRepository.save(entity);
+      return entity.getId();
+    }).orElseThrow(() -> {
+      return new IllegalArgumentException("Business is not logged in");
+    });
   }
 
   public Long addJobListingDetailsStep1(
@@ -345,62 +268,65 @@ public class JobListingService {
       @Argument(name = "positionType") Optional<List<String>> positionType,
       @Argument(name = "country") Optional<String> country, DataFetchingEnvironment environment) throws Exception {
 
-    AccountEntity accountEntity = authorizationService.getAccount();
-    FellowEntity fellowEntity = accountEntity.getFellow();
+    return authorizationService.getAccount().map(accountEntity -> {
+      FellowEntity fellowEntity = accountEntity.getFellow();
+      // Use AtomicReference to hold the Specification
+      AtomicReference<Specification<JobListingEntity>> specRef = new AtomicReference<>(Specification.where(null));
 
-    // Use AtomicReference to hold the Specification
-    AtomicReference<Specification<JobListingEntity>> specRef = new AtomicReference<>(Specification.where(null));
+      // Add filters dynamically
 
-    // Add filters dynamically
+      // Filter by businessId
+      businessId.ifPresent(businessIdValue -> {
+        specRef.set(specRef.get().and(
+            (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("business").get("id"), businessIdValue)));
+      });
 
-    // Filter by businessId
-    businessId.ifPresent(businessIdValue -> {
-      specRef.set(specRef.get().and(
-          (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("business").get("id"), businessIdValue)));
-    });
+      // Filter by isSaved (check if the job is saved by the current fellow)
+      isSaved.ifPresent(isSavedValue -> {
+        if (isSavedValue) {
+          specRef.set(specRef.get()
+              .and((root, query, criteriaBuilder) -> criteriaBuilder.isMember(fellowEntity, root.get("fellows"))));
+        } else {
+          specRef.set(specRef.get()
+              .and((root, query, criteriaBuilder) -> criteriaBuilder.isNotMember(fellowEntity, root.get("fellows"))));
+        }
+      });
 
-    // Filter by isSaved (check if the job is saved by the current fellow)
-    isSaved.ifPresent(isSavedValue -> {
-      if (isSavedValue) {
+      // Filter by experienceLevel (CSV matching using LIKE)
+      experienceLevel.ifPresent(levels -> {
         specRef.set(specRef.get()
-            .and((root, query, criteriaBuilder) -> criteriaBuilder.isMember(fellowEntity, root.get("fellows"))));
-      } else {
+            .and((root, query, criteriaBuilder) -> levels.stream()
+                .map(level -> criteriaBuilder.like(root.get("experienceLevel").as(String.class), "%" + level + "%"))
+                .reduce(criteriaBuilder::or).orElse(null)));
+      });
+
+      // Filter by locationOption
+      locationOption.ifPresent(locationOptions -> {
+        specRef.set(specRef.get().and((root, query, criteriaBuilder) -> root.get("locationOption").in(locationOptions)));
+      });
+
+      // Filter by positionType
+      positionType.ifPresent(positionTypes -> {
+        specRef.set(specRef.get().and((root, query, criteriaBuilder) -> root.get("positionType").in(positionTypes)));
+      });
+
+      // Filter by country
+      country.ifPresent(countryValue -> {
         specRef.set(specRef.get()
-            .and((root, query, criteriaBuilder) -> criteriaBuilder.isNotMember(fellowEntity, root.get("fellows"))));
-      }
+            .and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("business").get("businessProfile").get("country"), countryValue)));
+      });
+
+      // Execute the query with the final specification
+      return jobListingRepository.findAll(specRef.get()).stream().map( jobListing -> {
+        jobListing.setSaved(jobListing.getFellows().stream().anyMatch(fellow -> {
+          return fellow.getId() == fellowEntity.getId();
+        }));
+        return jobListing;
+      }).collect(Collectors.toList());
+    }).orElseThrow(() -> {
+      return new IllegalArgumentException("Fellow is not logged in");
     });
 
-    // Filter by experienceLevel (CSV matching using LIKE)
-    experienceLevel.ifPresent(levels -> {
-      specRef.set(specRef.get()
-          .and((root, query, criteriaBuilder) -> levels.stream()
-              .map(level -> criteriaBuilder.like(root.get("experienceLevel").as(String.class), "%" + level + "%"))
-              .reduce(criteriaBuilder::or).orElse(null)));
-    });
-
-    // Filter by locationOption
-    locationOption.ifPresent(locationOptions -> {
-      specRef.set(specRef.get().and((root, query, criteriaBuilder) -> root.get("locationOption").in(locationOptions)));
-    });
-
-    // Filter by positionType
-    positionType.ifPresent(positionTypes -> {
-      specRef.set(specRef.get().and((root, query, criteriaBuilder) -> root.get("positionType").in(positionTypes)));
-    });
-
-    // Filter by country
-    country.ifPresent(countryValue -> {
-      specRef.set(specRef.get()
-          .and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("business").get("businessProfile").get("country"), countryValue)));
-    });
-
-    // Execute the query with the final specification
-    return jobListingRepository.findAll(specRef.get()).stream().map( jobListing -> {
-      jobListing.setSaved(jobListing.getFellows().stream().anyMatch(fellow -> {
-        return fellow.getId() == fellowEntity.getId();
-      }));
-      return jobListing;
-    }).collect(Collectors.toList());
   }
 
 //  private <E extends BaseEntity, D extends JobListingElementData> E convertJobListingElementData(D data,

@@ -1,5 +1,7 @@
 package com.sfjs.gql.resolvers;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -17,7 +19,7 @@ public class Authorization {
   private AuthorizationService authorizationService;
 
   @MutationMapping(name = "login")
-  public AccountEntity login(
+  public Optional<AccountEntity> login(
       @Argument(name = "email") String email,
       @Argument(name = "password") String password) {
     return authorizationService.login(email, password);

@@ -2,7 +2,6 @@ package com.sfjs.security;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,44 +46,29 @@ public class AuthorizationService {
   private HttpServletResponse response;
 
   public boolean resetPassword(String email, String password, String token) {
-//    Result result = new Result();
-    AccountEntity accountEntity = accountRepository.findByEmail(email);
-    if (accountEntity == null) {
-//      result.setSuccess(false);
-//      result.setMessage("Account not found");
-//      return result;
-      throw new IllegalArgumentException("Account not found");
-    }
-    Optional<ResetPasswordTokenEntity> filteredTokenEntityList = accountEntity.getTokens()
-        .stream().filter(new Predicate<ResetPasswordTokenEntity>() {
-
-          @Override
-          public boolean test(ResetPasswordTokenEntity t) {
-            logger.info("Expires at: " + t.getExpiresAt());
-            boolean isExpired = t.getExpiresAt().isBefore(LocalDateTime.now());
-            logger.info("Is used: " + t.isUsed());
-            boolean matches = passwordEncoder.matches(token, t.getToken());
-            logger.info("Matches: " + matches);
-            return matches && !t.isUsed() && !isExpired;
-          }
-        }).findAny();
-    if (filteredTokenEntityList.isEmpty()) {
-//      result.setSuccess(false);
-//      result.setMessage("Token not found");
-//      return result;
-      throw new IllegalArgumentException("Token not found");
-    }
-    ResetPasswordTokenEntity tokenEntity = filteredTokenEntityList.get();
-    accountEntity.setPassword(passwordEncoder.encode(password));
-    accountRepository.save(accountEntity);
-    tokenEntity.setUsed(true);
-    resetPasswordTokenRepository.save(tokenEntity);
-//    result.setSuccess(true);
-//    return result;
-    return true;
+    return accountRepository.findByEmail(email).map(accountEntity -> {
+      return accountEntity.getTokens().stream().filter(t -> {
+        logger.info("Expires at: " + t.getExpiresAt());
+        boolean isExpired = t.getExpiresAt().isBefore(LocalDateTime.now());
+        logger.info("Is used: " + t.isUsed());
+        boolean matches = passwordEncoder.matches(token, t.getToken());
+        logger.info("Matches: " + matches);
+        return matches && !t.isUsed() && !isExpired;
+      }).findFirst().map(tokenEntity -> {
+        accountEntity.setPassword(passwordEncoder.encode(password));
+        accountRepository.save(accountEntity);
+        tokenEntity.setUsed(true);
+        resetPasswordTokenRepository.save(tokenEntity);
+        return true;
+      }).orElseThrow(() -> {
+        return new IllegalArgumentException("Token not found"); // Throw if no valid token
+      });
+    }).orElseThrow(() -> {
+        return new IllegalArgumentException("Account not found"); // Throw if no account
+    });
   }
 
-  public AccountEntity login(String email, String password) {
+  public Optional<AccountEntity> login(String email, String password) {
     // Create the authentication object
     Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(email, password));
@@ -104,30 +88,23 @@ public class AuthorizationService {
   }
 
   public String generateResetPasswordToken(String email) {
-//    Result result = new Result();
-    AccountEntity accountEntity = accountRepository.findByEmail(email);
-    if (accountEntity == null) {
-//      result.setSuccess(false);
-//      result.setMessage("Account not found");
-//      return result;
-      throw new IllegalArgumentException("Account not found");
-    }
-    ResetPasswordTokenEntity entity = new ResetPasswordTokenEntity();
-    entity.setAccount(accountEntity);
-    String token = TokenGenerator.generateToken(16);
-    String encryptedToken = passwordEncoder.encode(token);
-    entity.setToken(encryptedToken);
-    LocalDateTime expiresAt = LocalDateTime.now().plusDays(2);
-    logger.info("Expires at: " + expiresAt);
-    entity.setExpiresAt(expiresAt);
-    entity = resetPasswordTokenRepository.save(entity);
-//    result.setSuccess(true);
-//    result.setMessage(token);
-//    return result;
-    return token;
+    return accountRepository.findByEmail(email).map(accountEntity -> {
+      ResetPasswordTokenEntity entity = new ResetPasswordTokenEntity();
+      entity.setAccount(accountEntity);
+      String token = TokenGenerator.generateToken(16);
+      String encryptedToken = passwordEncoder.encode(token);
+      entity.setToken(encryptedToken);
+      LocalDateTime expiresAt = LocalDateTime.now().plusDays(2);
+      logger.info("Expires at: " + expiresAt);
+      entity.setExpiresAt(expiresAt);
+      entity = resetPasswordTokenRepository.save(entity);
+      return token;
+    }).orElseThrow(() -> {
+      return new IllegalArgumentException("Account not found");
+    });
   }
 
-  public AccountEntity getAccount() {
+  public Optional<AccountEntity> getAccount() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     logger.info("getAccount: " + authentication);
     if (authentication != null && authentication.getPrincipal() != null) {
@@ -142,6 +119,6 @@ public class AuthorizationService {
         return accountRepository.findByEmail(email);
       }
     }
-    return null;
+    return Optional.empty();
   }
 }

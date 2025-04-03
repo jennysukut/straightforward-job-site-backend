@@ -11,11 +11,11 @@ public class Business extends NamedBaseObject {
 
   @Getter
   @Setter
-  private Boolean betaTester;
+  private boolean betaTester;
 
   @Getter
   @Setter
-  private Boolean earlySignup;
+  private boolean earlySignup;
 
   @Getter
   @Setter

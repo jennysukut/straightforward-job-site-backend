@@ -27,17 +27,38 @@ type Mutation {
       message: String,
       referralCode: String,
       isReferralPartner: Boolean
-    ): ID!
+    ): ID! @deprecated(reason: "Use fellowSignup instead.")
+
+  fellowSignup(
+      email: String!,
+      password: String!,
+      name: String!,
+      isBetaTester: Boolean,
+      isCollaborator: Boolean,
+      message: String,
+      referralCode: String,
+      isReferralPartner: Boolean
+    ): Fellow
 
   signupBusiness(
       email: String!,
       password: String!,
       name: String!,
-      isBetaTester: Boolean!,
-      contactName: String!,
+      isBetaTester: Boolean,
+      contactName: String,
       isEarlySignup: Boolean,
-      referral: String!
-    ): ID!
+      referral: String
+    ): ID! @deprecated(reason: "Use businessSignup instead.")
+
+  businessSignup(
+      email: String!,
+      password: String!,
+      name: String!,
+      isBetaTester: Boolean,
+      contactName: String,
+      isEarlySignup: Boolean,
+      referral: String
+    ): Business
 
   acceptFellowDonation(
       email: String!,
@@ -316,21 +337,21 @@ type Link {
 type JobListing {
   id: ID!
   jobTitle: String!,
-  positionType: String!
-  positionSummary: String!,
-  nonNegParams: [String!]!
-  payscaleMin: Float!,
-  payscaleMax: Float!,
-  payOption: String!,
-  locationOption: String!
-  idealCandidate: String!,
-  daysInOffice: String!,
-  daysRemote: String!
-  experienceLevel: [String!]!,
-  preferredSkills: [String!]!,
+  positionType: String
+  positionSummary: String,
+  nonNegParams: [String!]
+  payscaleMin: Float,
+  payscaleMax: Float,
+  payOption: String,
+  locationOption: String,
+  idealCandidate: String,
+  daysInOffice: String,
+  daysRemote: String,
+  experienceLevel: [String!],
+  preferredSkills: [String!],
   moreAboutPosition: String,
-  responsibilities: [String!]!,
-  perks: [String!]!
+  responsibilities: [String!],
+  perks: [String!]
   interviewProcess: [InterviewProcess!]!
   business: Business!
   saved: Boolean!

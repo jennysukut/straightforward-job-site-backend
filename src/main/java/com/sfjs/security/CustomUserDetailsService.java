@@ -1,5 +1,6 @@
 package com.sfjs.security;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,17 @@ public class CustomUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    AccountEntity accountEntity = accountRepository.findByEmail(username);
-    AccountAuthorizationPrincipal result = new AccountAuthorizationPrincipal();
-    result.setUsername(username);
-    result.setPassword(accountEntity.getPassword());
-    result.setAuthorities(accountEntity.getRoles().stream().map(role -> {
-      return new SimpleGrantedAuthority("ROLE_" + role.getName());
-    }).collect(Collectors.toList()));
-    return result;
+    return accountRepository.findByEmail(username).map( accountEntity -> {
+      AccountAuthorizationPrincipal result = new AccountAuthorizationPrincipal();
+      result.setUsername(username);
+      result.setPassword(accountEntity.getPassword());
+      result.setAuthorities(accountEntity.getRoles().stream().map(role -> {
+        return new SimpleGrantedAuthority("ROLE_" + role.getName());
+      }).collect(Collectors.toList()));
+      return result;
+    }).orElseThrow(() -> {
+      return new UsernameNotFoundException("User not found with email: " + username);
+    });
   }
 
 }
