@@ -57,5 +57,5 @@ public class FellowEntity extends Fellow {
   @Setter
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "saved_jobs", joinColumns = @JoinColumn(name = "fellow_id"), inverseJoinColumns = @JoinColumn(name = "job_listing_id"))
-  private Set<JobListingEntity> savedJobs;
+  private Set<JobListingEntity> savedJobs = Set.of();
 }
