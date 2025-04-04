@@ -82,4 +82,8 @@ public class JobListing extends BaseObject {
   // @Getter @Setter String country; //?: string;
 
   @Getter @Setter Integer roundNumber;
+
+  @Getter @Setter private boolean published;
+
+  @Getter @Setter private boolean beingEdited;
 }

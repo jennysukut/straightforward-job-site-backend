@@ -368,6 +368,8 @@ type JobListing {
   interviewProcess: [InterviewProcess!]!
   business: Business!
   saved: Boolean!
+  published: Boolean!
+  beingEdited: Boolean!
 }
 
 type Business {
