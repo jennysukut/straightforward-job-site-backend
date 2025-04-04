@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -58,6 +59,30 @@ public class JobListingResolver {
     @Argument(name = "id") Long id,
     DataFetchingEnvironment environment) throws Exception {
     return jobListingRepository.findById(id);
+  }
+
+  @QueryMapping(name = "jobListingsPage")
+  public Page<JobListingEntity> jobListingsPage(
+      @Argument(name = "businessId") Optional<Long> businessId,
+      @Argument(name = "isSaved") Optional<Boolean> isSaved,
+      @Argument(name = "experienceLevel") Optional<List<String>> experienceLevel,
+      @Argument(name = "locationOption") Optional<List<String>> locationOption,
+      @Argument(name = "positionType") Optional<List<String>> positionType,
+      @Argument(name = "country") Optional<String> country,
+      @Argument(name = "pageNumber") Integer pageNumber,
+      @Argument(name = "pageSize") Integer pageSize,
+      DataFetchingEnvironment environment) throws Exception {
+
+    logger.info("jobListings");
+    logger.info("businessId: " + businessId);
+    logger.info("isSaved: " + isSaved);
+    logger.info("experienceLevel: " + businessId);
+    logger.info("locationOption: " + locationOption);
+    logger.info("positionType: " + positionType);
+    logger.info("country: " + country);
+
+    return jobListingService.jobListingPage(businessId, isSaved, experienceLevel, locationOption, positionType, country,
+        pageNumber, pageSize, environment);
   }
 
   @MutationMapping(name = "createJobListing")

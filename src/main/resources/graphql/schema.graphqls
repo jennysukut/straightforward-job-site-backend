@@ -1,6 +1,8 @@
 type Query {
   helloWorld: String
 
+  getMyProfile: Account
+
   jobListings(
     businessId: ID
     isSaved: Boolean
@@ -8,6 +10,17 @@ type Query {
     locationOption: [String!]
     positionType: [String!]
     country: String
+  ): [JobListing!]!
+
+  jobListingsPage(
+    businessId: ID
+    isSaved: Boolean
+    experienceLevel: [String!]
+    locationOption: [String!]
+    positionType: [String!]
+    country: String
+    pageNumber: Int!
+    pageSize: Int!
   ): [JobListing!]!
 
   fellowProfile(id: ID!): Profile @deprecated(reason: "Use fellow instead.")
@@ -425,6 +438,8 @@ type Profile {
 type Account {
   id: ID!,
   roles: [String!]!
+  business: Business
+  fellow: Fellow
 }
 
 type BusinessProfile {

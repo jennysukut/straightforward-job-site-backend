@@ -5,11 +5,14 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.security.AuthorizationService;
+
+import graphql.schema.DataFetchingEnvironment;
 
 @RestController
 @Transactional
@@ -23,6 +26,12 @@ public class Authorization {
       @Argument(name = "email") String email,
       @Argument(name = "password") String password) {
     return authorizationService.login(email, password);
+  }
+
+  @QueryMapping(name = "getMyProfile")
+  public Optional<AccountEntity> getMyProfile(
+      DataFetchingEnvironment environment) throws Exception {
+  return authorizationService.getAccount();
   }
 
   @MutationMapping(name = "resetPassword")
