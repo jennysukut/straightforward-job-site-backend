@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -31,9 +33,12 @@ public class JobApplicationEntity extends JobApplication {
 
   @Getter
   @Setter
-  @OneToOne(optional = true)
+  @ManyToOne(optional = true)
   @JsonIgnore
-  @JoinColumn(name = "fellow_id", unique = false)
+  @JoinTable(name = "job_application_fellow",
+    joinColumns = @JoinColumn(name = "job_application_id"), // Foreign key for JobApplicationEntity
+    inverseJoinColumns = @JoinColumn(name = "fellow_id") // Foreign key for FellowEntity
+  )
   private FellowEntity fellow;
 
   @Getter
