@@ -190,6 +190,11 @@ type Mutation {
     roundNumber: Int
   ): JobListing
 
+  starOrStopEditingJobListing(
+    id: ID!,
+    beingEdited: Boolean!
+  ): JobListing
+
   applyToJob(
     jobId: ID!,
     message: String!

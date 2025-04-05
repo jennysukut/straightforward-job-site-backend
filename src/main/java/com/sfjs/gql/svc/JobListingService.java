@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sfjs.data.core.InterviewProcess;
+import com.sfjs.data.core.JobListing;
 import com.sfjs.data.core.Responsibility;
 import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.BusinessEntity;
@@ -376,6 +377,16 @@ public class JobListingService {
       return new IllegalArgumentException("Fellow is not logged in");
     });
 
+  }
+
+  public Optional<JobListing> starOrStopEditingJobListing(
+    @Argument(name = "id") Long id,
+    @Argument(name = "beingEdited") boolean beingEdited,
+    DataFetchingEnvironment environment) throws Exception {
+    return jobListingRepository.findById(id).map(jobListingEntity -> {
+      jobListingEntity.setBeingEdited(beingEdited);
+      return jobListingRepository.save(jobListingEntity);
+    });
   }
 
 //  private <E extends BaseEntity, D extends JobListingElementData> E convertJobListingElementData(D data,

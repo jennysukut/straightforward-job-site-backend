@@ -163,6 +163,15 @@ public class JobListingResolver {
     });
   }
 
+  @MutationMapping(name = "starOrStopEditingJobListing")
+  @PreAuthorize("hasRole('ROLE_BUSINESS')")
+  public Optional<JobListing> starOrStopEditingJobListing(
+    @Argument(name = "id") Long id,
+    @Argument(name = "beingEdited") boolean beingEdited,
+    DataFetchingEnvironment environment) throws Exception {
+    return jobListingService.starOrStopEditingJobListing(id, beingEdited, environment);
+  }
+
 ////      @Argument(name = "businessName")    String businessName, //?: string;
 //      @Argument(name = "applicationLimit")    String applicationLimit, //?: string;
 //      // this job number will probably get replaced by an
