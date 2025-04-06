@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sfjs.data.core.InterviewProcess;
-import com.sfjs.data.core.JobListing;
 import com.sfjs.data.core.Responsibility;
 import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.BusinessEntity;
@@ -141,7 +140,10 @@ public class JobListingService {
   public Long createJobListing(
     @Argument(name = "jobTitle")    String jobTitle, //?: string;
     @Argument(name = "positionType")    String positionType, //?: string;
-    DataFetchingEnvironment environment) {
+    @Argument(name = "beingEdited") boolean beingEdited,
+    @Argument(name = "published") boolean published,
+    @Argument(name = "completed") String completed,
+    DataFetchingEnvironment environment) throws Exception {
 
     return authorizationService.getAccount().map(accountEntity -> {
       BusinessEntity businessEntity = accountEntity.getBusiness();
@@ -149,6 +151,9 @@ public class JobListingService {
       entity.setBusiness(businessEntity);
       entity.setJobTitle(jobTitle);
       entity.setPositionType(positionType);
+      entity.setBeingEdited(beingEdited);
+      entity.setPublished(published);
+      entity.setCompleted(completed);
       entity = jobListingRepository.save(entity);
       return entity.getId();
     }).orElseThrow(() -> {
@@ -183,7 +188,9 @@ public class JobListingService {
       @Argument(name = "idealCandidate") String idealCandidate,
       @Argument(name = "daysInOffice") String daysInOffice,
       @Argument(name = "daysRemote") String daysRemote,
-      DataFetchingEnvironment environment) {
+      @Argument(name = "city") String city,
+      @Argument(name = "state") String state,
+      DataFetchingEnvironment environment) throws Exception {
     Optional<JobListingEntity> optionalEntity = jobListingRepository.findById(id);
 
     if (optionalEntity.isEmpty()) {
@@ -198,6 +205,8 @@ public class JobListingService {
     entity.setIdealCandidate(idealCandidate);
     entity.setDaysInOffice(daysInOffice);
     entity.setDaysRemote(daysRemote);
+    entity.setCity(city);
+    entity.setState(state);
     jobListingRepository.save(entity);
     return entity.getId();
   }
@@ -379,13 +388,13 @@ public class JobListingService {
 
   }
 
-  public Optional<JobListing> starOrStopEditingJobListing(
+  public Optional<Boolean> starOrStopEditingJobListing(
     @Argument(name = "id") Long id,
     @Argument(name = "beingEdited") boolean beingEdited,
     DataFetchingEnvironment environment) throws Exception {
     return jobListingRepository.findById(id).map(jobListingEntity -> {
       jobListingEntity.setBeingEdited(beingEdited);
-      return jobListingRepository.save(jobListingEntity);
+      return jobListingRepository.save(jobListingEntity).isBeingEdited();
     });
   }
 

@@ -147,6 +147,9 @@ type Mutation {
   createJobListing(
     jobTitle: String!,
     positionType: String!
+    beingEdited: Boolean
+    published: Boolean
+    completed: String
   ): ID!
 
   addJobListingDetailsStep1(
@@ -163,7 +166,9 @@ type Mutation {
     locationOption: String!
     idealCandidate: String!,
     daysInOffice: String,
-    daysRemote: String
+    daysRemote: String,
+    city: String,
+    state: String
   ): ID!
 
   addJobListingDetailsStep3(
@@ -193,7 +198,11 @@ type Mutation {
   starOrStopEditingJobListing(
     id: ID!,
     beingEdited: Boolean!
-  ): JobListing
+  ): Boolean
+
+  publishJobListing(
+    id: ID!
+  ): ID!
 
   applyToJob(
     jobId: ID!,
@@ -375,6 +384,11 @@ type JobListing {
   saved: Boolean!
   published: Boolean!
   beingEdited: Boolean!
+  completed: String
+  city: String
+  state: String
+  applications: [JobApplication!]
+  applicationLimit: Int
 }
 
 type Business {

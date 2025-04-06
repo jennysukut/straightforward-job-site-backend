@@ -90,8 +90,12 @@ public class JobListingResolver {
   public Long createJobListing(
       @Argument(name = "jobTitle")    String jobTitle, //?: string;
       @Argument(name = "positionType")    String positionType, //?: string;
+      @Argument(name = "beingEdited") boolean beingEdited,
+      @Argument(name = "published") boolean published,
+      @Argument(name = "completed") String completed,
       DataFetchingEnvironment environment) throws Exception {
-    return jobListingService.createJobListing(jobTitle, positionType, environment);
+    return jobListingService.createJobListing(jobTitle, positionType, beingEdited,
+        published, completed, environment);
   }
 
   @MutationMapping(name = "addJobListingDetailsStep1")
@@ -115,8 +119,11 @@ public class JobListingResolver {
       @Argument(name = "idealCandidate") String idealCandidate,
       @Argument(name = "daysInOffice") String daysInOffice,
       @Argument(name = "daysRemote") String daysRemote,
+      @Argument(name = "city") String city,
+      @Argument(name = "state") String state,
       DataFetchingEnvironment environment) throws Exception {
-    return jobListingService.addJobListingDetailsStep2(id, payscaleMin, payscaleMax, payOption, locationOption, idealCandidate, daysInOffice, daysRemote, environment);
+    return jobListingService.addJobListingDetailsStep2(id, payscaleMin, payscaleMax, payOption, locationOption,
+        idealCandidate, daysInOffice, daysRemote, city, state, environment);
   }
 
   @MutationMapping(name = "addJobListingDetailsStep3")
@@ -165,12 +172,24 @@ public class JobListingResolver {
 
   @MutationMapping(name = "starOrStopEditingJobListing")
   @PreAuthorize("hasRole('ROLE_BUSINESS')")
-  public Optional<JobListing> starOrStopEditingJobListing(
+  public Optional<Boolean> starOrStopEditingJobListing(
     @Argument(name = "id") Long id,
     @Argument(name = "beingEdited") boolean beingEdited,
     DataFetchingEnvironment environment) throws Exception {
     return jobListingService.starOrStopEditingJobListing(id, beingEdited, environment);
   }
+
+  @MutationMapping(name = "publishJobListing")
+  @PreAuthorize("hasRole('ROLE_BUSINESS')")
+  public Optional<Long> publishJobListinging(
+    @Argument(name = "id") Long id,
+    DataFetchingEnvironment environment) throws Exception {
+    return jobListingRepository.findById(id).map(entity -> {
+      entity.setPublished(true);
+      return jobListingRepository.save(entity).getId();
+    });
+  }
+
 
 ////      @Argument(name = "businessName")    String businessName, //?: string;
 //      @Argument(name = "applicationLimit")    String applicationLimit, //?: string;

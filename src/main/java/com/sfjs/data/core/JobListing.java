@@ -86,4 +86,10 @@ public class JobListing extends BaseObject {
   @Getter @Setter private boolean published;
 
   @Getter @Setter private boolean beingEdited;
+
+  @Getter @Setter private String completed;
+
+  @Getter @Setter private String city;
+
+  @Getter @Setter private String state;
 }
