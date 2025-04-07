@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sfjs.data.core.InterviewProcess;
 import com.sfjs.data.core.JobListing;
-import com.sfjs.data.core.Responsibility;
 import com.sfjs.data.entity.JobListingEntity;
 import com.sfjs.gql.svc.JobListingService;
 import com.sfjs.jpa.repo.JobListingRepository;
@@ -144,7 +143,7 @@ public class JobListingResolver {
   @PreAuthorize("hasRole('ROLE_BUSINESS')")
   public Long addJobListingDetailsStep4(
       @Argument(name = "id") Long id,
-      @Argument(name = "responsibilities") List<Responsibility> responsibilities,
+      @Argument(name = "responsibilities") List<String> responsibilities,
       @Argument(name = "perks") List<String> perks,
       @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) throws Exception {
