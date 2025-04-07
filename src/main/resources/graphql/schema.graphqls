@@ -156,6 +156,7 @@ type Mutation {
     id: ID!,
     positionSummary: String!,
     nonNegParams: [String!]!
+    completed: String
   ): ID!
 
   addJobListingDetailsStep2(
@@ -169,6 +170,7 @@ type Mutation {
     daysRemote: String,
     city: String,
     state: String
+    completed: String
   ): ID!
 
   addJobListingDetailsStep3(
@@ -176,32 +178,38 @@ type Mutation {
     experienceLevel: [String!]!,
     preferredSkills: [String!]!,
     moreAboutPosition: String,
+    completed: String
   ): ID!
 
   addJobListingDetailsStep4(
     id: ID!,
     responsibilities: [ResponsibilityInput!]!,
     perks: [String!]!
+    completed: String
   ): ID!
 
   addJobListingDetailsStep5(
     id: ID!,
     interviewProcess: [InterviewProcessInput!]!
+    completed: String
   ): ID!
 
   createJobListingRound(
     id: ID!,
     applicationLimit: Int
     roundNumber: Int
+    completed: String
   ): JobListing
 
   starOrStopEditingJobListing(
     id: ID!,
     beingEdited: Boolean!
+    completed: String
   ): Boolean
 
   publishJobListing(
     id: ID!
+    completed: String
   ): ID!
 
   applyToJob(

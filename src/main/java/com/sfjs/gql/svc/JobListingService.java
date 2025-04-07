@@ -142,7 +142,7 @@ public class JobListingService {
     @Argument(name = "positionType")    String positionType, //?: string;
     @Argument(name = "beingEdited") boolean beingEdited,
     @Argument(name = "published") boolean published,
-    @Argument(name = "completed") String completed,
+    @Argument(name = "completed") Optional<String> completed,
     DataFetchingEnvironment environment) throws Exception {
 
     return authorizationService.getAccount().map(accountEntity -> {
@@ -153,7 +153,9 @@ public class JobListingService {
       entity.setPositionType(positionType);
       entity.setBeingEdited(beingEdited);
       entity.setPublished(published);
-      entity.setCompleted(completed);
+      if (completed.isPresent()) {
+        entity.setCompleted(completed.get());
+      }
       entity = jobListingRepository.save(entity);
       return entity.getId();
     }).orElseThrow(() -> {
@@ -165,6 +167,7 @@ public class JobListingService {
       @Argument(name = "id") Long id,
       @Argument(name = "positionSummary")    String positionSummary, //?: string;
       @Argument(name = "nonNegParams")    List<String> nonNegParams, //?: Array<string>;
+      @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) {
     Optional<JobListingEntity> optionalEntity = jobListingRepository.findById(id);
 
@@ -175,6 +178,9 @@ public class JobListingService {
     JobListingEntity entity = optionalEntity.get();
     entity.setPositionSummary(positionSummary);
     entity.setNonNegParams(nonNegParams);
+    if (completed.isPresent()) {
+      entity.setCompleted(completed.get());
+    }
     jobListingRepository.save(entity);
     return entity.getId();
   }
@@ -190,6 +196,7 @@ public class JobListingService {
       @Argument(name = "daysRemote") String daysRemote,
       @Argument(name = "city") String city,
       @Argument(name = "state") String state,
+      @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) throws Exception {
     Optional<JobListingEntity> optionalEntity = jobListingRepository.findById(id);
 
@@ -207,6 +214,9 @@ public class JobListingService {
     entity.setDaysRemote(daysRemote);
     entity.setCity(city);
     entity.setState(state);
+    if (completed.isPresent()) {
+      entity.setCompleted(completed.get());
+    }
     jobListingRepository.save(entity);
     return entity.getId();
   }
@@ -216,6 +226,7 @@ public class JobListingService {
       @Argument(name = "experienceLevel") List<String> experienceLevel,
       @Argument(name = "preferredSkills") List<String> preferredSkills,
       @Argument(name = "moreAboutPosition") String moreAboutPosition,
+      @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) {
     Optional<JobListingEntity> optionalEntity = jobListingRepository.findById(id);
 
@@ -227,6 +238,9 @@ public class JobListingService {
     entity.setExperienceLevel(experienceLevel);
     entity.setPreferredSkills(preferredSkills);
     entity.setMoreAboutPosition(moreAboutPosition);
+    if (completed.isPresent()) {
+      entity.setCompleted(completed.get());
+    }
     jobListingRepository.save(entity);
     return entity.getId();
   }
@@ -235,6 +249,7 @@ public class JobListingService {
       @Argument(name = "id") Long id,
       @Argument(name = "responsibilities") List<Responsibility> responsibilities,
       @Argument(name = "perks") List<String> perks,
+      @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) {
     Optional<JobListingEntity> optionalEntity = jobListingRepository.findById(id);
 
@@ -247,6 +262,9 @@ public class JobListingService {
       return item.getResponsibility();
     }).collect(Collectors.toList()));
     entity.setPerks(perks);
+    if (completed.isPresent()) {
+      entity.setCompleted(completed.get());
+    }
     jobListingRepository.save(entity);
     return entity.getId();
   }
@@ -254,6 +272,7 @@ public class JobListingService {
   public Long addJobListingDetailsStep5(
       @Argument(name = "id") Long id,
       @Argument(name = "interviewProcess") List<InterviewProcess> interviewProcess,
+      @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) {
     Optional<JobListingEntity> optionalEntity = jobListingRepository.findById(id);
 
@@ -271,6 +290,9 @@ public class JobListingService {
       entity = interviewProcessRepository.save(entity);
       return entity;
     }).collect(Collectors.toList()));
+    if (completed.isPresent()) {
+      jobListingEntity.setCompleted(completed.get());
+    }
     jobListingRepository.save(jobListingEntity);
     return jobListingEntity.getId();
   }
@@ -391,9 +413,13 @@ public class JobListingService {
   public Optional<Boolean> starOrStopEditingJobListing(
     @Argument(name = "id") Long id,
     @Argument(name = "beingEdited") boolean beingEdited,
+    @Argument(name = "completed") Optional<String> completed,
     DataFetchingEnvironment environment) throws Exception {
     return jobListingRepository.findById(id).map(jobListingEntity -> {
       jobListingEntity.setBeingEdited(beingEdited);
+      if (completed.isPresent()) {
+        jobListingEntity.setCompleted(completed.get());
+      }
       return jobListingRepository.save(jobListingEntity).isBeingEdited();
     });
   }

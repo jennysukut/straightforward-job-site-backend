@@ -92,7 +92,7 @@ public class JobListingResolver {
       @Argument(name = "positionType")    String positionType, //?: string;
       @Argument(name = "beingEdited") boolean beingEdited,
       @Argument(name = "published") boolean published,
-      @Argument(name = "completed") String completed,
+      @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) throws Exception {
     return jobListingService.createJobListing(jobTitle, positionType, beingEdited,
         published, completed, environment);
@@ -104,8 +104,9 @@ public class JobListingResolver {
       @Argument(name = "id") Long id,
       @Argument(name = "positionSummary")    String positionSummary, //?: string;
       @Argument(name = "nonNegParams")    List<String> nonNegParams, //?: Array<string>;
+      @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) throws Exception {
-    return jobListingService.addJobListingDetailsStep1(id, positionSummary, nonNegParams, environment);
+    return jobListingService.addJobListingDetailsStep1(id, positionSummary, nonNegParams, completed, environment);
   }
 
   @MutationMapping(name = "addJobListingDetailsStep2")
@@ -121,9 +122,10 @@ public class JobListingResolver {
       @Argument(name = "daysRemote") String daysRemote,
       @Argument(name = "city") String city,
       @Argument(name = "state") String state,
+      @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) throws Exception {
     return jobListingService.addJobListingDetailsStep2(id, payscaleMin, payscaleMax, payOption, locationOption,
-        idealCandidate, daysInOffice, daysRemote, city, state, environment);
+        idealCandidate, daysInOffice, daysRemote, city, state, completed, environment);
   }
 
   @MutationMapping(name = "addJobListingDetailsStep3")
@@ -133,8 +135,9 @@ public class JobListingResolver {
       @Argument(name = "experienceLevel") List<String> experienceLevel,
       @Argument(name = "preferredSkills") List<String> preferredSkills,
       @Argument(name = "moreAboutPosition") String moreAboutPosition,
+      @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) throws Exception {
-    return jobListingService.addJobListingDetailsStep3(id, experienceLevel, preferredSkills, moreAboutPosition, environment);
+    return jobListingService.addJobListingDetailsStep3(id, experienceLevel, preferredSkills, moreAboutPosition, completed, environment);
   }
 
   @MutationMapping(name = "addJobListingDetailsStep4")
@@ -143,8 +146,9 @@ public class JobListingResolver {
       @Argument(name = "id") Long id,
       @Argument(name = "responsibilities") List<Responsibility> responsibilities,
       @Argument(name = "perks") List<String> perks,
+      @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) throws Exception {
-    return jobListingService.addJobListingDetailsStep4(id, responsibilities, perks, environment);
+    return jobListingService.addJobListingDetailsStep4(id, responsibilities, perks, completed, environment);
   }
 
   @MutationMapping(name = "addJobListingDetailsStep5")
@@ -152,8 +156,9 @@ public class JobListingResolver {
   public Long addJobListingDetailsStep5(
       @Argument(name = "id") Long id,
       @Argument(name = "interviewProcess") List<InterviewProcess> interviewProcess,
+      @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) throws Exception {
-    return jobListingService.addJobListingDetailsStep5(id, interviewProcess, environment);
+    return jobListingService.addJobListingDetailsStep5(id, interviewProcess, completed, environment);
   }
 
   @MutationMapping(name = "createJobListingRound")
@@ -162,10 +167,14 @@ public class JobListingResolver {
       @Argument(name = "id") Long id,
       @Argument(name = "applicationLimit") Integer applicationLimit,
       @Argument(name = "roundNumber") Integer roundNumber,
+      @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) throws Exception {
     return jobListingRepository.findById(id).map(entity -> {
       entity.setApplicationLimit(applicationLimit);
       entity.setRoundNumber(roundNumber);
+      if (completed.isPresent()) {
+        entity.setCompleted(completed.get());
+      }
       return jobListingRepository.save(entity);
     });
   }
@@ -175,17 +184,22 @@ public class JobListingResolver {
   public Optional<Boolean> starOrStopEditingJobListing(
     @Argument(name = "id") Long id,
     @Argument(name = "beingEdited") boolean beingEdited,
+    @Argument(name = "completed") Optional<String> completed,
     DataFetchingEnvironment environment) throws Exception {
-    return jobListingService.starOrStopEditingJobListing(id, beingEdited, environment);
+    return jobListingService.starOrStopEditingJobListing(id, beingEdited, completed, environment);
   }
 
   @MutationMapping(name = "publishJobListing")
   @PreAuthorize("hasRole('ROLE_BUSINESS')")
   public Optional<Long> publishJobListinging(
     @Argument(name = "id") Long id,
+    @Argument(name = "completed") Optional<String> completed,
     DataFetchingEnvironment environment) throws Exception {
     return jobListingRepository.findById(id).map(entity -> {
       entity.setPublished(true);
+      if (completed.isPresent()) {
+        entity.setCompleted(completed.get());
+      }
       return jobListingRepository.save(entity).getId();
     });
   }
