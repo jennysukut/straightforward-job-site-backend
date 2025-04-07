@@ -140,8 +140,8 @@ public class JobListingService {
   public Long createJobListing(
     @Argument(name = "jobTitle")    String jobTitle, //?: string;
     @Argument(name = "positionType")    String positionType, //?: string;
-    @Argument(name = "beingEdited") boolean beingEdited,
-    @Argument(name = "published") boolean published,
+    @Argument(name = "beingEdited") Optional<Boolean> beingEdited,
+    @Argument(name = "published") Optional<Boolean> published,
     @Argument(name = "completed") Optional<String> completed,
     DataFetchingEnvironment environment) throws Exception {
 
@@ -151,8 +151,12 @@ public class JobListingService {
       entity.setBusiness(businessEntity);
       entity.setJobTitle(jobTitle);
       entity.setPositionType(positionType);
-      entity.setBeingEdited(beingEdited);
-      entity.setPublished(published);
+      if (beingEdited.isPresent()) {
+        entity.setBeingEdited(beingEdited.get());
+      }
+      if (published.isPresent()) {
+        entity.setPublished(published.get());
+      }
       if (completed.isPresent()) {
         entity.setCompleted(completed.get());
       }

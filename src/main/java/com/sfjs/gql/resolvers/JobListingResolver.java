@@ -90,8 +90,8 @@ public class JobListingResolver {
   public Long createJobListing(
       @Argument(name = "jobTitle")    String jobTitle, //?: string;
       @Argument(name = "positionType")    String positionType, //?: string;
-      @Argument(name = "beingEdited") boolean beingEdited,
-      @Argument(name = "published") boolean published,
+      @Argument(name = "beingEdited") Optional<Boolean> beingEdited,
+      @Argument(name = "published") Optional<Boolean> published,
       @Argument(name = "completed") Optional<String> completed,
       DataFetchingEnvironment environment) throws Exception {
     return jobListingService.createJobListing(jobTitle, positionType, beingEdited,
