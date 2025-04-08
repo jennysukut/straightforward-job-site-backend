@@ -214,7 +214,7 @@ type Mutation {
 
   applyToJob(
     jobId: ID!,
-    message: String!
+    message: String
   ): ID!
 
   keepNotes(
