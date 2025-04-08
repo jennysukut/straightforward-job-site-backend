@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.sfjs.data.core.InterviewProcess;
-import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.BusinessEntity;
 import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.data.entity.InterviewProcessEntity;
@@ -307,25 +306,44 @@ public class JobListingService {
       @Argument(name = "country") Optional<String> country,
       DataFetchingEnvironment environment) throws Exception {
 
-    return authorizationService.getAccount().map(accountEntity -> {
-      FellowEntity fellowEntity = accountEntity.getFellow();
-      AtomicReference<Specification<JobListingEntity>> specRef = getSearchSpec(accountEntity, businessId, isSaved, experienceLevel, locationOption, positionType, country);
+    AtomicReference<Specification<JobListingEntity>> specRef = getSearchSpec(businessId, isSaved, experienceLevel,
+        locationOption, positionType, country);
 
-      // Execute the query with the final specification
-      return jobListingRepository.findAll(specRef.get()).stream().map( jobListing -> {
-        jobListing.setSaved(jobListing.getFellows().stream().anyMatch(fellow -> {
-          return fellow.getId() == fellowEntity.getId();
-        }));
-        return jobListing;
-      }).collect(Collectors.toList());
-    }).orElseThrow(() -> {
-      return new IllegalArgumentException("Fellow is not logged in");
-    });
+    return authorizationService.getAccount()
+      .map(accountEntity -> accountEntity.getFellow())
+      .map(fellowEntity -> {
+        isSaved.ifPresent(value -> {
+          adjustSearchCriteria(specRef, fellowEntity, value);
+        });
+        // Execute the query with the final specification
+        List<JobListingEntity> result = jobListingRepository.findAll(specRef.get());
+        // And then map and return the results
+        return result.stream().map(jobListing -> {
+          jobListing.setSaved(jobListing.getFellows().stream().anyMatch(fellow -> {
+            return fellow.getId() == fellowEntity.getId();
+          }));
+          return jobListing;
+        }).collect(Collectors.toList());
+      }).orElseGet(() -> {
+        // Execute the query with the final specification
+        return jobListingRepository.findAll(specRef.get());
+      });
+    }
 
+  private void adjustSearchCriteria(
+    AtomicReference<Specification<JobListingEntity>> specRef,
+    FellowEntity fellowEntity,
+    Boolean isSavedValue) {
+    if (isSavedValue) {
+      specRef.set(specRef.get()
+          .and((root, query, criteriaBuilder) -> criteriaBuilder.isMember(fellowEntity, root.get("fellows"))));
+    } else {
+      specRef.set(specRef.get()
+          .and((root, query, criteriaBuilder) -> criteriaBuilder.isNotMember(fellowEntity, root.get("fellows"))));
+    }
   }
 
   private AtomicReference<Specification<JobListingEntity>> getSearchSpec(
-      AccountEntity accountEntity,
       @Argument(name = "businessId") Optional<Long> businessId,
       @Argument(name = "isSaved") Optional<Boolean> isSaved,
       @Argument(name = "experienceLevel") Optional<List<String>> experienceLevel,
@@ -333,7 +351,6 @@ public class JobListingService {
       @Argument(name = "positionType") Optional<List<String>> positionType,
       @Argument(name = "country") Optional<String> country
       ) {
-    FellowEntity fellowEntity = accountEntity.getFellow();
     // Use AtomicReference to hold the Specification
     AtomicReference<Specification<JobListingEntity>> specRef = new AtomicReference<>(Specification.where(null));
 
@@ -342,17 +359,6 @@ public class JobListingService {
     businessId.ifPresent(businessIdValue -> {
       specRef.set(specRef.get().and(
           (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("business").get("id"), businessIdValue)));
-    });
-
-    // Filter by isSaved (check if the job is saved by the current fellow)
-    isSaved.ifPresent(isSavedValue -> {
-      if (isSavedValue) {
-        specRef.set(specRef.get()
-            .and((root, query, criteriaBuilder) -> criteriaBuilder.isMember(fellowEntity, root.get("fellows"))));
-      } else {
-        specRef.set(specRef.get()
-            .and((root, query, criteriaBuilder) -> criteriaBuilder.isNotMember(fellowEntity, root.get("fellows"))));
-      }
     });
 
     // Filter by experienceLevel (CSV matching using LIKE)
@@ -393,21 +399,30 @@ public class JobListingService {
       @Argument(name = "pageSize") Integer pageSize,
       DataFetchingEnvironment environment) throws Exception {
 
-    return authorizationService.getAccount().map(accountEntity -> {
-      FellowEntity fellowEntity = accountEntity.getFellow();
-      AtomicReference<Specification<JobListingEntity>> specRef = getSearchSpec(accountEntity, businessId, isSaved, experienceLevel, locationOption, positionType, country);
+    AtomicReference<Specification<JobListingEntity>> specRef = getSearchSpec(businessId, isSaved, experienceLevel,
+        locationOption, positionType, country);
 
-      Pageable request = PageRequest.of(pageNumber, pageSize);
-      // Execute the query with the final specification
-      return jobListingRepository.findAll(specRef.get(), request).map( jobListing -> {
-        jobListing.setSaved(jobListing.getFellows().stream().anyMatch(fellow -> {
-          return fellow.getId() == fellowEntity.getId();
-        }));
-        return jobListing;
+    Pageable request = PageRequest.of(pageNumber, pageSize);
+
+    return authorizationService.getAccount()
+      .map(accountEntity -> accountEntity.getFellow())
+      .map(fellowEntity -> {
+        isSaved.ifPresent(value -> {
+          adjustSearchCriteria(specRef, fellowEntity, value);
+        });
+        // Execute the query with the final specification
+        Page<JobListingEntity> result = jobListingRepository.findAll(specRef.get(), request);
+        // And then map and return the results
+        return result.map(jobListing -> {
+          jobListing.setSaved(jobListing.getFellows().stream().anyMatch(fellow -> {
+            return fellow.getId() == fellowEntity.getId();
+          }));
+          return jobListing;
+        });
+      }).orElseGet(() -> {
+        // Execute the query with the final specification
+        return jobListingRepository.findAll(specRef.get(), request);
       });
-    }).orElseThrow(() -> {
-      return new IllegalArgumentException("Fellow is not logged in");
-    });
 
   }
 
