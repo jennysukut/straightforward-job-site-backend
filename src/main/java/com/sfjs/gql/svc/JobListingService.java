@@ -355,10 +355,10 @@ public class JobListingService {
     AtomicReference<Specification<JobListingEntity>> specRef = new AtomicReference<>(Specification.where(null));
 
     specRef.set(specRef.get()
-        .and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("deletedAt"), false)));
+        .and((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("deletedAt"))));
 
     specRef.set(specRef.get()
-        .and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("published"), false)));
+        .and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("published"), true)));
 
     // Add filters dynamically
     // Filter by businessId
