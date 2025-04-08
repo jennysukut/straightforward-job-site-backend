@@ -203,6 +203,16 @@ public class JobListingResolver {
     });
   }
 
+  @MutationMapping(name = "deleteJobListing")
+  @PreAuthorize("hasRole('ROLE_BUSINESS')")
+  public Boolean deleteJobListinging(
+    @Argument(name = "id") Long id,
+    DataFetchingEnvironment environment) throws Exception {
+    return jobListingRepository.findById(id).map(jobListingEntity -> {
+      jobListingRepository.deleteById(id);
+      return true;
+    }).orElse(false);
+  }
 
 ////      @Argument(name = "businessName")    String businessName, //?: string;
 //      @Argument(name = "applicationLimit")    String applicationLimit, //?: string;

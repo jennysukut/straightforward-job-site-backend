@@ -22,6 +22,7 @@ public interface BaseRepository<ENTITY extends BaseObject>
   @Query("UPDATE #{#entityName} e SET e.deletedAt = CURRENT_TIMESTAMP WHERE e.id = :id")
   void deleteById(@Param("id") Long id);
 
+  @Query("SELECT e FROM #{#entityName} e WHERE e.id = id AND e.deletedAt IS NULL")
   List<ENTITY> findAllById(Long id);
 
 //  boolean existsByReference(String reference);
