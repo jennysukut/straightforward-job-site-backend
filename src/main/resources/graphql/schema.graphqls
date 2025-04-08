@@ -418,6 +418,8 @@ type JobApplication {
   id: ID!
   message: String
   status: String
+  jobListing: JobListing
+  fellow: Fellow
 }
 
 input InterviewProcessInput {
