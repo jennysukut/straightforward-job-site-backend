@@ -354,6 +354,9 @@ public class JobListingService {
     // Use AtomicReference to hold the Specification
     AtomicReference<Specification<JobListingEntity>> specRef = new AtomicReference<>(Specification.where(null));
 
+    specRef.set(specRef.get()
+        .and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("isDeleted"), false)));
+
     // Add filters dynamically
     // Filter by businessId
     businessId.ifPresent(businessIdValue -> {
