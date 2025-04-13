@@ -11,7 +11,7 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sfjs.data.core.InterviewAppointment;
+import com.sfjs.data.core.JobInterviewProcessStepAppointment;
 import com.sfjs.data.entity.BusinessEntity;
 import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.data.entity.InterviewAppointmentEntity;
@@ -102,7 +102,7 @@ public class JobApplicationService {
   }
 
   public List<Long> scheduleAppointments(@Argument(name = "jobApplicationId") Long jobApplicationId,
-      @Argument(name = "appointments") List<InterviewAppointment> appointments, DataFetchingEnvironment environment)
+      @Argument(name = "appointments") List<JobInterviewProcessStepAppointment> appointments, DataFetchingEnvironment environment)
       throws Exception {
     Optional<JobApplicationEntity> optionalEntity = jobApplicationRepository.findById(jobApplicationId);
     if (optionalEntity.isEmpty()) {
@@ -114,6 +114,11 @@ public class JobApplicationService {
     return appointments.stream().map(appointment -> {
       InterviewAppointmentEntity entity = new InterviewAppointmentEntity();
       entity.setApplication(jobApplicationEntity);
+      entity.setInterviewProcess(
+          jobApplicationEntity.getJobListing().getInterviewProcess().stream()
+          .filter(foo -> foo.getId() == appointment.getInterviewStepId())
+          .findFirst().get()
+          );
       entity.setInterviewDateAndTime(appointment.getInterviewDateAndTime());
       entity.setNote(appointment.getNote());
       entity = appointmentRepository.save(entity);

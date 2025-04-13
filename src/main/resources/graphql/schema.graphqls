@@ -426,6 +426,7 @@ type JobApplication {
   status: String
   jobListing: JobListing
   fellow: Fellow
+  appointments: [JobInterviewAppointment!]!
 }
 
 input InterviewProcessInput {
@@ -444,8 +445,14 @@ type InterviewProcess {
 
 input JobInterviewAppointmentInput {
   interviewDateAndTime: DateTime!
-  # interviewDateAndTime: DateTime! @Pattern(regexp: "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$")
   note: String
+  interviewStepId: ID!
+}
+
+type JobInterviewAppointment {
+  interviewDateAndTime: DateTime!
+  note: String
+  interviewProcess: InterviewProcess
 }
 
 type Profile {

@@ -10,7 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sfjs.data.core.InterviewAppointment;
+import com.sfjs.data.core.JobInterviewProcessStepAppointment;
 import com.sfjs.gql.svc.JobApplicationService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -46,7 +46,7 @@ public class JobApplicationResolver {
   @PreAuthorize("hasRole('ROLE_BUSINESS')")
   public List<Long> scheduleAppointments(
     @Argument(name = "jobApplicationId") Long jobApplicationId,
-    @Argument(name = "appointments")    List<InterviewAppointment> appointments,
+    @Argument(name = "appointments")    List<JobInterviewProcessStepAppointment> appointments,
     DataFetchingEnvironment environment) throws Exception {
     return jobApplicationService.scheduleAppointments(jobApplicationId, appointments, environment);
   }
