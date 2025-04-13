@@ -304,10 +304,11 @@ public class JobListingService {
       @Argument(name = "locationOption") Optional<List<String>> locationOption,
       @Argument(name = "positionType") Optional<List<String>> positionType,
       @Argument(name = "country") Optional<String> country,
+      @Argument(name = "isPublished") Optional<Boolean> isPublished,
       DataFetchingEnvironment environment) throws Exception {
 
     AtomicReference<Specification<JobListingEntity>> specRef = getSearchSpec(businessId, isSaved, experienceLevel,
-        locationOption, positionType, country);
+        locationOption, positionType, country, isPublished);
 
     return authorizationService.getAccount()
       .map(accountEntity -> accountEntity.getFellow())
@@ -349,7 +350,8 @@ public class JobListingService {
       @Argument(name = "experienceLevel") Optional<List<String>> experienceLevel,
       @Argument(name = "locationOption") Optional<List<String>> locationOption,
       @Argument(name = "positionType") Optional<List<String>> positionType,
-      @Argument(name = "country") Optional<String> country
+      @Argument(name = "country") Optional<String> country,
+      @Argument(name = "isPublished") Optional<Boolean> isPublished
       ) {
     // Use AtomicReference to hold the Specification
     AtomicReference<Specification<JobListingEntity>> specRef = new AtomicReference<>(Specification.where(null));
@@ -357,8 +359,10 @@ public class JobListingService {
     specRef.set(specRef.get()
         .and((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get("deletedAt"))));
 
-    specRef.set(specRef.get()
-        .and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("published"), true)));
+    if (isPublished.isPresent()) {
+      specRef.set(specRef.get()
+          .and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("published"), isPublished.get())));
+    }
 
     // Add filters dynamically
     // Filter by businessId
@@ -403,10 +407,11 @@ public class JobListingService {
       @Argument(name = "country") Optional<String> country,
       @Argument(name = "pageNumber") Integer pageNumber,
       @Argument(name = "pageSize") Integer pageSize,
+      @Argument(name = "isPublished") Optional<Boolean> isPublished,
       DataFetchingEnvironment environment) throws Exception {
 
     AtomicReference<Specification<JobListingEntity>> specRef = getSearchSpec(businessId, isSaved, experienceLevel,
-        locationOption, positionType, country);
+        locationOption, positionType, country, isPublished);
 
     Pageable request = PageRequest.of(pageNumber, pageSize);
 

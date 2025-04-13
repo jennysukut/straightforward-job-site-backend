@@ -40,6 +40,7 @@ public class JobListingResolver {
       @Argument(name = "locationOption") Optional<List<String>> locationOption,
       @Argument(name = "positionType") Optional<List<String>> positionType,
       @Argument(name = "country") Optional<String> country,
+      @Argument(name = "isPublished") Optional<Boolean> isPublished,
       DataFetchingEnvironment environment) throws Exception {
 
     logger.info("jobListings");
@@ -49,8 +50,9 @@ public class JobListingResolver {
     logger.info("locationOption: " + locationOption);
     logger.info("positionType: " + positionType);
     logger.info("country: " + country);
+    logger.info("isPublished: " + isPublished);
 
-    return jobListingService.jobListing(businessId, isSaved, experienceLevel, locationOption, positionType, country, environment);
+    return jobListingService.jobListing(businessId, isSaved, experienceLevel, locationOption, positionType, country, isPublished, environment);
   }
 
   @QueryMapping(name = "jobListing")
@@ -70,6 +72,7 @@ public class JobListingResolver {
       @Argument(name = "country") Optional<String> country,
       @Argument(name = "pageNumber") Integer pageNumber,
       @Argument(name = "pageSize") Integer pageSize,
+      @Argument(name = "isPublished") Optional<Boolean> isPublished,
       DataFetchingEnvironment environment) throws Exception {
 
     logger.info("jobListings");
@@ -81,7 +84,7 @@ public class JobListingResolver {
     logger.info("country: " + country);
 
     return jobListingService.jobListingPage(businessId, isSaved, experienceLevel, locationOption, positionType, country,
-        pageNumber, pageSize, environment);
+        pageNumber, pageSize, isPublished, environment);
   }
 
   @MutationMapping(name = "createJobListing")

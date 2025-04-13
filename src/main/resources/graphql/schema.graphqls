@@ -10,6 +10,7 @@ type Query {
     locationOption: [String!]
     positionType: [String!]
     country: String
+    isPublished: Boolean
   ): [JobListing!]!
 
   jobListingsPage(
@@ -21,6 +22,7 @@ type Query {
     country: String
     pageNumber: Int!
     pageSize: Int!
+    isPublished: Boolean
   ): [JobListing!]!
 
   fellowProfile(id: ID!): Profile @deprecated(reason: "Use fellow instead.")
