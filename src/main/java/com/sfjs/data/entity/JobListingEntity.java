@@ -51,7 +51,7 @@ public class JobListingEntity extends JobListing {
   @Setter
   @JsonIgnore
   @OneToMany(mappedBy = "jobListing")
-  private List<JobApplicationEntity> jobApplications = new ArrayList<>();
+  private List<JobApplicationEntity> applications = new ArrayList<>();
 
   @Getter
   @Setter
