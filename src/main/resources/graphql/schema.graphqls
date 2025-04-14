@@ -30,6 +30,8 @@ type Query {
   jobListing(id: ID!): JobListing
   business(id: ID!): Business
   fellow(id: ID!): Fellow
+
+  getApplication(id: ID!): JobApplication
 }
 
 type Mutation {

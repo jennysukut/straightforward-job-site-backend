@@ -166,4 +166,11 @@ public class JobApplicationService {
           return new IllegalArgumentException("Fellow is not logged in");
         });
   }
+
+  public Optional<JobApplicationEntity> getApplication(
+    @Argument(name = "id") Long id,
+    DataFetchingEnvironment environment) throws Exception {
+    logger.info("Enter getApplication");
+    return jobApplicationRepository.findById(id);
+  }
 }

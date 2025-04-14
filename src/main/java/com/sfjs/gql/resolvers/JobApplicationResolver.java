@@ -1,16 +1,19 @@
 package com.sfjs.gql.resolvers;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sfjs.data.core.JobInterviewProcessStepAppointment;
+import com.sfjs.data.entity.JobApplicationEntity;
 import com.sfjs.gql.svc.JobApplicationService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -60,4 +63,11 @@ public class JobApplicationResolver {
     return jobApplicationService.saveJobListing(jobId, environment);
   }
 
+  @QueryMapping(name = "getApplication")
+  public Optional<JobApplicationEntity> getApplication(
+    @Argument(name = "id") Long id,
+    DataFetchingEnvironment environment) throws Exception {
+    logger.info("Enter getApplication");
+    return jobApplicationService.getApplication(id, environment);
+  }
 }
