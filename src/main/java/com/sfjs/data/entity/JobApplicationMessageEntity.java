@@ -18,14 +18,14 @@ import lombok.Setter;
  * @author carl
  *
  */
-@Entity(name = "job_application_message")
+@Entity(name = "message")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class JobApplicationMessageEntity extends JobApplicationMessage {
 
   @Getter
   @Setter
-  @ManyToOne(optional = true)
+  @ManyToOne(optional = false)
   @JsonIgnore
-  @JoinColumn(name = "application_id", unique = false)
-  private JobApplicationEntity application;
+  @JoinColumn(name = "conversation_id", unique = false)
+  private ConversationEntity conversation;
 }

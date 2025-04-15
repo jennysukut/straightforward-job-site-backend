@@ -13,12 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sfjs.data.core.JobInterviewProcessStepAppointment;
 import com.sfjs.data.entity.BusinessEntity;
+import com.sfjs.data.entity.ConversationEntity;
 import com.sfjs.data.entity.FellowEntity;
 import com.sfjs.data.entity.InterviewAppointmentEntity;
 import com.sfjs.data.entity.JobApplicationEntity;
 import com.sfjs.data.entity.JobApplicationNoteEntity;
 import com.sfjs.data.entity.JobListingEntity;
 import com.sfjs.jpa.repo.AppointmentRepository;
+import com.sfjs.jpa.repo.ConversationRepository;
 import com.sfjs.jpa.repo.FellowRepository;
 import com.sfjs.jpa.repo.JobApplicationNoteRepository;
 import com.sfjs.jpa.repo.JobApplicationRepository;
@@ -51,6 +53,9 @@ public class JobApplicationService {
   @Autowired
   private FellowRepository fellowRepository;
 
+  @Autowired
+  private ConversationRepository conversationRepository;
+
   public Long applyToJob(
       @Argument(name = "jobId") Long jobId,
       @Argument(name = "message") String message, // ?: string;
@@ -65,6 +70,9 @@ public class JobApplicationService {
           entity.setMessage(message);
           entity.setStatus("submitted");
           entity.setJobListing(jobListing);
+          ConversationEntity conversation = new ConversationEntity();
+          conversation = conversationRepository.save(conversation);
+          entity.setConversation(conversation);
           return jobApplicationRepository.save(entity).getId();
         }).orElseThrow(() -> {
           return new IllegalArgumentException("Fellow is not logged in");

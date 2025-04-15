@@ -32,6 +32,8 @@ type Query {
   fellow(id: ID!): Fellow
 
   getApplication(id: ID!): JobApplication
+
+  getConversation(id: ID!): Conversation
 }
 
 type Mutation {
@@ -252,6 +254,11 @@ type Mutation {
   deleteJobListing(
     id: ID!
   ): Boolean
+
+  sendMessage(
+    conversationId: ID!
+    text: String
+  ): Message
 }
 
 scalar Long
@@ -429,6 +436,7 @@ type JobApplication {
   jobListing: JobListing
   fellow: Fellow
   appointments: [JobInterviewAppointment!]!
+  conversation: Conversation!
 }
 
 input InterviewProcessInput {
@@ -497,4 +505,17 @@ type BusinessProfile {
   businessField: String
   missionVision: String
   moreAboutBusiness: String
+}
+
+type Conversation {
+  id: ID!
+  messages: [Message!]!
+}
+
+type Message {
+  id: ID!
+  deliveredAt: DateTime
+  seenAt: DateTime
+  text: String
+  fromBusiness: Boolean
 }

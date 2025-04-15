@@ -43,7 +43,7 @@ public class JobApplicationEntity extends JobApplication {
 
   @Getter
   @Setter
-  @OneToOne(optional = true)
+  @OneToOne(optional = false)
   @JsonIgnore
   @JoinColumn(name = "job_listing_id", unique = false)
   private JobListingEntity jobListing;
@@ -53,4 +53,10 @@ public class JobApplicationEntity extends JobApplication {
   @JsonIgnore
   @OneToMany(mappedBy = "application")
   private List<InterviewAppointmentEntity> appointments = new ArrayList<>();
+
+  @Getter
+  @Setter
+  @JsonIgnore
+  @OneToOne(optional = false)
+  private ConversationEntity conversation;
 }

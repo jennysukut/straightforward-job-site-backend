@@ -26,4 +26,6 @@ public class JobApplicationMessage extends BaseObject {
   private LocalDateTime seenAt;
 
   @Getter @Setter private boolean fromBusiness;
+
+  @Getter @Setter private String text;
 }
