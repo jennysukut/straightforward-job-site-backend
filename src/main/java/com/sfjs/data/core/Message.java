@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @MappedSuperclass
-public class JobApplicationMessage extends BaseObject {
+public class Message extends BaseObject {
 
   @Getter
   @Setter

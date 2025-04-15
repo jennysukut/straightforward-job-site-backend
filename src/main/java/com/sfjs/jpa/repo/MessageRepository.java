@@ -3,9 +3,9 @@ package com.sfjs.jpa.repo;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sfjs.data.entity.JobApplicationMessageEntity;
+import com.sfjs.data.entity.MessageEntity;
 
 @Repository
 @Transactional
-public interface JobApplicationMessageRepository extends BaseRepository<JobApplicationMessageEntity> {
+public interface MessageRepository extends BaseRepository<MessageEntity> {
 }

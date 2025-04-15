@@ -23,5 +23,5 @@ public class ConversationEntity extends BaseObject {
   @Setter
   @JsonIgnore
   @OneToMany(mappedBy = "conversation")
-  private List<JobApplicationMessageEntity> messages = new ArrayList<>();
+  private List<MessageEntity> messages = new ArrayList<>();
 }

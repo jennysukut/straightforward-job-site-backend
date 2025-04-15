@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sfjs.data.entity.AccountEntity;
 import com.sfjs.data.entity.BusinessEntity;
-import com.sfjs.data.entity.JobApplicationMessageEntity;
+import com.sfjs.data.entity.MessageEntity;
 import com.sfjs.jpa.repo.ConversationRepository;
-import com.sfjs.jpa.repo.JobApplicationMessageRepository;
+import com.sfjs.jpa.repo.MessageRepository;
 import com.sfjs.security.AuthorizationService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -27,18 +27,18 @@ public class ConversationService {
   private AuthorizationService authorizationService;
 
   @Autowired
-  private JobApplicationMessageRepository messageRepository;
+  private MessageRepository messageRepository;
 
   @Autowired
   private ConversationRepository conversationRepository;
 
-  public Optional<JobApplicationMessageEntity> sendMessage(
+  public Optional<MessageEntity> sendMessage(
       @Argument(name = "conversationId") Long conversationId,
       @Argument(name = "text") String text,
       DataFetchingEnvironment environment) throws Exception {
       logger.info("Enter sendMessage");
 
-      JobApplicationMessageEntity message = new JobApplicationMessageEntity();
+      MessageEntity message = new MessageEntity();
       message.setText(text);
       Optional<AccountEntity> account = authorizationService.getAccount();
       if (account.isPresent()) {

@@ -1,7 +1,7 @@
 package com.sfjs.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sfjs.data.core.JobApplicationMessage;
+import com.sfjs.data.core.Message;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
@@ -20,7 +20,7 @@ import lombok.Setter;
  */
 @Entity(name = "message")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class JobApplicationMessageEntity extends JobApplicationMessage {
+public class MessageEntity extends Message {
 
   @Getter
   @Setter

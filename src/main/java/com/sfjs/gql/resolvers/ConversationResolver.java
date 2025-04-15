@@ -1,6 +1,5 @@
 package com.sfjs.gql.resolvers;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sfjs.data.entity.ConversationEntity;
-import com.sfjs.data.entity.JobApplicationMessageEntity;
+import com.sfjs.data.entity.MessageEntity;
 import com.sfjs.gql.svc.ConversationService;
 import com.sfjs.jpa.repo.ConversationRepository;
 
@@ -40,8 +39,8 @@ public class ConversationResolver {
   }
 
   @MutationMapping(name = "sendMessage")
-//  @PreAuthorize("hasRole('ROLE_FELLOW')")
-  public Optional<JobApplicationMessageEntity> sendMessage(
+  @PreAuthorize("hasAnyRole('ROLE_FELLOW', 'ROLE_BUSINESS')")
+  public Optional<MessageEntity> sendMessage(
     @Argument(name = "conversationId") Long conversationId,
     @Argument(name = "text") String text,
     DataFetchingEnvironment environment) throws Exception {
