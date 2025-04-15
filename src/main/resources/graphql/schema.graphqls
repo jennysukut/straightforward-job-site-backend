@@ -259,6 +259,25 @@ type Mutation {
     conversationId: ID!
     text: String
   ): Message
+
+  rejectApp(
+    appId: ID!
+    rejectionMessage: String
+    rejectionDetails: String
+  ): JobApplication
+
+  highlightApp(
+    appId: ID!
+  ): JobApplication
+
+  updateStatus(
+    appId: ID!
+    status: String
+  ): JobApplication
+
+  sendJobOffer(
+    appId: ID!
+  ): JobApplication
 }
 
 scalar Long
@@ -434,9 +453,15 @@ type JobApplication {
   message: String
   status: String
   jobListing: JobListing
+  notes: [String!]!
   fellow: Fellow
   appointments: [JobInterviewAppointment!]!
   conversation: Conversation!
+  appIsBeingRejected: Boolean
+  rejectionMessage: String
+  rejectionDetails: String
+  highlighted: Boolean
+  jobOfferBeingSent: Boolean
 }
 
 input InterviewProcessInput {

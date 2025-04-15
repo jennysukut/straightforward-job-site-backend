@@ -11,6 +11,7 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sfjs.data.core.JobApplicationStatus;
 import com.sfjs.data.core.JobInterviewProcessStepAppointment;
 import com.sfjs.data.entity.BusinessEntity;
 import com.sfjs.data.entity.ConversationEntity;
@@ -180,5 +181,53 @@ public class JobApplicationService {
     DataFetchingEnvironment environment) throws Exception {
     logger.info("Enter getApplication");
     return jobApplicationRepository.findById(id);
+  }
+
+  public Optional<JobApplicationEntity> rejectApp(
+      @Argument(name = "appId") Long appId,
+      @Argument(name = "rejectionMessage") String rejectionMessage,
+      @Argument(name = "rejectionDetails") String rejectionDetails,
+      DataFetchingEnvironment environment) throws Exception {
+    logger.info("Enter rejectApp");
+    return jobApplicationRepository.findById(appId).map(entity -> {
+      entity.setAppIsBeingRejected(true);
+      entity.setRejectionMessage(rejectionMessage);
+      entity.setRejectionDetails(rejectionDetails);
+      entity.setStatus(JobApplicationStatus.REJECTED.getValue());
+      return jobApplicationRepository.save(entity);
+    });
+  }
+
+  public Optional<JobApplicationEntity> highlightApp(
+      @Argument(name = "appId") Long appId,
+      DataFetchingEnvironment environment) throws Exception {
+    logger.info("Enter highlightApp");
+    return jobApplicationRepository.findById(appId).map(entity -> {
+      entity.setHighlighted(true);
+      entity.setStatus(JobApplicationStatus.HIGHLIGHTED.getValue());
+      return jobApplicationRepository.save(entity);
+    });
+  }
+
+  public Optional<JobApplicationEntity> updateStatus(
+      @Argument(name = "appId") Long appId,
+      @Argument(name = "status") String status,
+      DataFetchingEnvironment environment) throws Exception {
+    logger.info("Enter updateStatus");
+    return jobApplicationRepository.findById(appId).map(entity -> {
+      entity.setStatus(status);
+      return jobApplicationRepository.save(entity);
+    });
+  }
+
+  public Optional<JobApplicationEntity> sendJobOffer(
+      @Argument(name = "appId") Long appId,
+      DataFetchingEnvironment environment) throws Exception {
+    logger.info("Enter sendJobOffer");
+    return jobApplicationRepository.findById(appId).map(entity -> {
+      entity.setJobOfferBeingSent(true);
+      entity.setStatus(JobApplicationStatus.OFFERED.getValue());
+      return jobApplicationRepository.save(entity);
+    });
   }
 }

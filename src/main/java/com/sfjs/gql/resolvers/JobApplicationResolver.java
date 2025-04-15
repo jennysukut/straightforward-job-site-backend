@@ -70,4 +70,39 @@ public class JobApplicationResolver {
     logger.info("Enter getApplication");
     return jobApplicationService.getApplication(id, environment);
   }
+
+  @MutationMapping(name = "rejectApp")
+  public Optional<JobApplicationEntity> rejectApp(
+      @Argument(name = "appId") Long appId,
+      @Argument(name = "rejectionMessage") String rejectionMessage,
+      @Argument(name = "rejectionDetails") String rejectionDetails,
+      DataFetchingEnvironment environment) throws Exception {
+    logger.info("Enter rejectApp");
+    return jobApplicationService.rejectApp(appId, rejectionMessage, rejectionDetails, environment);
+  }
+
+  @MutationMapping(name = "highlightApp")
+  public Optional<JobApplicationEntity> highlightApp(
+      @Argument(name = "appId") Long appId,
+      DataFetchingEnvironment environment) throws Exception {
+    logger.info("Enter highlightApp");
+    return jobApplicationService.highlightApp(appId, environment);
+  }
+
+  @MutationMapping(name = "updateStatus")
+  public Optional<JobApplicationEntity> updateStatus(
+      @Argument(name = "appId") Long appId,
+      @Argument(name = "status") String status,
+      DataFetchingEnvironment environment) throws Exception {
+    logger.info("Enter updateStatus");
+    return jobApplicationService.updateStatus(appId, status, environment);
+  }
+
+  @MutationMapping(name = "sendJobOffer")
+  public Optional<JobApplicationEntity> sendJobOffer(
+      @Argument(name = "appId") Long appId,
+      DataFetchingEnvironment environment) throws Exception {
+    logger.info("Enter sendJobOffer");
+    return jobApplicationService.sendJobOffer(appId, environment);
+  }
 }
