@@ -1,3 +1,7 @@
+type Subscription {
+  messages(conversationId: ID!): Message
+}
+
 type Query {
   helloWorld: String
 
@@ -538,7 +542,7 @@ type Conversation {
 }
 
 type Message {
-  id: ID!
+  id: ID
   deliveredAt: DateTime
   seenAt: DateTime
   text: String

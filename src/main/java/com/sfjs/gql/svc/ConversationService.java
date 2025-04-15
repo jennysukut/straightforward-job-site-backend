@@ -16,6 +16,8 @@ import com.sfjs.jpa.repo.MessageRepository;
 import com.sfjs.security.AuthorizationService;
 
 import graphql.schema.DataFetchingEnvironment;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Sinks;
 
 @Service
 @Transactional
@@ -32,6 +34,8 @@ public class ConversationService {
   @Autowired
   private ConversationRepository conversationRepository;
 
+  private final Sinks.Many<MessageEntity> messageSink = Sinks.many().multicast().onBackpressureBuffer();
+
   public Optional<MessageEntity> sendMessage(
       @Argument(name = "conversationId") Long conversationId,
       @Argument(name = "text") String text,
@@ -47,8 +51,16 @@ public class ConversationService {
       }
       return conversationRepository.findById(conversationId).map(convo -> {
         message.setConversation(convo);
-        return messageRepository.save(message);
+        MessageEntity savedMessage = messageRepository.save(message);
+        this.messageSink.tryEmitNext(savedMessage);
+        return savedMessage;
       });
     }
+
+  public Flux<MessageEntity> messages(
+      @Argument(name = "conversationId") Long conversationId,
+      DataFetchingEnvironment environment) throws Exception {
+    return messageSink.asFlux().filter(message -> message.getConversation().getId().equals(conversationId));
+  }
 
 }

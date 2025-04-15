@@ -7,16 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SubscriptionMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.sfjs.data.entity.ConversationEntity;
 import com.sfjs.data.entity.MessageEntity;
 import com.sfjs.gql.svc.ConversationService;
 import com.sfjs.jpa.repo.ConversationRepository;
 
 import graphql.schema.DataFetchingEnvironment;
+import reactor.core.publisher.Flux;
 
 @Controller
 @Transactional
@@ -47,4 +48,13 @@ public class ConversationResolver {
     logger.info("Enter sendMessage");
     return conversationService.sendMessage(conversationId, text, environment);
   }
+
+  @SubscriptionMapping
+  public Flux<MessageEntity> messages(
+      @Argument(name = "conversationId") Long conversationId,
+      DataFetchingEnvironment environment) throws Exception {
+    logger.info("Enter messages: " + conversationId);
+    return conversationService.messages(conversationId, environment);
+  }
+
 }
