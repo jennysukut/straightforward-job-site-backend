@@ -1,5 +1,6 @@
 package com.sfjs.gql.resolvers;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -43,7 +44,7 @@ public class ConversationResolver {
   @PreAuthorize("hasAnyRole('ROLE_FELLOW', 'ROLE_BUSINESS')")
   public Optional<MessageEntity> sendMessage(
     @Argument(name = "conversationId") Long conversationId,
-    @Argument(name = "text") String text,
+    @Argument(name = "text") List<String> text,
     DataFetchingEnvironment environment) throws Exception {
     logger.info("Enter sendMessage");
     return conversationService.sendMessage(conversationId, text, environment);

@@ -1,6 +1,7 @@
 package com.sfjs.data.core;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sfjs.data.BaseObject;
@@ -27,5 +28,5 @@ public class Message extends BaseObject {
 
   @Getter @Setter private boolean fromBusiness;
 
-  @Getter @Setter private String text;
+  @Getter @Setter private List<String> text;
 }

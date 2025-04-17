@@ -1,5 +1,6 @@
 package com.sfjs.gql.svc;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -38,7 +39,7 @@ public class ConversationService {
 
   public Optional<MessageEntity> sendMessage(
       @Argument(name = "conversationId") Long conversationId,
-      @Argument(name = "text") String text,
+      @Argument(name = "text") List<String> text,
       DataFetchingEnvironment environment) throws Exception {
       logger.info("Enter sendMessage");
 
