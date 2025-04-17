@@ -1,5 +1,7 @@
 package com.sfjs.data.entity;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +18,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PostLoad;
 import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +26,16 @@ import lombok.Setter;
 @Entity(name = "fellow")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class FellowEntity extends Fellow {
+
+  @PostLoad
+  private void postLoad() {
+    LocalDateTime startOfToday = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
+    getJobApplications().forEach(app -> {
+      if (app.getCreatedAt().isAfter(startOfToday)) {
+        this.dailyApplications.add(app);
+      }
+    });
+  }
 
   @Getter
   @Setter
