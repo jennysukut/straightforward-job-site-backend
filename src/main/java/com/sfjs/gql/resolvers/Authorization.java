@@ -1,5 +1,7 @@
 package com.sfjs.gql.resolvers;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,15 @@ public class Authorization {
   @QueryMapping(name = "getMyProfile")
   public Optional<AccountEntity> getMyProfile(
       DataFetchingEnvironment environment) throws Exception {
-  return authorizationService.getAccount();
+    return authorizationService.getAccount().map(account -> {
+      if (account.getFellow() != null) {
+        LocalDateTime startOfToday = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
+        account.getFellow().setDailyApplications(account.getFellow().getJobApplications().stream().filter(app -> {
+          return app.getCreatedAt().isAfter(startOfToday);
+        }).toList());
+      }
+      return account;
+    });
   }
 
   @MutationMapping(name = "resetPassword")
