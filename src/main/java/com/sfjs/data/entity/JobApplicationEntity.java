@@ -43,7 +43,7 @@ public class JobApplicationEntity extends JobApplication {
 
   @Getter
   @Setter
-  @OneToOne(optional = false)
+  @ManyToOne(optional = false)
   @JsonIgnore
   @JoinColumn(name = "job_listing_id", unique = false)
   private JobListingEntity jobListing;
