@@ -261,7 +261,7 @@ type Mutation {
 
   sendMessage(
     conversationId: ID!
-    text: String
+    text: String!
   ): Message
 
   rejectApp(
