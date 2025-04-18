@@ -41,6 +41,8 @@ public class JobListingResolver {
       @Argument(name = "positionType") Optional<List<String>> positionType,
       @Argument(name = "country") Optional<String> country,
       @Argument(name = "isPublished") Optional<Boolean> isPublished,
+      @Argument(name = "searchbar") Optional<String> searchbar,
+      @Argument(name = "location") Optional<String> location,
       DataFetchingEnvironment environment) throws Exception {
 
     logger.info("jobListings");
@@ -51,8 +53,10 @@ public class JobListingResolver {
     logger.info("positionType: " + positionType);
     logger.info("country: " + country);
     logger.info("isPublished: " + isPublished);
+    logger.info("searchbar: " + searchbar);
+    logger.info("location: " + location);
 
-    return jobListingService.jobListing(businessId, isSaved, experienceLevel, locationOption, positionType, country, isPublished, environment);
+    return jobListingService.jobListings(businessId, isSaved, experienceLevel, locationOption, positionType, country, isPublished, searchbar, location, environment);
   }
 
   @QueryMapping(name = "jobListing")
@@ -73,18 +77,23 @@ public class JobListingResolver {
       @Argument(name = "pageNumber") Integer pageNumber,
       @Argument(name = "pageSize") Integer pageSize,
       @Argument(name = "isPublished") Optional<Boolean> isPublished,
+      @Argument(name = "searchbar") Optional<String> searchbar,
+      @Argument(name = "location") Optional<String> location,
       DataFetchingEnvironment environment) throws Exception {
 
-    logger.info("jobListings");
+    logger.info("jobListingsPage");
     logger.info("businessId: " + businessId);
     logger.info("isSaved: " + isSaved);
     logger.info("experienceLevel: " + businessId);
     logger.info("locationOption: " + locationOption);
     logger.info("positionType: " + positionType);
     logger.info("country: " + country);
+    logger.info("isPublished: " + isPublished);
+    logger.info("searchbar: " + searchbar);
+    logger.info("location: " + location);
 
-    return jobListingService.jobListingPage(businessId, isSaved, experienceLevel, locationOption, positionType, country,
-        pageNumber, pageSize, isPublished, environment);
+    return jobListingService.jobListingsPage(businessId, isSaved, experienceLevel, locationOption, positionType, country,
+        pageNumber, pageSize, isPublished, searchbar, location, environment);
   }
 
   @MutationMapping(name = "createJobListing")

@@ -297,7 +297,7 @@ public class JobListingService {
     return jobListingEntity.getId();
   }
 
-  public List<JobListingEntity> jobListing(
+  public List<JobListingEntity> jobListings(
       @Argument(name = "businessId") Optional<Long> businessId,
       @Argument(name = "isSaved") Optional<Boolean> isSaved,
       @Argument(name = "experienceLevel") Optional<List<String>> experienceLevel,
@@ -305,10 +305,23 @@ public class JobListingService {
       @Argument(name = "positionType") Optional<List<String>> positionType,
       @Argument(name = "country") Optional<String> country,
       @Argument(name = "isPublished") Optional<Boolean> isPublished,
+      @Argument(name = "searchbar") Optional<String> searchbar,
+      @Argument(name = "location") Optional<String> location,
       DataFetchingEnvironment environment) throws Exception {
 
+    logger.info("jobListings");
+    logger.info("businessId: " + businessId);
+    logger.info("isSaved: " + isSaved);
+    logger.info("experienceLevel: " + businessId);
+    logger.info("locationOption: " + locationOption);
+    logger.info("positionType: " + positionType);
+    logger.info("country: " + country);
+    logger.info("isPublished: " + isPublished);
+    logger.info("searchbar: " + searchbar);
+    logger.info("location: " + location);
+
     AtomicReference<Specification<JobListingEntity>> specRef = getSearchSpec(businessId, isSaved, experienceLevel,
-        locationOption, positionType, country, isPublished);
+        locationOption, positionType, country, isPublished, searchbar, location, environment);
 
     return authorizationService.getAccount()
       .map(accountEntity -> accountEntity.getFellow())
@@ -351,8 +364,11 @@ public class JobListingService {
       @Argument(name = "locationOption") Optional<List<String>> locationOption,
       @Argument(name = "positionType") Optional<List<String>> positionType,
       @Argument(name = "country") Optional<String> country,
-      @Argument(name = "isPublished") Optional<Boolean> isPublished
-      ) {
+      @Argument(name = "isPublished") Optional<Boolean> isPublished,
+      @Argument(name = "searchbar") Optional<String> searchbar,
+      @Argument(name = "location") Optional<String> location,
+      DataFetchingEnvironment environment) throws Exception {
+
     // Use AtomicReference to hold the Specification
     AtomicReference<Specification<JobListingEntity>> specRef = new AtomicReference<>(Specification.where(null));
 
@@ -395,10 +411,32 @@ public class JobListingService {
           .and((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("business").get("businessProfile").get("country"), countryValue)));
     });
 
+    // Filter by searchbar
+    searchbar.ifPresent(searchbarValue -> {
+        specRef.set(specRef.get().and((root, query, criteriaBuilder) ->
+            criteriaBuilder.or(
+                criteriaBuilder.like(root.get("jobTitle").as(String.class), "%" + searchbarValue + "%"),
+                criteriaBuilder.like(root.get("nonNegParams").as(String.class), "%" + searchbarValue + "%"),
+                criteriaBuilder.like(root.get("preferredSkills").as(String.class), "%" + searchbarValue + "%")
+            )
+        ));
+    });
+
+    // Filter by location
+    location.ifPresent(locationValue -> {
+        specRef.set(specRef.get().and((root, query, criteriaBuilder) ->
+            criteriaBuilder.or(
+                criteriaBuilder.like(root.get("city").as(String.class), "%" + locationValue + "%"),
+                criteriaBuilder.like(root.get("state").as(String.class), "%" + locationValue + "%"),
+                criteriaBuilder.like(root.get("business").get("businessProfile").get("location").as(String.class), "%" + locationValue + "%")
+            )
+        ));
+    });
+
     return specRef;
   }
 
-  public Page<JobListingEntity> jobListingPage(
+  public Page<JobListingEntity> jobListingsPage(
       @Argument(name = "businessId") Optional<Long> businessId,
       @Argument(name = "isSaved") Optional<Boolean> isSaved,
       @Argument(name = "experienceLevel") Optional<List<String>> experienceLevel,
@@ -408,10 +446,23 @@ public class JobListingService {
       @Argument(name = "pageNumber") Integer pageNumber,
       @Argument(name = "pageSize") Integer pageSize,
       @Argument(name = "isPublished") Optional<Boolean> isPublished,
+      @Argument(name = "searchbar") Optional<String> searchbar,
+      @Argument(name = "location") Optional<String> location,
       DataFetchingEnvironment environment) throws Exception {
 
+    logger.info("jobListingsPage");
+    logger.info("businessId: " + businessId);
+    logger.info("isSaved: " + isSaved);
+    logger.info("experienceLevel: " + businessId);
+    logger.info("locationOption: " + locationOption);
+    logger.info("positionType: " + positionType);
+    logger.info("country: " + country);
+    logger.info("isPublished: " + isPublished);
+    logger.info("searchbar: " + searchbar);
+    logger.info("location: " + location);
+
     AtomicReference<Specification<JobListingEntity>> specRef = getSearchSpec(businessId, isSaved, experienceLevel,
-        locationOption, positionType, country, isPublished);
+        locationOption, positionType, country, isPublished, searchbar, location, environment);
 
     Pageable request = PageRequest.of(pageNumber, pageSize);
 
