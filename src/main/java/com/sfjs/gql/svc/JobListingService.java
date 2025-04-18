@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.stereotype.Service;
@@ -464,7 +465,7 @@ public class JobListingService {
     AtomicReference<Specification<JobListingEntity>> specRef = getSearchSpec(businessId, isSaved, experienceLevel,
         locationOption, positionType, country, isPublished, searchbar, location, environment);
 
-    Pageable request = PageRequest.of(pageNumber, pageSize);
+    Pageable request = PageRequest.of(pageNumber, pageSize, Sort.by("updatedAt").descending());
 
     return authorizationService.getAccount()
       .map(accountEntity -> accountEntity.getFellow())
