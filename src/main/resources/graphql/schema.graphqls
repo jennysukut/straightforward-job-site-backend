@@ -548,6 +548,7 @@ type Conversation {
 
 type Message {
   id: ID
+  createdAt: DateTime
   deliveredAt: DateTime
   seenAt: DateTime
   text: [String!]!

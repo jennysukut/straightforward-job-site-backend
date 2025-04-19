@@ -1,6 +1,9 @@
 package com.sfjs.data.entity;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +33,15 @@ public class FellowEntity extends Fellow {
   @PostLoad
   private void postLoad() {
     LocalDateTime startOfToday = LocalDateTime.now().truncatedTo(ChronoUnit.DAYS);
+    ZoneId zone = ZoneId.systemDefault();
+
+    // Get the offset for this ZoneId at the current moment
+    ZoneOffset offset = zone.getRules().getOffset(startOfToday);
+
+    // Now use the offset
+    OffsetDateTime offsetDateTime = startOfToday.atOffset(offset);
     getJobApplications().forEach(app -> {
-      if (app.getCreatedAt().isAfter(startOfToday)) {
+      if (app.getCreatedAt().isAfter(offsetDateTime)) {
         this.dailyApplications.add(app);
       }
     });
