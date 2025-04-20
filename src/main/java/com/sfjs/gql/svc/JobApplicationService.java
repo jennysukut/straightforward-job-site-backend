@@ -95,9 +95,9 @@ public class JobApplicationService {
 
             return notes.stream().map(note -> {
               JobApplicationNoteEntity noteEntity = new JobApplicationNoteEntity();
-              noteEntity.setBusinessNote(businessEntity != null);
-              noteEntity.setFellowNote(fellowEntity != null);
-              noteEntity.setDetails(note);
+              noteEntity.setMadeByBusiness(businessEntity != null);
+              noteEntity.setMadeByFellow(fellowEntity != null);
+              noteEntity.setNote(note);
               noteEntity.setApplication(entity);
               noteEntity = jobApplicationNoteRepository.save(noteEntity);
               return noteEntity.getId();

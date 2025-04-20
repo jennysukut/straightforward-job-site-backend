@@ -461,7 +461,7 @@ type JobApplication {
   message: String
   status: String
   jobListing: JobListing
-  notes: [String!]!
+  notes: [JobApplicationNote!]!
   fellow: Fellow
   appointments: [JobInterviewAppointment!]!
   conversation: Conversation!
@@ -553,4 +553,11 @@ type Message {
   seenAt: DateTime
   text: [String!]!
   fromBusiness: Boolean
+}
+
+type JobApplicationNote {
+  id: ID!
+  note: String
+  madeByBusiness: Boolean
+  madeByFellow: Boolean
 }
