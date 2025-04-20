@@ -55,6 +55,14 @@ public class JobApplicationResolver {
     return jobApplicationService.editNote(noteId, note, environment);
   }
 
+  @MutationMapping(name = "deleteNote")
+  @PreAuthorize("hasAnyRole('ROLE_FELLOW', 'ROLE_BUSINESS')")
+  public Boolean deleteNote(
+      @Argument(name = "noteId") Long noteId,
+      DataFetchingEnvironment environment) throws Exception {
+    return jobApplicationService.deleteNote(noteId, environment);
+  }
+
   @MutationMapping(name = "scheduleAppointments")
   @PreAuthorize("hasRole('ROLE_BUSINESS')")
   public List<Long> scheduleAppointments(

@@ -240,4 +240,13 @@ public class JobApplicationService {
       return jobApplicationNoteRepository.save(entity);
     });
   }
+
+  public Boolean deleteNote(
+      @Argument(name = "noteId") Long noteId,
+      DataFetchingEnvironment environment) throws Exception {
+    return jobApplicationNoteRepository.findById(noteId).map(entity -> {
+      jobApplicationNoteRepository.deleteById(noteId);
+      return true;
+    }).orElse(false);
+  }
 }

@@ -241,6 +241,10 @@ type Mutation {
     note: String!
   ): JobApplicationNote!
 
+  deleteNote(
+    noteId: ID!
+  ): Boolean!
+
   scheduleAppointments(
     jobApplicationId: ID!,
     appointments: [JobInterviewAppointmentInput!]!
