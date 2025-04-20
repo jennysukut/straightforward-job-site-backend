@@ -289,7 +289,7 @@ type Mutation {
 
   updateStatus(
     appId: ID!
-    status: String
+    status: String!
   ): JobApplication
 
   sendJobOffer(
