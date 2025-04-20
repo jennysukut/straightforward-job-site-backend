@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sfjs.data.core.JobInterviewProcessStepAppointment;
 import com.sfjs.data.entity.JobApplicationEntity;
+import com.sfjs.data.entity.JobApplicationNoteEntity;
 import com.sfjs.gql.svc.JobApplicationService;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -43,6 +44,15 @@ public class JobApplicationResolver {
       @Argument(name = "notes")    List<String> notes,
       DataFetchingEnvironment environment) throws Exception {
     return jobApplicationService.keepNotes(jobApplicationId, notes, environment);
+  }
+
+  @MutationMapping(name = "editNote")
+  @PreAuthorize("hasAnyRole('ROLE_FELLOW', 'ROLE_BUSINESS')")
+  public Optional<JobApplicationNoteEntity> editNote(
+      @Argument(name = "noteId") Long noteId,
+      @Argument(name = "note") String note,
+      DataFetchingEnvironment environment) throws Exception {
+    return jobApplicationService.editNote(noteId, note, environment);
   }
 
   @MutationMapping(name = "scheduleAppointments")

@@ -230,4 +230,14 @@ public class JobApplicationService {
       return jobApplicationRepository.save(entity);
     });
   }
+
+  public Optional<JobApplicationNoteEntity> editNote(
+      @Argument(name = "noteId") Long noteId,
+      @Argument(name = "note") String note,
+      DataFetchingEnvironment environment) throws Exception {
+    return jobApplicationNoteRepository.findById(noteId).map(entity -> {
+      entity.setNote(note);
+      return jobApplicationNoteRepository.save(entity);
+    });
+  }
 }

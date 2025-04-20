@@ -236,6 +236,11 @@ type Mutation {
     notes: [String!]!
   ): [ID!]!
 
+  editNote(
+    noteId: ID!
+    note: String!
+  ): JobApplicationNote!
+
   scheduleAppointments(
     jobApplicationId: ID!,
     appointments: [JobInterviewAppointmentInput!]!
