@@ -58,5 +58,6 @@ public class JobApplicationEntity extends JobApplication {
   @Setter
   @JsonIgnore
   @OneToOne(optional = false)
+  @JoinColumn(name = "conversation_id", unique = true)
   private ConversationEntity conversation;
 }

@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,4 +25,10 @@ public class ConversationEntity extends BaseObject {
   @JsonIgnore
   @OneToMany(mappedBy = "conversation")
   private List<MessageEntity> messages = new ArrayList<>();
+
+  @Getter
+  @Setter
+  @JsonIgnore
+  @OneToOne(mappedBy = "conversation", optional = true)
+  private JobApplicationEntity jobApplication;
 }
