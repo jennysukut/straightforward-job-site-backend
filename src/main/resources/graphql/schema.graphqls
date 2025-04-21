@@ -422,6 +422,7 @@ type Link {
 
 type JobListing {
   id: ID!
+  createdAt: DateTime
   jobTitle: String!,
   positionType: String
   positionSummary: String,
@@ -467,6 +468,7 @@ type Fellow {
 
 type JobApplication {
   id: ID!
+  createdAt: DateTime
   message: String
   status: String
   jobListing: JobListing
@@ -533,6 +535,7 @@ type Profile {
 
 type Account {
   id: ID!,
+  createdAt: DateTime
   roles: [String!]!
   business: Business
   fellow: Fellow
@@ -566,6 +569,7 @@ type Message {
 
 type JobApplicationNote {
   id: ID!
+  createdAt: DateTime
   note: String
   madeByBusiness: Boolean
   madeByFellow: Boolean
