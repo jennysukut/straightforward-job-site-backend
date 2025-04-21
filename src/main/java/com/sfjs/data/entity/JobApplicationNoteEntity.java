@@ -1,5 +1,7 @@
 package com.sfjs.data.entity;
 
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sfjs.data.core.JobApplicationNote;
 
@@ -20,6 +22,7 @@ import lombok.Setter;
  */
 @Entity(name = "job_application_note")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Where(clause = "deleted_at IS NULL")
 public class JobApplicationNoteEntity extends JobApplicationNote {
 
   @Getter
