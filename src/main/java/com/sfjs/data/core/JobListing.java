@@ -1,9 +1,12 @@
 package com.sfjs.data.core;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sfjs.data.BaseObject;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
@@ -92,4 +95,10 @@ public class JobListing extends BaseObject {
   @Getter @Setter private String city;
 
   @Getter @Setter private String state;
+
+  @Getter
+  @Setter
+  @Column(name = "published_at")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+  private OffsetDateTime publishedAt;
 }

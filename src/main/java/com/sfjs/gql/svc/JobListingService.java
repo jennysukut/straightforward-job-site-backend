@@ -1,5 +1,6 @@
 package com.sfjs.gql.svc;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -155,6 +156,9 @@ public class JobListingService {
       }
       if (published.isPresent()) {
         entity.setPublished(published.get());
+        if (published.get()) {
+          entity.setPublishedAt(OffsetDateTime.now());
+        }
       }
       if (completed.isPresent()) {
         entity.setCompleted(completed.get());

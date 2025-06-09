@@ -443,6 +443,7 @@ type JobListing {
   business: Business!
   saved: Boolean!
   published: Boolean!
+  publishedAt: DateTime
   beingEdited: Boolean!
   completed: String
   city: String

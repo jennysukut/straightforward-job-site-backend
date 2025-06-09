@@ -1,5 +1,6 @@
 package com.sfjs.gql.resolvers;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -208,6 +209,7 @@ public class JobListingResolver {
     DataFetchingEnvironment environment) throws Exception {
     return jobListingRepository.findById(id).map(entity -> {
       entity.setPublished(true);
+      entity.setPublishedAt(OffsetDateTime.now());
       if (completed.isPresent()) {
         entity.setCompleted(completed.get());
       }
