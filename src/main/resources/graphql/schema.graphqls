@@ -42,6 +42,8 @@ type Query {
   getApplication(id: ID!): JobApplication
 
   getConversation(id: ID!): Conversation
+
+  getSkills: [String!]!
 }
 
 type Mutation {

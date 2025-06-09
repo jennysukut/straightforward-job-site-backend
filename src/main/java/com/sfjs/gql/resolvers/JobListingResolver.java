@@ -4,6 +4,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -18,6 +20,7 @@ import com.sfjs.data.core.JobListing;
 import com.sfjs.data.entity.JobListingEntity;
 import com.sfjs.gql.svc.JobListingService;
 import com.sfjs.jpa.repo.JobListingRepository;
+import com.sfjs.jpa.repo.SkillRepository;
 
 import graphql.schema.DataFetchingEnvironment;
 
@@ -32,6 +35,9 @@ public class JobListingResolver {
 
   @Autowired
   private JobListingRepository jobListingRepository;
+
+  @Autowired
+  private SkillRepository skillRepository;
 
   @QueryMapping(name = "jobListings")
   public List<JobListingEntity> jobListings(
@@ -226,6 +232,13 @@ public class JobListingResolver {
       jobListingRepository.deleteById(id);
       return true;
     }).orElse(false);
+  }
+
+  @QueryMapping(name = "getSkills")
+  public List<String> getSkills(
+    DataFetchingEnvironment environment) throws Exception {
+    return skillRepository.findAll().stream()
+        .map(skill -> skill.getName()).collect(Collectors.toList());
   }
 
 ////      @Argument(name = "businessName")    String businessName, //?: string;
