@@ -16,6 +16,7 @@ import com.sfjs.data.core.BookOrQuote;
 import com.sfjs.data.core.Education;
 import com.sfjs.data.core.Experience;
 import com.sfjs.data.core.ExperienceLevel;
+import com.sfjs.data.core.FellowProfile.ProfileSteps;
 import com.sfjs.data.core.Hobby;
 import com.sfjs.data.core.Link;
 import com.sfjs.data.entity.AccomplishmentEntity;
@@ -145,6 +146,8 @@ public class FellowService {
       profileEntity.setFellow(fellowEntity);
     }
 
+    profileEntity.getStepsCompleted().add(ProfileSteps.STEP_ONE.getValue());
+
     profileEntity.setSmallBio(smallBio);
     profileEntity.setCountry(country);
     profileEntity.setLocation(location);
@@ -167,6 +170,8 @@ public class FellowService {
       logger.info("No profile associated with this fellow account");
       throw new IllegalArgumentException("No profile for this fellow account");
     }
+
+    profileEntity.getStepsCompleted().add(ProfileSteps.STEP_TWO.getValue());
 
     profileEntity.setExperience(experience.stream().map(data -> {
       ExperienceEntity entity = new ExperienceEntity();
@@ -204,6 +209,8 @@ public class FellowService {
       logger.info("No profile associated with this fellow account");
       throw new IllegalArgumentException("No profile for this fellow account");
     }
+
+    profileEntity.getStepsCompleted().add(ProfileSteps.STEP_THREE.getValue());
 
     profileEntity.setAwards(awards.stream().map(data -> {
       AwardEntity entity = new AwardEntity();
@@ -250,6 +257,8 @@ public class FellowService {
       profileEntity.setFellow(fellowEntity);
     }
 
+    profileEntity.getStepsCompleted().add(ProfileSteps.STEP_FOUR.getValue());
+
     profileEntity.setPassions(passions);
     profileEntity.setLookingFor(lookingFor);
     profileEntity.setLocationOptions(locationOptions);
@@ -268,6 +277,8 @@ public class FellowService {
       logger.info("No profile associated with this fellow account");
       throw new IllegalArgumentException("No profile for this fellow account");
     }
+
+    profileEntity.getStepsCompleted().add(ProfileSteps.STEP_FIVE.getValue());
 
     profileEntity.setHobbies(hobbies.stream().map( data -> {
       HobbyEntity entity = new HobbyEntity();
@@ -302,6 +313,8 @@ public class FellowService {
       logger.info("No profile associated with this fellow account");
       throw new IllegalArgumentException("No profile for this fellow account");
     }
+
+    profileEntity.getStepsCompleted().add(ProfileSteps.STEP_SIX.getValue());
 
     profileEntity.setLinks(links.stream().map( data -> {
       LinkEntity entity = new LinkEntity();

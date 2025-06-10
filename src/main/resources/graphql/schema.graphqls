@@ -534,6 +534,7 @@ type Profile {
   links: [Link!]
   aboutMe: String
   name: String
+  stepsCompleted: [Int!]!
 }
 
 type Account {
